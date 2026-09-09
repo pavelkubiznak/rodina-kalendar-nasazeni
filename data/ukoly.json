@@ -1,0 +1,38 @@
+[
+  {
+    "id": "auto-alicante",
+    "nazev": "Zarezervovat auto na letišti v Alicante",
+    "doKdy": "2026-11-15",
+    "popis": "Vyzvednutí 18. 12. odpoledne po příletu (13:25), vrácení 1. 1. ráno před odletem (07:10) — nebo 31. 12. při příjezdu do hotelu. Čím dřív, tím levněji.",
+    "upominky": [30, 14, 7, 1],
+    "hotovo": false,
+    "ikona": "🚗"
+  },
+  {
+    "id": "karate-adresa",
+    "nazev": "Doplnit adresu tělocvičny karate",
+    "doKdy": "2026-09-15",
+    "popis": "Ať jde spočítat přesun ze školy. Kontakt na oddíl: 721 317 764.",
+    "upominky": [3],
+    "hotovo": false,
+    "ikona": "📍"
+  },
+  {
+    "id": "dds-kolize",
+    "nazev": "Dořešit s DDM Robotiku a Scratch",
+    "doKdy": "2026-09-25",
+    "popis": "Obojí se kryje. Zeptat se na náhradní skupinu nebo přihlášky zrušit — do té doby neplatit (dohromady 4 100 Kč).",
+    "upominky": [7, 2],
+    "hotovo": false,
+    "ikona": "⚠️"
+  },
+  {
+    "id": "karate-streda",
+    "nazev": "Rozhodnout středeční karate vs. Chovatelský 6",
+    "doKdy": "2026-09-28",
+    "popis": "Od 30. 9. se Tomášovi kryje chovatelský kroužek (16:00–17:00, Bezručova) se středečním karate (16:45–17:30). Zjistit v oddíle, jestli může chodit jen v pondělí.",
+    "upominky": [7, 2],
+    "hotovo": false,
+    "ikona": "⚠️"
+  }
+]

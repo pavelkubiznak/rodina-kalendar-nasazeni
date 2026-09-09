@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rodinný kalendář</title>
+<meta name="description" content="Rodinný kalendář — kroužky, rozvrhy, výlety, platby a svátky na jednom místě.">
+<meta name="theme-color" content="#f3f3f6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>Rodinný kalendář</h1>
+      <span class="motto">Už nikdy nechceme jako rodina nic propásnout</span>
+    </div>
+    <div id="filtry" class="chips"></div>
+    <button id="tema" class="iconbtn" title="Světlý / tmavý režim" aria-label="Přepnout režim">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div id="hero" class="hero"></div>
+
+  <section class="adder-wrap" id="sekce-pridat">
+    <div class="adder">
+      <div class="adder-h">
+        <div>
+          <div class="eyebrow">Rychlé zadání</div>
+          <h2>Nadiktuj, co se má stát</h2>
+        </div>
+        <button id="nastaveni-btn" class="iconbtn" title="Nastavení ukládání" aria-label="Nastavení">⚙</button>
+      </div>
+      <p class="sub">Klikni do pole, na iPhonu zmáčkni mikrofon na klávesnici a mluv normálně.
+        Rozumí datům („6. března", „za dva měsíce", „příští středu"), časům, jménům kluků
+        i upomínkám („měsíc předem"). Dostaneš návrh, který potvrdíš.</p>
+      <textarea id="vstup" rows="2"
+        placeholder="Třeba: Matěj má 6. března v 9:30 zubaře — nebo: klukům začátkem března končí pasy, upozorni mě dva měsíce předem"></textarea>
+      <div class="row">
+        <button id="navrhni" class="btn primary">Vytvořit návrh</button>
+        <span class="hint">⌘/Ctrl + Enter</span>
+        <span id="stav-ulozeni" class="hint stav"></span>
+      </div>
+      <div id="navrh" class="proposal" style="display:none"></div>
+      <div id="nastaveni" class="nastaveni" hidden>
+        <div class="eyebrow">Ukládání do repozitáře</div>
+        <p class="sub">Bez tohohle ti kalendář návrh jen ukáže a dá JSON ke zkopírování.
+          S vyplněnými údaji ho rovnou zapíše do GitHubu a web se za chvíli přebuildí — uvidí to i Šárka.</p>
+        <div class="pole"><label for="gh-repo">Repozitář</label>
+          <input id="gh-repo" placeholder="ucet/rodinny-kalendar" autocomplete="off"></div>
+        <div class="pole"><label for="gh-token">Token</label>
+          <input id="gh-token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+        <p class="hint">Fine-grained token jen pro tenhle repozitář, oprávnění <em>Contents: Read and write</em>.
+          Uloží se do tvého prohlížeče, nikam jinam se neposílá. Na sdíleném počítači ho nezadávej.</p>
+        <div class="row">
+          <button id="gh-ulozit" class="btn primary">Uložit</button>
+          <button id="gh-smazat" class="btn">Smazat token</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="calhead">
+    <h2 id="nadpis-mesice">—</h2>
+    <div class="seg" id="nav-sipky">
+      <button id="prev" aria-label="Předchozí">←</button>
+      <button id="dnes">Dnes</button>
+      <button id="next" aria-label="Další">→</button>
+    </div>
+    <div class="seg" id="pohledy" role="group" aria-label="Pohled">
+      <button data-v="tyden">Týden</button>
+      <button data-v="mesic">Měsíc</button>
+      <button data-v="agenda">Agenda</button>
+    </div>
+    <div class="legenda">
+      <span><i class="lg cesta"></i>cesty a pobyty</span>
+      <span><i class="lg krouzek"></i>kroužky</span>
+    </div>
+  </div>
+  <div id="mrizka"></div>
+
+  <section class="blockz" id="sekce-knihovna">
+    <h2>Knihovna</h2>
+    <p class="sub">Rozklikni oddělení a máš seznam, se kterým se dá jít rovnou k regálu.</p>
+    <div id="knihovna" class="paycards"></div>
+  </section>
+
+  <section class="blockz" id="sekce-doklady">
+    <h2>Platnost dokladů</h2>
+    <p class="sub">Hlídá se automaticky — upozornění chodí tři měsíce, dva měsíce a měsíc předem.</p>
+    <div id="doklady" class="paycards"></div>
+  </section>
+
+  <section class="blockz" id="sekce-ukoly">
+    <h2>Vyžaduje rozhodnutí</h2>
+    <p class="sub">Věci, které se samy nevyřeší. Seřazeno podle toho, co hoří nejdřív.</p>
+    <div id="ukoly" class="paycards"></div>
+  </section>
+
+  <section class="blockz" id="sekce-platby">
+    <h2>Platby a termíny</h2>
+    <p class="sub">Účet DDM Barák: <span class="mono">365464684/0300</span>, vždy pod variabilním symbolem u dané přihlášky.</p>
+    <div id="platby" class="paycards"></div>
+  </section>
+
+  <section class="blockz" id="sekce-krouzky">
+    <h2>Kroužky ve školním roce 2026/2027</h2>
+    <p class="sub">Červeně jsou kroužky, které se s něčím kryjí — ty zatím neplať.</p>
+    <div class="scroller">
+      <table>
+        <thead><tr><th>Kroužek</th><th>Kdo</th><th>Den</th><th>Čas</th><th>První lekce</th><th>Cena</th><th>Stav</th></tr></thead>
+        <tbody id="tab-krouzky"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Data v <code>data/*.json</code> · aktualizováno <span id="stopa">—</span> ·
+    <a href="?display=1">režim na zeď</a>
+  </footer>
+</main>
+
+<button id="fab" class="fab" aria-label="Přidat akci">＋</button>
+
+<div id="drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Detail dne">
+  <div class="veil"></div>
+  <div class="sheet">
+    <div class="sheet-h">
+      <div>
+        <div class="d" id="sheet-datum">—</div>
+        <div class="hint" id="sheet-rok"></div>
+      </div>
+      <button id="zavri" class="iconbtn" aria-label="Zavřít">✕</button>
+    </div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

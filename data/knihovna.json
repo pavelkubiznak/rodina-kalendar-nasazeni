@@ -1,0 +1,63 @@
+[
+  {
+    "id": "vypujcky-2026-09-14",
+    "vratitDo": "2026-09-14",
+    "knihovna": "Knihovna města Hradce Králové",
+    "upominky": [7, 3, 1],
+    "vraceno": false,
+    "zdroj": "Souhrn výpůjček z 13. 8. 2026 (e-mail z knihovny)",
+    "oddeleni": [
+      {
+        "nazev": "Ústřední půjčovna dospělí",
+        "ctenar": "pavel",
+        "telefon": "495 075 025",
+        "email": "ustrednipujc@knihovnahk.cz",
+        "tituly": [
+          { "autor": "Baťa, Tomáš", "nazev": "Myšlenky Tomáše Bati" },
+          { "autor": "Baťa, Tomáš", "nazev": "Úvahy a projevy" },
+          { "autor": "Banáš, Jozef", "nazev": "Jsem Baťa, dokážu to!" }
+        ]
+      },
+      {
+        "nazev": "Ústřední půjčovna děti",
+        "ctenar": "pavel",
+        "telefon": "495 075 033",
+        "email": "detske@knihovnahk.cz",
+        "tituly": [
+          { "autor": null, "nazev": "Hravá angličtina — interaktivní mluvicí kniha" },
+          { "autor": "Bauer, Ivan", "nazev": "Vlastivěda: dějepisná část — interaktivní mluvicí učebnice" }
+        ]
+      },
+      {
+        "nazev": "Hudební oddělení",
+        "ctenar": "pavel",
+        "telefon": "495 075 034",
+        "email": "pujcho@knihovnahk.cz",
+        "tituly": [
+          { "autor": "Válková, Veronika", "nazev": "Terezínské ghetto: tajemný vlak do neznáma" },
+          { "autor": "Vaněček, Michal", "nazev": "Putování labyrintem světa" },
+          { "autor": "Kosatík, Pavel", "nazev": "100x TGM" },
+          { "autor": "Forsyth, Frederick", "nazev": "Mstitel" },
+          { "autor": "Coelho, Paulo", "nazev": "Poutník: Mágův deník (zvukový záznam)" },
+          { "autor": "Ruiz, Miguel", "nazev": "Toltécké umění života a smrti" },
+          { "autor": "Coelho, Paulo", "nazev": "Alchymista" }
+        ]
+      },
+      {
+        "nazev": "Hudební oddělení",
+        "ctenar": "tomas",
+        "telefon": "495 075 034",
+        "email": "pujcho@knihovnahk.cz",
+        "tituly": [
+          { "autor": "Slušný, Jaromír", "nazev": "Nejkrásnější římské báje a pověsti" },
+          { "autor": "Stančík, Petr", "nazev": "H2O a poklad šíleného oka" },
+          { "autor": "Hulpach, Vladimír", "nazev": "Keltské mýty a báje (zvukový záznam)" },
+          { "autor": "Twain, Mark", "nazev": "Dobrodružství Huckleberryho Finna" },
+          { "autor": "Ransome, Arthur", "nazev": "Trosečníci z Vlaštovky" },
+          { "autor": "Perry, Sarah", "nazev": "Nestvůra z Essexu" },
+          { "autor": "Ščerba, Natalja", "nazev": "Časodějové. Klíč k času" }
+        ]
+      }
+    ]
+  }
+]

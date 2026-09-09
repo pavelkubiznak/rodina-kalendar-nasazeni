@@ -1,0 +1,89 @@
+[
+  {
+    "id": "aj-konverzace", "nazev": "English conversation and games", "kdo": ["matej"],
+    "poskytovatel": "ZŠ SNP – p. McKinnon", "den": 1, "od": "07:00", "do": "07:45",
+    "misto": "ZŠ tř. SNP 694 (ráno před vyučováním)",
+    "prvniLekce": "2026-09-21", "konecKurzu": "2027-06-30",
+    "stav": "aktivni", "cena": 1000, "za": "pololetí",
+    "poznamka": "Start posunut na 21. 9. (p. McKinnon byla 14.–18. 9. na školním výletě). Přislíben plný počet lekcí včetně týdne před Vánoci.",
+    "platba": { "castka": 1000, "splatnost": null, "zaplaceno": false, "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)" }
+  },
+  {
+    "id": "aj-vytvarka", "nazev": "Art and Crafts in English", "kdo": ["matej"],
+    "poskytovatel": "ZŠ SNP – p. McKinnon", "den": 3, "od": "07:00", "do": "07:45",
+    "misto": "ZŠ tř. SNP 694 (ráno před vyučováním)",
+    "prvniLekce": "2026-09-23", "konecKurzu": "2027-06-30",
+    "stav": "aktivni", "cena": 1000, "za": "pololetí",
+    "poznamka": "Česky „Výtvarná a řemeslná činnost v angličtině“. Start posunut na 23. 9.",
+    "platba": { "castka": 1000, "splatnost": null, "zaplaceno": false, "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)" }
+  },
+  {
+    "id": "karate", "nazev": "Karate", "kdo": ["tomas"],
+    "poskytovatel": "SK Karate Spartak Hradec Králové", "den": 1, "denDalsi": 3,
+    "od": "16:45", "do": "17:30", "misto": null,
+    "prvniLekce": "2026-09-09", "konecKurzu": "2027-06-30",
+    "stav": "aktivni", "cena": 2900, "za": "pololetí",
+    "poznamka": "Skupina 7–9 let, pondělí a středa. Kontakt: 721 317 764, info@spartak.cz. Doplnit adresu tělocvičny.",
+    "platba": { "castka": 2900, "splatnost": "2026-09-21", "zaplaceno": false, "kde": "SK Karate Spartak – 1. pololetí" }
+  },
+  {
+    "id": "elektronik", "nazev": "Mladý elektronik – začátečníci", "kdo": ["matej"],
+    "poskytovatel": "DDM Barák", "den": 1, "od": "15:00", "do": "17:00",
+    "misto": "DDM Rautenkrancova 1241",
+    "prvniLekce": "2026-10-05", "konecKurzu": "2027-05-31",
+    "stav": "aktivni", "cena": 2400, "za": "rok",
+    "vs": { "matej": "161314001" },
+    "poznamka": "",
+    "platba": { "castka": 2400, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "chovatelsky-4", "nazev": "Chovatelský kroužek 4", "kdo": ["matej", "tomas"],
+    "poskytovatel": "DDM Barák", "den": 2, "od": "15:45", "do": "16:45",
+    "misto": "DDM Rautenkrancova 1241",
+    "prvniLekce": "2026-09-29", "konecKurzu": "2027-06-01",
+    "stav": "aktivni", "cena": 2000, "za": "rok",
+    "vs": { "matej": "161524001", "tomas": "161524002" },
+    "poznamka": "Matějova přihláška schválena 4. 9. 2026 — kluci tam jdou spolu.",
+    "platba": { "castka": 4000, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "chovatelsky-6", "nazev": "Chovatelský kroužek 6", "kdo": ["matej", "tomas"],
+    "poskytovatel": "DDM Barák", "den": 3, "od": "16:00", "do": "17:00",
+    "misto": "Přírodovědné centrum, Bezručova 1468",
+    "prvniLekce": "2026-09-30", "konecKurzu": "2027-06-02",
+    "stav": "kolize", "cena": 1500, "za": "rok",
+    "vs": { "matej": "262115002", "tomas": "262115001" },
+    "poznamka": "⚠️ Tomášovi se kryje se středečním karate (16:45–17:30). Buď karate jen v pondělí, nebo vybrat mezi karate a chovatelským.",
+    "platba": { "castka": 3000, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "modelari", "nazev": "Letečtí modeláři – začátečníci", "kdo": ["matej", "tomas"],
+    "poskytovatel": "DDM Barák", "den": 4, "od": "15:00", "do": "17:00",
+    "misto": "DDM Rautenkrancova 1241",
+    "prvniLekce": "2026-10-01", "konecKurzu": "2027-06-03",
+    "stav": "aktivni", "cena": 2900, "za": "rok",
+    "vs": { "matej": "161322002", "tomas": "161322004" },
+    "poznamka": "Oba kluci spolu.",
+    "platba": { "castka": 5800, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "robotika-2", "nazev": "Robotika pro nejmenší 2", "kdo": ["matej"],
+    "poskytovatel": "DDM Barák", "den": 3, "od": "14:00", "do": "15:00",
+    "misto": "DDM Rautenkrancova 1241",
+    "prvniLekce": "2026-09-30", "konecKurzu": "2027-06-02",
+    "stav": "kolize", "cena": 2200, "za": "rok",
+    "vs": { "matej": "161302008" },
+    "poznamka": "⚠️ Matěj má ve středu výtvarku do 14:25 — na kroužek od 14:00 nestihne dojet. Jiná skupina byla při zápisu obsazená. Zatím neplatit, dořešit s DDM.",
+    "platba": { "castka": 2200, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "scratch", "nazev": "Programování ve Scratchi", "kdo": ["matej"],
+    "poskytovatel": "DDM Barák", "den": 4, "od": "16:00", "do": "17:00",
+    "misto": "DDM Rautenkrancova 1241",
+    "prvniLekce": "2026-10-01", "konecKurzu": "2027-06-03",
+    "stav": "kolize", "cena": 1900, "za": "rok",
+    "vs": { "matej": "161319007" },
+    "poznamka": "⚠️ Kryje se s druhou hodinou leteckých modelářů (15:00–17:00), kam jdou kluci spolu. Jiný termín DDM nevypisuje. Zatím neplatit.",
+    "platba": { "castka": 1900, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  }
+]

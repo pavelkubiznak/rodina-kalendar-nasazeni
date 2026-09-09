@@ -1,0 +1,382 @@
+[
+ {
+  "datum": "2026-01-01",
+  "nazev": "Nový rok / Den obnovy samostatného českého státu",
+  "volno": true
+ },
+ {
+  "datum": "2026-02-14",
+  "nazev": "Valentýn",
+  "volno": false
+ },
+ {
+  "datum": "2026-04-03",
+  "nazev": "Velký pátek",
+  "volno": true
+ },
+ {
+  "datum": "2026-04-05",
+  "nazev": "Velikonoční neděle",
+  "volno": false
+ },
+ {
+  "datum": "2026-04-06",
+  "nazev": "Velikonoční pondělí",
+  "volno": true
+ },
+ {
+  "datum": "2026-05-01",
+  "nazev": "Svátek práce",
+  "volno": true
+ },
+ {
+  "datum": "2026-05-08",
+  "nazev": "Den vítězství",
+  "volno": true
+ },
+ {
+  "datum": "2026-05-10",
+  "nazev": "Den matek",
+  "volno": false
+ },
+ {
+  "datum": "2026-07-05",
+  "nazev": "Den slovanských věrozvěstů Cyrila a Metoděje",
+  "volno": true
+ },
+ {
+  "datum": "2026-07-06",
+  "nazev": "Den upálení mistra Jana Husa",
+  "volno": true
+ },
+ {
+  "datum": "2026-09-28",
+  "nazev": "Den české státnosti",
+  "volno": true
+ },
+ {
+  "datum": "2026-10-28",
+  "nazev": "Den vzniku samostatného československého státu",
+  "volno": true
+ },
+ {
+  "datum": "2026-10-31",
+  "nazev": "Halloween",
+  "volno": false
+ },
+ {
+  "datum": "2026-11-17",
+  "nazev": "Den boje za svobodu a demokracii",
+  "volno": true
+ },
+ {
+  "datum": "2026-12-05",
+  "nazev": "Mikuláš",
+  "volno": false
+ },
+ {
+  "datum": "2026-12-24",
+  "nazev": "Štědrý den",
+  "volno": true
+ },
+ {
+  "datum": "2026-12-25",
+  "nazev": "1. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2026-12-26",
+  "nazev": "2. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2026-12-31",
+  "nazev": "Silvestr",
+  "volno": false
+ },
+ {
+  "datum": "2027-01-01",
+  "nazev": "Nový rok / Den obnovy samostatného českého státu",
+  "volno": true
+ },
+ {
+  "datum": "2027-02-14",
+  "nazev": "Valentýn",
+  "volno": false
+ },
+ {
+  "datum": "2027-03-26",
+  "nazev": "Velký pátek",
+  "volno": true
+ },
+ {
+  "datum": "2027-03-28",
+  "nazev": "Velikonoční neděle",
+  "volno": false
+ },
+ {
+  "datum": "2027-03-29",
+  "nazev": "Velikonoční pondělí",
+  "volno": true
+ },
+ {
+  "datum": "2027-05-01",
+  "nazev": "Svátek práce",
+  "volno": true
+ },
+ {
+  "datum": "2027-05-08",
+  "nazev": "Den vítězství",
+  "volno": true
+ },
+ {
+  "datum": "2027-05-09",
+  "nazev": "Den matek",
+  "volno": false
+ },
+ {
+  "datum": "2027-07-05",
+  "nazev": "Den slovanských věrozvěstů Cyrila a Metoděje",
+  "volno": true
+ },
+ {
+  "datum": "2027-07-06",
+  "nazev": "Den upálení mistra Jana Husa",
+  "volno": true
+ },
+ {
+  "datum": "2027-09-28",
+  "nazev": "Den české státnosti",
+  "volno": true
+ },
+ {
+  "datum": "2027-10-28",
+  "nazev": "Den vzniku samostatného československého státu",
+  "volno": true
+ },
+ {
+  "datum": "2027-10-31",
+  "nazev": "Halloween",
+  "volno": false
+ },
+ {
+  "datum": "2027-11-17",
+  "nazev": "Den boje za svobodu a demokracii",
+  "volno": true
+ },
+ {
+  "datum": "2027-12-05",
+  "nazev": "Mikuláš",
+  "volno": false
+ },
+ {
+  "datum": "2027-12-24",
+  "nazev": "Štědrý den",
+  "volno": true
+ },
+ {
+  "datum": "2027-12-25",
+  "nazev": "1. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2027-12-26",
+  "nazev": "2. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2027-12-31",
+  "nazev": "Silvestr",
+  "volno": false
+ },
+ {
+  "datum": "2028-01-01",
+  "nazev": "Nový rok / Den obnovy samostatného českého státu",
+  "volno": true
+ },
+ {
+  "datum": "2028-02-14",
+  "nazev": "Valentýn",
+  "volno": false
+ },
+ {
+  "datum": "2028-04-14",
+  "nazev": "Velký pátek",
+  "volno": true
+ },
+ {
+  "datum": "2028-04-16",
+  "nazev": "Velikonoční neděle",
+  "volno": false
+ },
+ {
+  "datum": "2028-04-17",
+  "nazev": "Velikonoční pondělí",
+  "volno": true
+ },
+ {
+  "datum": "2028-05-01",
+  "nazev": "Svátek práce",
+  "volno": true
+ },
+ {
+  "datum": "2028-05-08",
+  "nazev": "Den vítězství",
+  "volno": true
+ },
+ {
+  "datum": "2028-05-14",
+  "nazev": "Den matek",
+  "volno": false
+ },
+ {
+  "datum": "2028-07-05",
+  "nazev": "Den slovanských věrozvěstů Cyrila a Metoděje",
+  "volno": true
+ },
+ {
+  "datum": "2028-07-06",
+  "nazev": "Den upálení mistra Jana Husa",
+  "volno": true
+ },
+ {
+  "datum": "2028-09-28",
+  "nazev": "Den české státnosti",
+  "volno": true
+ },
+ {
+  "datum": "2028-10-28",
+  "nazev": "Den vzniku samostatného československého státu",
+  "volno": true
+ },
+ {
+  "datum": "2028-10-31",
+  "nazev": "Halloween",
+  "volno": false
+ },
+ {
+  "datum": "2028-11-17",
+  "nazev": "Den boje za svobodu a demokracii",
+  "volno": true
+ },
+ {
+  "datum": "2028-12-05",
+  "nazev": "Mikuláš",
+  "volno": false
+ },
+ {
+  "datum": "2028-12-24",
+  "nazev": "Štědrý den",
+  "volno": true
+ },
+ {
+  "datum": "2028-12-25",
+  "nazev": "1. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2028-12-26",
+  "nazev": "2. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2028-12-31",
+  "nazev": "Silvestr",
+  "volno": false
+ },
+ {
+  "datum": "2029-01-01",
+  "nazev": "Nový rok / Den obnovy samostatného českého státu",
+  "volno": true
+ },
+ {
+  "datum": "2029-02-14",
+  "nazev": "Valentýn",
+  "volno": false
+ },
+ {
+  "datum": "2029-03-30",
+  "nazev": "Velký pátek",
+  "volno": true
+ },
+ {
+  "datum": "2029-04-01",
+  "nazev": "Velikonoční neděle",
+  "volno": false
+ },
+ {
+  "datum": "2029-04-02",
+  "nazev": "Velikonoční pondělí",
+  "volno": true
+ },
+ {
+  "datum": "2029-05-01",
+  "nazev": "Svátek práce",
+  "volno": true
+ },
+ {
+  "datum": "2029-05-08",
+  "nazev": "Den vítězství",
+  "volno": true
+ },
+ {
+  "datum": "2029-05-13",
+  "nazev": "Den matek",
+  "volno": false
+ },
+ {
+  "datum": "2029-07-05",
+  "nazev": "Den slovanských věrozvěstů Cyrila a Metoděje",
+  "volno": true
+ },
+ {
+  "datum": "2029-07-06",
+  "nazev": "Den upálení mistra Jana Husa",
+  "volno": true
+ },
+ {
+  "datum": "2029-09-28",
+  "nazev": "Den české státnosti",
+  "volno": true
+ },
+ {
+  "datum": "2029-10-28",
+  "nazev": "Den vzniku samostatného československého státu",
+  "volno": true
+ },
+ {
+  "datum": "2029-10-31",
+  "nazev": "Halloween",
+  "volno": false
+ },
+ {
+  "datum": "2029-11-17",
+  "nazev": "Den boje za svobodu a demokracii",
+  "volno": true
+ },
+ {
+  "datum": "2029-12-05",
+  "nazev": "Mikuláš",
+  "volno": false
+ },
+ {
+  "datum": "2029-12-24",
+  "nazev": "Štědrý den",
+  "volno": true
+ },
+ {
+  "datum": "2029-12-25",
+  "nazev": "1. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2029-12-26",
+  "nazev": "2. svátek vánoční",
+  "volno": true
+ },
+ {
+  "datum": "2029-12-31",
+  "nazev": "Silvestr",
+  "volno": false
+ }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "pas-matej", "nazev": "Cestovní pas — Matěj", "kdo": ["matej"],
+    "platnostDo": "2027-03-01", "presne": false,
+    "upominky": [90, 60, 30], "ikona": "🛂",
+    "poznamka": "Přesné datum ověř v pase a uprav. Nový dětský pas vyřídíš na úřadě v HK, obvykle do 30 dnů (expresně za pár dnů, dráž)."
+  },
+  {
+    "id": "pas-tomas", "nazev": "Cestovní pas — Tomáš", "kdo": ["tomas"],
+    "platnostDo": "2027-03-01", "presne": false,
+    "upominky": [90, 60, 30], "ikona": "🛂",
+    "poznamka": "Přesné datum ověř v pase a uprav. Vyřizovat oba najednou."
+  }
+]

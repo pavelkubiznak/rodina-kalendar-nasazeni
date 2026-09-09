@@ -1,0 +1,56 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * *'   # denně 5:00 SELČ – přegeneruje svátky a .ics
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Vygenerovat svátky a ICS feed
+        run: |
+          node scripts/gen-svatky.mjs
+          node scripts/plan-knihovna.mjs --write
+          node scripts/build-ics.mjs
+
+      - name: Commit vygenerovaných souborů
+        run: |
+          git config user.name  "rodinny-kalendar-bot"
+          git config user.email "actions@github.com"
+          git add data/svatky.json data/knihovna-plan.json rodina.ics
+          git diff --staged --quiet || git commit -m "chore: přegenerované svátky a ICS feed"
+          git push
+        continue-on-error: true
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true   # zapne Pages samo při prvním běhu, není potřeba nic klikat
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: '.' }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,42 @@
+name: Ranní zpráva a upomínky
+
+# Pošle zprávu do Telegramu každé ráno v 6:30 — ale JEN když je co říct.
+# Prázdné dny mlčí, aby si člověk notifikací nezvykl přehlížet.
+#
+# Nastav v repu: Settings → Secrets and variables → Actions → New repository secret
+#   TELEGRAM_TOKEN  – token bota z @BotFather
+#   TELEGRAM_CHAT   – ID chatu (u skupiny začíná mínusem, např. -1001234567890)
+
+on:
+  schedule:
+    - cron: '30 4 * * *'   # 6:30 SELČ (v zimě 5:30 — GitHub jede v UTC)
+  workflow_dispatch:
+
+jobs:
+  zprava:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Sestavit zprávu
+        id: text
+        run: |
+          node scripts/plan-knihovna.mjs --write
+          node scripts/zprava.mjs > /tmp/zprava.txt
+          if [ -s /tmp/zprava.txt ]; then echo "poslat=ano" >> $GITHUB_OUTPUT; fi
+
+      - name: Poslat do Telegramu
+        if: steps.text.outputs.poslat == 'ano'
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHAT }}
+        run: |
+          curl -sS -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT}" \
+            -d "parse_mode=Markdown" \
+            -d "disable_web_page_preview=true" \
+            --data-urlencode "text@/tmp/zprava.txt" \
+            -o /tmp/odpoved.json -w "%{http_code}\n"
+          grep -q '"ok":true' /tmp/odpoved.json || { cat /tmp/odpoved.json; exit 1; }

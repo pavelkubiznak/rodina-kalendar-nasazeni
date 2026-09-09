@@ -1,0 +1,18 @@
+{
+  "_zdroj": "https://www.knihovnahk.cz/kontakty",
+  "overenoDne": "2026-09-09",
+  "adresa": "Wonkova 1262/1a, Hradec Králové",
+  "poznamka": "O nedělích a státních svátcích zavřeno. Otevírací doba se občas mění — plánovač hlásí, když je ověření starší než 90 dní.",
+  "oddeleni": {
+    "Ústřední půjčovna dospělí": { "1": ["08:00","18:00"], "2": ["12:00","18:00"], "3": ["08:00","18:00"], "4": ["08:00","18:00"], "5": ["08:00","18:00"], "6": ["08:00","12:00"], "0": null },
+    "Ústřední půjčovna děti":   { "1": ["12:00","18:00"], "2": ["12:00","18:00"], "3": ["08:00","18:00"], "4": ["12:00","18:00"], "5": ["12:00","18:00"], "6": ["08:00","12:00"], "0": null },
+    "Hudební oddělení":          { "1": ["08:00","18:00"], "2": ["12:00","18:00"], "3": ["08:00","18:00"], "4": ["08:00","18:00"], "5": ["08:00","18:00"], "6": ["08:00","12:00"], "0": null }
+  },
+  "bibliobox": {
+    "umisteni": "U ústřední budovy, Wonkova 1262/1a (a na pobočkách)",
+    "odepsani": "následující pracovní den",
+    "pozor": "Vhozením v den termínu se konto odepíše až další pracovní den — tedy pozdě."
+  },
+  "cestaMinut": 20,
+  "potrebaMinut": 45
+}
