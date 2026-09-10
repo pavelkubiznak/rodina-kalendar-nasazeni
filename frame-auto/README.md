@@ -70,24 +70,34 @@ pozná, že nestahuje včerejší plakát). Když render selže, web se nasadí 
 
 ## Krok 3 — lokální uploader
 
-`upload/denni-upload.py` na něčem, co v 5:30 běží — HA Green, Mac, Raspberry Pi.
+Běží na Macu, který televize povolila. Na jiném stroji (HA Green, Raspberry Pi) by se
+muselo párovat znovu — u televize s ovladačem.
 
-```
-30 5 * * *  /usr/bin/python3 /cesta/upload/denni-upload.py
+```bash
+sh frame-auto/upload/nainstaluj-mac.sh      # log: ~/Library/Logs/frame-upload.log
 ```
 
-Nastavit `FRAME_IP` a `IMG_URL`.
+launchd pouští `upload/denni-upload.py` každých 10 minut a hned po probuzení Macu, ne jednou
+v 5:30: televize v noci spí a API nepřijme, takže se plakát nahraje, jakmile se ráno probudí.
+Když už dnešní plakát visí, skript hned skončí a nic nestahuje.
+
+Nahraje jen plakát s `datumIso` na dnešek. Když render na GitHubu selže, zůstane na TV
+včerejší — a kvůli starému plakátu se nesmaže ten, co tam visí. IP televize je v `FRAME_IP`
+(výchozí 10.0.0.116), odinstalace v hlavičce `nainstaluj-mac.sh`.
 
 ## Na co si dát pozor
 
 **Pevná IP televize.** Rezervace v DHCP na routeru. Když TV skočí na jinou adresu,
 upload tiše přestane fungovat a budeš to hledat týden.
 
-**Mazání starých obrázků.** Skript maže včerejší až *po* úspěšném nahrání nového —
-`posledni.json` si drží content_id. Bez toho se úložiště televize zaplní.
+**Mazání starých obrázků.** Skript maže předchozí plakáty až *po* úspěšném nahrání nového.
+`posledni.json` si drží jejich content_id; co se smazat nepovede, zkusí znovu příště.
+Maže jen to, co sám nahrál — fotky nahrané ručně přes SmartThings (a testovací obrázky
+z kroku 0) nechá být. Bez mazání se úložiště televize zaplní.
 
-**TV v 5:30 spí.** Proto těch 6 pokusů po 5 minutách. Jestli Frame na noc vypínáš
-úplně ze zásuvky, tohle nepomůže a upload musí jít až ráno, kdy ji zapneš.
+**TV v noci spí — a Mac může taky.** Uploader zkouší každých 10 minut, dokud se nepovede.
+Když Mac spí, launchd ho pustí až po probuzení a plakát se nahraje teprve tehdy. Aby to
+chodilo samo, nech Mac na adaptéru nespat (Nastavení systému → Baterie → Volby).
 
 **Matte = "none".** S paspartou to ukousne okraje a rozhodí layout.
 

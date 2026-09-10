@@ -1,49 +1,67 @@
 #!/usr/bin/env python3
 """
-Denni upload kalendare na The Frame.
-Stahne hotovy JPEG z GitHub Pages, nahraje ho do TV, nastavi jako aktualni
-a smaze vcerejsi - jinak se uloziste televize za rok zaplni.
+Denni upload plakatu na The Frame.
 
-Cron na 5:30:  30 5 * * *  /usr/bin/python3 /cesta/denni-upload.py
+Spousti ho launchd kazdych 10 minut (viz nainstaluj-mac.sh). Kdyz uz dnesni plakat
+na TV visi, hned skonci. Jinak overi, ze na Pages je plakat na DNESEK - ne vcerejsi,
+kdyz render v GitHub Actions selhal - nahraje ho, nastavi jako aktualni a smaze
+drivejsi plakaty, jinak se uloziste televize za rok zaplni.
+
+Televize v noci spi a API neprijme; pokus pak selze a dalsi prijde za 10 minut.
 """
-import os, sys, json, time, urllib.request
+import os, sys, json, time, datetime, urllib.request
 from samsungtvws import SamsungTVWS
 
-TV_IP    = os.environ.get("FRAME_IP", "192.168.1.xx")
-IMG_URL  = "https://pavelkubiznak.github.io/rodina-kalendar-nasazeni/frame.jpg"
+TV_IP    = os.environ.get("FRAME_IP", "10.0.0.116")
+PAGES    = "https://pavelkubiznak.github.io/rodina-kalendar-nasazeni/"
 HERE     = os.path.dirname(os.path.abspath(__file__))
 TOKEN    = os.path.join(HERE, "tv-token.txt")
-STATE    = os.path.join(HERE, "posledni.json")   # content_id vcerejsiho obrazku
-RETRIES  = 6      # TV muze jeste spat - zkousime 6x po 5 minutach
-WAIT     = 300
+STATE    = os.path.join(HERE, "posledni.json")   # content_id a datum posledniho nahraneho plakatu
 
-def nahraj():
-    data = urllib.request.urlopen(IMG_URL, timeout=30).read()
-    tv = SamsungTVWS(host=TV_IP, port=8002, token_file=TOKEN)
-    if not tv.art().supported():
-        raise RuntimeError("art mode nedostupny")
+def log(*a):
+    print(time.strftime("%F %T"), *a, flush=True)
 
-    novy = tv.art().upload(data, file_type="JPEG", matte="none")
-    tv.art().select_image(novy, show=True)
+def stahni(nazev):
+    # Pages drzi cache 10 minut, parametr s casem ji obejde
+    return urllib.request.urlopen("%s%s?t=%d" % (PAGES, nazev, time.time()), timeout=30).read()
 
-    # az kdyz novy visi, smazat stary
-    if os.path.exists(STATE):
-        stary = json.load(open(STATE)).get("content_id")
-        if stary and stary != novy:
-            try:
-                tv.art().delete(stary)
-            except Exception as e:
-                print("nepodarilo se smazat", stary, e, file=sys.stderr)
+dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
+stav = json.load(open(STATE)) if os.path.exists(STATE) else {}
+if stav.get("datum") == dnes:
+    sys.exit(0)
 
-    json.dump({"content_id": novy, "kdy": time.strftime("%F %T")}, open(STATE, "w"))
-    print("ok:", novy)
+try:
+    data = json.loads(stahni("frame-data.json"))
+    if data.get("datumIso") != dnes:
+        # stary plakat nenahravat - a hlavne kvuli nemu nesmazat ten, co na TV visi
+        log("na Pages je plakat na %s, ne na %s - cekam" % (data.get("datumIso"), dnes))
+        sys.exit(1)
+    jpg = stahni("frame.jpg")
 
-for pokus in range(1, RETRIES + 1):
-    try:
-        nahraj()
-        sys.exit(0)
-    except Exception as e:
-        print("pokus %d/%d selhal: %s" % (pokus, RETRIES, e), file=sys.stderr)
-        if pokus < RETRIES:
-            time.sleep(WAIT)
-sys.exit(1)
+    art = SamsungTVWS(host=TV_IP, port=8002, token_file=TOKEN).art(timeout=20)
+    novy = art.upload(jpg, file_type="JPEG", matte="none")
+    art.select_image(novy, show=True)
+
+    # az kdyz novy visi, smazat drivejsi plakaty - i ty, ktere se minule smazat nepovedlo.
+    # Maze jen to, co nahral tenhle skript (content_id v posledni.json), rucne nahrane fotky ne.
+    stare = (set(stav.get("nesmazane", [])) | {stav.get("content_id")}) - {None, novy}
+    nesmazane = []
+    if stare:
+        try:
+            # co uz na TV neni (smazane rucne), se preskoci
+            nesmazane = sorted(stare & {a.get("content_id") for a in art.available()})
+            if nesmazane and art.delete_list(nesmazane):
+                log("smazano:", ", ".join(nesmazane))
+                nesmazane = []
+            elif nesmazane:
+                log("TV smazani nepotvrdila, zkusi se priste:", ", ".join(nesmazane))
+        except Exception as e:
+            nesmazane = sorted(stare)
+            log("nepodarilo se smazat, zkusi se priste:", ", ".join(nesmazane), type(e).__name__, e)
+
+    json.dump({"content_id": novy, "nesmazane": nesmazane, "datum": dnes, "kdy": time.strftime("%F %T")},
+              open(STATE, "w"))
+    log("ok:", novy, "plakat na", dnes)
+except Exception as e:
+    log("nepovedlo se, dalsi pokus za 10 min:", type(e).__name__, e)
+    sys.exit(1)
