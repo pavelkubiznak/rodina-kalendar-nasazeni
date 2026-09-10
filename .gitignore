@@ -1,2 +1,8 @@
 node_modules/
 .DS_Store
+.venv/
+frame-auto/upload/tv-token.txt
+frame-auto/upload/posledni.json
+frame.jpg
+frame-data.json
+frame-auto/test.jpg

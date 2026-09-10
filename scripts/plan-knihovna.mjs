@@ -76,8 +76,7 @@ function oknoDne(s, oddeleniPotreba, kdoJde) {
   return { s, od: volniOd, do: doKdy, delka, brzda, zavrene };
 }
 
-export function naplanuj() {
-  const dnes = iso(new Date());
+export function naplanuj(dnes = iso(new Date())) {
   const out = [];
   for (const v of knihovna) {
     if (v.vraceno) continue;
@@ -132,8 +131,8 @@ export function textPlanu(p) {
 }
 
 /* strukturovaný plán pro web — generuje se při buildu, aby stránka nemusela nic počítat */
-export function planProWeb() {
-  return naplanuj().map(p => ({
+export function planProWeb(dnes) {
+  return naplanuj(dnes).map(p => ({
     id: p.v.id,
     vratitDo: p.v.vratitDo,
     nejlepsi: p.kandidati[0] ? {

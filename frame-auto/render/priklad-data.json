@@ -1,0 +1,23 @@
+{
+  "razitko": "aktualizováno 11. 9. v 5:30",
+  "den": "Pátek",
+  "datum": "11. září 2026 · týden 37",
+  "dnes": [
+    { "cas": "11:40", "kdo": "OBA", "text": "konec vyučování" },
+    { "cas": "12:00—18:00", "text": "Knihovna — vrátit 19 titulů", "pozn": "Wonkova 1262/1a", "hi": true },
+    { "cas": "", "text": "Vybrat nové knížky a CD", "pozn": "kvůli tomu se tam jede, ne kvůli vracení" }
+  ],
+  "cesty": [
+    { "dni": "43", "kam": "Oslo", "pozn": "dní do odletu · 24. 10." },
+    { "dni": "98", "kam": "Benidorm", "pozn": "dní do odletu · 18. 12. · auto v Alicante zatím nerezervováno" }
+  ],
+  "nadpisVpravo": "Víkend",
+  "dalsiDny": [
+    { "den": "Sobota", "text": "volno" },
+    { "den": "Neděle", "text": "Bibliobox — poslední možnost", "pozn": "z boxu se konto odepíše až v pondělí", "warn": true }
+  ],
+  "blizi": [
+    { "datum": "21. 9.", "text": "Zaplatit karate — 2 900 Kč" },
+    { "datum": "30. 9.", "text": "Platba DDM — 13 200 Kč", "pozn": "bez kolizních kroužků" }
+  ]
+}

@@ -5,6 +5,7 @@ on:
     branches: [main]
   schedule:
     - cron: '0 3 * * *'   # denně 5:00 SELČ – přegeneruje svátky a .ics
+    - cron: '0 19 * * *'  # 21:00 SELČ / 20:00 SEČ – plakát na zítřek pro The Frame (viz krok níže)
   workflow_dispatch:
 
 permissions:
@@ -38,6 +39,24 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: přegenerované svátky a ICS feed"
           git push
         continue-on-error: true
+
+      # Plakát pro The Frame (frame-auto/). Po 18:00 pražského času se renderuje zítřek:
+      # plánované běhy GitHubu tu chodí i o 4–5 hodin později, takže na ranní cron se
+      # upload v 5:30 spolehnout nemůže — večerní běh má rezervu přes celou noc.
+      - name: Plakát pro The Frame
+        continue-on-error: true   # když selže Chromium, web se nasadí i tak, jen bez plakátu
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          node scripts/build-frame-data.mjs > frame-data.json
+          node frame-auto/render/render.mjs frame-data.json frame.jpg
+
+      - name: Úklid před publikací
+        if: always()
+        run: |
+          rm -rf node_modules
+          # rozbitý render nesmí na Pages nechat prázdný frame-data.json
+          if [ ! -s frame.jpg ]; then rm -f frame.jpg frame-data.json; fi
 
       - uses: actions/configure-pages@v5
         with:
