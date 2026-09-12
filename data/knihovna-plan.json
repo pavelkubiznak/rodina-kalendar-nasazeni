@@ -3,20 +3,15 @@
     "id": "vypujcky-2026-09-14",
     "vratitDo": "2026-09-14",
     "nejlepsi": {
-      "datum": "2026-09-11",
-      "popis": "pátek 11. září",
-      "od": "12:00",
-      "do": "18:00",
+      "datum": "2026-09-12",
+      "popis": "sobota 12. září",
+      "od": "08:00",
+      "do": "12:00",
       "vseOtevreno": true,
       "zavrene": [],
       "brzda": null
     },
     "nahradni": [
-      {
-        "popis": "sobota 12. září",
-        "od": "08:00",
-        "do": "12:00"
-      },
       {
         "popis": "pondělí 14. září",
         "od": "13:50",
