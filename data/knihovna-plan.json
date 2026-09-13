@@ -3,21 +3,15 @@
     "id": "vypujcky-2026-09-14",
     "vratitDo": "2026-09-14",
     "nejlepsi": {
-      "datum": "2026-09-12",
-      "popis": "sobota 12. září",
-      "od": "08:00",
-      "do": "12:00",
+      "datum": "2026-09-14",
+      "popis": "pondělí 14. září",
+      "od": "13:50",
+      "do": "16:25",
       "vseOtevreno": true,
       "zavrene": [],
-      "brzda": null
+      "brzda": "Karate v 16:45"
     },
-    "nahradni": [
-      {
-        "popis": "pondělí 14. září",
-        "od": "13:50",
-        "do": "16:25"
-      }
-    ],
+    "nahradni": [],
     "denD": {
       "popis": "pondělí 14. září",
       "od": "13:50",
