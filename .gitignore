@@ -9,3 +9,9 @@ frame-auto/test.jpg
 frame-auto/upload/hlidka.json
 frame-auto/upload/diagnostika-vystup.txt
 *.zaloha
+frame-auto/upload/inventura.json
+frame-auto/upload/inventura.zadej
+frame-auto/upload/nahledy/
+
+# GitHub token pro push z automatiky (nikdy do gitu)
+.gh-token
