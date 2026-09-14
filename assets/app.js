@@ -796,6 +796,45 @@ const gh = {
 const b64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
 const zb64 = str => new TextDecoder().decode(Uint8Array.from(atob(str.replace(/\n/g,'')), c => c.charCodeAt(0)));
 
+/* ---------- přenos nastavení na další zařízení ---------- */
+const b64url  = t => b64(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const zb64url = t => zb64(t.replace(/-/g,'+').replace(/_/g,'/'));
+
+function prenosOdkaz() {
+  const cfg = gh.nacti();
+  if (!cfg || !cfg.repo || !cfg.token) return null;
+  return location.origin + location.pathname + '#nastav=' + b64url(JSON.stringify(cfg));
+}
+
+// Když se kalendář otevře z QR kódu, převezme nastavení a hned uklidí adresu,
+// aby token nezůstal v historii prohlížeče.
+function prijmiZHashe() {
+  const m = location.hash.match(/^#nastav=(.+)$/);
+  if (!m) return null;
+  history.replaceState(null, '', location.pathname + location.search);
+  try {
+    const c = JSON.parse(zb64url(m[1]));
+    if (!c || !c.repo || !c.token) return null;
+    gh.uloz(c);
+    return c;
+  } catch { return null; }
+}
+
+function vykresliQR(box, odkaz) {
+  const cil = el('div','qr');
+  box.append(cil);
+  const kresli = () => {
+    try { new QRCode(cil, { text: odkaz, width: 232, height: 232, correctLevel: QRCode.CorrectLevel.L }); }
+    catch { cil.replaceWith(el('div','hint','QR se nepodařilo vykreslit — použij odkaz níž.')); }
+  };
+  if (window.QRCode) return kresli();
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  s.onload = kresli;
+  s.onerror = () => { cil.replaceWith(el('div','hint','QR se nepodařilo načíst — použij odkaz níž.')); };
+  document.head.append(s);
+}
+
 async function ulozDoRepa(soubor, zaznam, popisZmeny) {
   const cfg = gh.nacti();
   if (!cfg || !cfg.repo || !cfg.token) return { ok:false, duvod:'bez-tokenu' };
@@ -946,6 +985,7 @@ function render() { renderOvladani(); renderHero(); renderKalendar(); renderKnih
 
   // nastavení ukládání
   const panel = $('#nastaveni');
+  const prijato = prijmiZHashe();
   const cfg = gh.nacti();
   if (cfg) { $('#gh-repo').value = cfg.repo || ''; $('#gh-token').value = cfg.token || ''; }
   const stav = () => {
@@ -963,6 +1003,28 @@ function render() { renderOvladani(); renderHero(); renderKalendar(); renderKnih
   $('#gh-smazat').onclick = () => {
     gh.smaz(); $('#gh-repo').value = ''; $('#gh-token').value = ''; stav();
   };
+  $('#gh-prenest').onclick = () => {
+    const box = $('#gh-prenos');
+    if (!box.hidden) { box.hidden = true; box.innerHTML = ''; return; }
+    const odkaz = prenosOdkaz();
+    box.hidden = false; box.innerHTML = '';
+    if (!odkaz) { box.append(el('div','hint','Nejdřív vyplň repozitář i token a dej Uložit.')); return; }
+    box.append(el('div','eyebrow','Přenést na telefon'));
+    box.append(el('div','hint','Namiř na QR fotoaparát telefonu a otevři odkaz — kalendář se tam nastaví sám. '
+      + 'Je v něm tvůj token, tak ho nikomu neukazuj a po přenesení QR zavři.'));
+    vykresliQR(box, odkaz);
+    box.append(el('div','odkaz', odkaz));
+    const kop = el('button','btn','Zkopírovat odkaz');
+    kop.onclick = async () => { try { await navigator.clipboard.writeText(odkaz); kop.textContent = 'Zkopírováno'; } catch {} };
+    const skryj = el('button','btn','Skrýt');
+    skryj.onclick = () => { box.hidden = true; box.innerHTML = ''; };
+    const r = el('div','row'); r.append(kop, skryj); box.append(r);
+  };
+  if (prijato) {
+    $('#stav-ulozeni').textContent = '● nastaveno z QR — ukládá se do ' + prijato.repo;
+    $('#stav-ulozeni').classList.add('ok');
+  }
+
 
   $('#stopa').textContent = state.data.config.aktualizovano;
   render();
