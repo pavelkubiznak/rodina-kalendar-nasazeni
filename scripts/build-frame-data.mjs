@@ -3,9 +3,10 @@
    Na stdout jde jen JSON — workflow ho přesměrovává rovnou do souboru. */
 import fs from 'node:fs';
 import { planProWeb } from './plan-knihovna.mjs';
+import { vsechnyEvents } from './udalosti.mjs';
 
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
-const people = J('people'), krouzky = J('krouzky'), events = J('events'), svatky = J('svatky'),
+const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(), svatky = J('svatky'),
       narozeniny = J('narozeniny'), ukoly = J('ukoly'), doklady = J('doklady'),
       rozvrhy = J('rozvrhy'), knihovna = J('knihovna'), oteviraci = J('knihovna-oteviraci');
 

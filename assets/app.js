@@ -19,9 +19,14 @@ const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.cl
 
 async function nacti() {
   if (window.__DATA__) return window.__DATA__;
-  const f = ['config','people','krouzky','events','rozvrhy','narozeniny','svatky','ukoly','doklady','knihovna','knihovna-plan'];
+  const f = ['config','people','krouzky','events','events-google','rozvrhy','narozeniny','svatky','ukoly','doklady','knihovna','knihovna-plan'];
   const out = {};
-  await Promise.all(f.map(async n => { out[n] = await (await fetch(`data/${n}.json`)).json(); }));
+  await Promise.all(f.map(async n => {
+    try { out[n] = await (await fetch(`data/${n}.json`)).json(); }
+    catch { out[n] = []; }          // events-google.json nemusí existovat před prvním syncem
+  }));
+  // ruční události z Google Kalendáře se chovají stejně jako ty z events.json
+  out.events = [...(out.events || []), ...(out['events-google'] || [])];
   return out;
 }
 const osoba = id => state.data.people.find(p => p.id === id) || { jmeno:id, barva:'#87838f' };
@@ -787,7 +792,33 @@ function parseText(t) {
     _chybiDatum: !datum };
 }
 
-/* ---------- ukládání do GitHubu ---------- */
+/* ---------- předání nové akce Google Kalendáři ---------- */
+// Kalendář „Rodina" — tam, kde se píše ručně. Odsud si to sync stáhne zpátky do repa.
+const GOOGLE_KALENDAR = '2e353d2ebce2f69421426398bfeeddc9fced97e446ec27d7de1cf264f4c81633@group.calendar.google.com';
+
+function googleOdkaz(z) {
+  const bezPomlcek = d => d.replace(/-/g, '');
+  const poDni = d => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return bezPomlcek(x.toISOString().slice(0, 10)); };
+  let dates;
+  if (z.celodenni || !z.cas) {
+    dates = `${bezPomlcek(z.od)}/${poDni(z.do || z.od)}`;
+  } else {
+    const konec = z.casDo || (String(Number(z.cas.slice(0, 2)) + 1).padStart(2, '0') + z.cas.slice(2));
+    dates = `${bezPomlcek(z.od)}T${z.cas.replace(':', '')}00/${bezPomlcek(z.od)}T${konec.replace(':', '')}00`;
+  }
+  const q = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `${z.ikona || ''} ${z.nazev}`.trim(),
+    dates,
+    ctz: 'Europe/Prague',
+    src: GOOGLE_KALENDAR,
+  });
+  if (z.misto) q.set('location', z.misto);
+  if (z.popis) q.set('details', z.popis);
+  return `https://calendar.google.com/calendar/render?${q}`;
+}
+
+/* ---------- ukládání do GitHubu (úkoly a doklady — ty žijí v datech, ne v kalendáři) ---------- */
 const gh = {
   nacti: () => { try { return JSON.parse(localStorage.getItem('rk-gh') || 'null'); } catch { return null; } },
   uloz: v => localStorage.setItem('rk-gh', JSON.stringify(v)),
@@ -898,9 +929,17 @@ function renderNavrh(n) {
 
   zrus.onclick = () => renderNavrh(null);
   ok.onclick = async () => {
+    // akce patří do Google Kalendáře — otevřeme ho předvyplněný, uživatel jen potvrdí
+    if (n._typ === 'akce') {
+      window.open(googleOdkaz(n.zaznam), '_blank', 'noopener');
+      $('#vstup').value = '';
+      box.innerHTML = '';
+      box.append(el('div','eyebrow','Otevřeno v Google Kalendáři'));
+      box.append(el('div','hint','Zkontroluj a dej Uložit. Objeví se to na všech zařízeních hned a tady do čtvrt hodiny.'));
+      return;
+    }
     ok.disabled = true; ok.textContent = 'Ukládám…';
     // zobrazit hned lokálně
-    if (n._typ === 'akce') state.data.events.push(n.zaznam);
     if (n._typ === 'ukol') state.data.ukoly.push(n.zaznam);
     if (n._typ === 'doklad') (state.data.doklady = state.data.doklady || []).push(n.zaznam);
     try {
@@ -918,11 +957,7 @@ function renderNavrh(n) {
       box.append(el('div','hint','Zapsáno do repozitáře. Web se přebuildí zhruba do minuty a uvidí to i Šárka. Do Google Kalendáře to dorazí s další aktualizací feedu.'));
     } else if (v.duvod === 'bez-tokenu') {
       box.append(el('div','eyebrow','Přidáno jen sem'));
-      box.append(el('div','hint','Zatím to vidíš jen ty v tomhle prohlížeči. Vlož blok do ' + n.soubor + ', nebo si v ⚙ nastav ukládání do GitHubu a příště se to uloží samo.'));
-      box.append(el('pre','json', JSON.stringify(n.zaznam, null, 2)));
-      const cp = el('button','btn','Zkopírovat');
-      cp.onclick = () => navigator.clipboard.writeText(JSON.stringify(n.zaznam, null, 2));
-      const rr = el('div','row'); rr.append(cp); box.append(rr);
+      box.append(el('div','hint','Na tomhle zařízení není nastavené ukládání, takže to zatím vidíš jen ty v tomhle prohlížeči. Ostatní to uvidí, až to doplníš z počítače.'));
     } else {
       box.append(el('div','eyebrow','Uložení selhalo'));
       box.append(el('div','hint', `${v.duvod}. Zkontroluj repozitář a token v ⚙. Návrh je zatím jen v tomhle prohlížeči.`));

@@ -1,0 +1,56 @@
+name: Sync s Google Kalendářem
+
+# Dva směry, které se nikdy nepotkají:
+#   pull  — kalendář „Rodina" (tam píše člověk)          → data/events-google.json
+#   push  — data v gitu (rozvrhy, kroužky, svátky, …)    → kalendář „Rodina – automaticky"
+# Díky tomu nemůže vzniknout smyčka ani konflikt: každá událost má právě jednoho vlastníka.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'scripts/udalosti.mjs'
+      - 'scripts/google-*.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# ať se dva běhy nepoperou o push do main
+concurrency:
+  group: google-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Stáhnout ruční události z Google
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: node scripts/google-pull.mjs
+
+      - name: Commitnout, když se něco změnilo
+        run: |
+          git config user.name  "rodinny-kalendar-bot"
+          git config user.email "actions@github.com"
+          git add data/events-google.json
+          if git diff --staged --quiet; then
+            echo "Beze změny, není co commitovat."
+          else
+            git commit -m "sync: ruční události z Google Kalendáře"
+            git pull --rebase --autostash origin main
+            git push
+          fi
+
+      - name: Nasypat generované události do Google
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: node scripts/google-push.mjs

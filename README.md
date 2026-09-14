@@ -191,6 +191,63 @@ lokální parser — hlavně u složitějších vět.
 
 ---
 
+## Synchronizace s Google Kalendářem
+
+Zdroj pravdy pro **ruční** události je Google Kalendář **„Rodina"**. Píše se do něj
+odkudkoli — v Kalendáři na iPhonu, na Macu, ve webovém Google Kalendáři — a je to
+obousměrné a okamžité, protože je to normální kalendářový účet, ne odebíraný feed.
+
+Vedle něj stojí kalendář **„Rodina – automaticky"**, do kterého robot sype všechno,
+co se generuje z dat v repozitáři: rozvrhy, kroužky, svátky, narozeniny, výlety,
+splatnosti, knihovnu a deadliny úkolů.
+
+```
+Rodina                 ←→  iPhone / Mac / web        obousměrně, okamžitě
+   │ pull (číst)
+   ↓
+data/events-google.json  →  plakát · feed · upomínky · web
+   ↑ push (psát)
+Rodina – automaticky   ←   data/*.json v gitu
+```
+
+**Každá událost má právě jednoho vlastníka**, a proto nemůže vzniknout smyčka ani
+konflikt. Servisní účet má na „Rodinu" schválně jen právo čtení — co tam napíše
+člověk, robot fyzicky nemůže přepsat ani smazat.
+
+| | |
+|---|---|
+| Kalendář Rodina | `2e353d2ebce2f69421426398bfeeddc9fced97e446ec27d7de1cf264f4c81633@group.calendar.google.com` |
+| Kalendář Rodina – automaticky | `629c4eb8e076dc92556eb84b294f5e4f1c996c4a4bcec1c3e215485a021acab4@group.calendar.google.com` |
+| Google Cloud projekt | `rodinny-kalendar` (`rodinny-kalendar-508609`) |
+| Servisní účet | `kalendar-sync@rodinny-kalendar-508609.iam.gserviceaccount.com` |
+| Secret v GitHubu | `GOOGLE_SA_KEY` — celý JSON klíč servisního účtu |
+
+Běhá to v `.github/workflows/sync.yml` každých 15 minut a navíc při každé změně
+v `data/`. Plánované běhy GitHubu chodí se zpožděním, proto si `deploy.yml` stahuje
+čerstvá data z Googlu ještě jednou těsně předtím, než renderuje plakát na The Frame —
+tam na aktuálnosti záleží nejvíc.
+
+Ruční spuštění a zkouška naprázdno:
+
+```bash
+export GOOGLE_SA_KEY="$(cat ~/Downloads/rodinny-kalendar-*.json)"
+node scripts/google-pull.mjs
+node scripts/google-push.mjs --nanecisto   # vypíše, co by udělal, a nic nezapíše
+```
+
+### Přidat kalendář na iPhone
+
+Nastavení → Aplikace → Kalendář → Účty → Přidat účet → Google → přihlásit se
+`pavel.kubiznak@gmail.com`. Pak v Kalendáři dole **Kalendáře** zaškrtnout **Rodina**
+a **Rodina – automaticky**. Nové události ukládat do kalendáře **Rodina** —
+do „automaticky" nemá smysl psát, příští sync to přepíše.
+
+### Feed rodina.ics
+
+Zůstává funkční pro toho, kdo nemá sdílený Google Kalendář. Obsahuje generovaná
+i ruční data. Pozor: odebíraný ICS je v iOS **navždy jen ke čtení** — to je důvod,
+proč hlavní cesta vede přes sdílený kalendář, ne přes feed.
+
 ## Zobrazení na zeď
 
 `?display=1` na konci URL zapne režim bez ovládacích prvků, s většími písmy a automatickým

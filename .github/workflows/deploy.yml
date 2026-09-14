@@ -25,6 +25,14 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
 
+      # Než se vyrobí plakát a feed, stáhneme čerstvé ruční události z Google.
+      # Kdyby Google zlobil, deploy nesmí spadnout — pojede se s posledními staženými daty.
+      - name: Čerstvé události z Google Kalendáře
+        continue-on-error: true
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+        run: node scripts/google-pull.mjs
+
       - name: Vygenerovat svátky a ICS feed
         run: |
           node scripts/gen-svatky.mjs
@@ -35,7 +43,7 @@ jobs:
         run: |
           git config user.name  "rodinny-kalendar-bot"
           git config user.email "actions@github.com"
-          git add data/svatky.json data/knihovna-plan.json rodina.ics
+          git add data/svatky.json data/knihovna-plan.json data/events-google.json rodina.ics
           git diff --staged --quiet || git commit -m "chore: přegenerované svátky a ICS feed"
           git push
         continue-on-error: true

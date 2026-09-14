@@ -2,8 +2,9 @@
    Když není co hlásit, nevypíše nic (workflow pak nic neposílá). */
 import fs from 'node:fs';
 import { naplanuj, textPlanu } from './plan-knihovna.mjs';
+import { vsechnyEvents } from './udalosti.mjs';
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
-const people = J('people'), krouzky = J('krouzky'), events = J('events'),
+const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(),
       ukoly = J('ukoly'), doklady = J('doklady'), narozeniny = J('narozeniny'), knihovna = J('knihovna');
 
 const MES = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
