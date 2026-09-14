@@ -1,31 +1,118 @@
 [
   {
-    "id": "vypujcky-2026-09-14",
-    "vratitDo": "2026-09-14",
+    "id": "vypujcky-2026-10-13",
+    "vratitDo": "2026-10-13",
     "knihovna": "Knihovna města Hradce Králové",
-    "upominky": [7, 3, 1],
+    "upominky": [
+      7,
+      3,
+      1
+    ],
     "vraceno": false,
-    "zdroj": "Souhrn výpůjček z 13. 8. 2026 (e-mail z knihovny)",
+    "zdroj": "E-maily z knihovny (11. 9. 2026) + prodlouženo na místě 14. 9. 2026",
     "oddeleni": [
-      {
-        "nazev": "Ústřední půjčovna dospělí",
-        "ctenar": "pavel",
-        "telefon": "495 075 025",
-        "email": "ustrednipujc@knihovnahk.cz",
-        "tituly": [
-          { "autor": "Baťa, Tomáš", "nazev": "Myšlenky Tomáše Bati" },
-          { "autor": "Baťa, Tomáš", "nazev": "Úvahy a projevy" },
-          { "autor": "Banáš, Jozef", "nazev": "Jsem Baťa, dokážu to!" }
-        ]
-      },
       {
         "nazev": "Ústřední půjčovna děti",
         "ctenar": "pavel",
         "telefon": "495 075 033",
         "email": "detske@knihovnahk.cz",
         "tituly": [
-          { "autor": null, "nazev": "Hravá angličtina — interaktivní mluvicí kniha" },
-          { "autor": "Bauer, Ivan", "nazev": "Vlastivěda: dějepisná část — interaktivní mluvicí učebnice" }
+          {
+            "autor": null,
+            "nazev": "Hravá angličtina : interaktivní mluvicí kniha"
+          },
+          {
+            "autor": "Bauer, Ivan, 1966-",
+            "nazev": "Vlastivěda : dějepisná část : interaktivní mluvicí učebnice : chytrý školák"
+          }
+        ]
+      },
+      {
+        "nazev": "Hudební oddělení",
+        "ctenar": "matej",
+        "telefon": "495 075 034",
+        "email": "pujcho@knihovnahk.cz",
+        "tituly": [
+          {
+            "autor": "Doyle, Arthur Conan, 1859-1930",
+            "nazev": "Baskervilský pes"
+          },
+          {
+            "autor": "Kinney, Jeff, 1971-",
+            "nazev": "Deník malého poseroutky 19 : Recept na katastrofu"
+          },
+          {
+            "autor": "Zamarovský, Vojtěch, 1919-2006",
+            "nazev": "Gilgameš"
+          },
+          {
+            "autor": "Pratchett, Terry, 1948-2015",
+            "nazev": "Muži ve zbrani"
+          },
+          {
+            "autor": "Martin, George R. R., 1948-",
+            "nazev": "Tanec s draky : [5. díl bestsellerové ságy] R"
+          },
+          {
+            "autor": "Asimov, Isaac, 1920-1992",
+            "nazev": "Já, robot R"
+          },
+          {
+            "autor": "Herriot, James, 1916-1995",
+            "nazev": "Zvěrolékař a psí historky R"
+          },
+          {
+            "autor": "Yovanoff, Brenna 1979-",
+            "nazev": "Šílená Max"
+          },
+          {
+            "autor": "Martin, George R. R., 1948-",
+            "nazev": "Hra o trůny / [zvukový záznam]"
+          },
+          {
+            "autor": "Cowell, Cressida, 1966-",
+            "nazev": "Škyťák Šelmovská štika III.. VIII. Jak zlomit dračí srdce"
+          },
+          {
+            "autor": "Nine Inch Nails (1989-)",
+            "nazev": "Tron: Ares I Music By Nine Inch Nails O.S.T"
+          },
+          {
+            "autor": "Kadlečková, Vilma, 1971-",
+            "nazev": "Mycelium : Pád do temnot"
+          },
+          {
+            "autor": "Zelený, Mnislav, 1943-",
+            "nazev": "Duch s rozkvetlým penisem"
+          },
+          {
+            "autor": "Pratchett, Terry, 1948-2015",
+            "nazev": "Čarodějky na cestách"
+          },
+          {
+            "autor": "Corey, James S. A.",
+            "nazev": "Leviatan se probouzí"
+          },
+          {
+            "autor": "Cline, Ernest, 1972-",
+            "nazev": "Ready Player One"
+          },
+          {
+            "autor": "Riordan, Rick, 1964-",
+            "nazev": "Slunce a hvězda : Dobrodružství Nika a Willa"
+          },
+          {
+            "autor": "Weir, Andy, 1972-",
+            "nazev": "Artemis"
+          },
+          {
+            "autor": "Griel, Patrick, 1978-",
+            "nazev": "Příběhy z mezivěku"
+          },
+          {
+            "autor": "Borůvková, Vendula, 1977-",
+            "nazev": "1918 aneb Jak jsem dal gól přes celé Československo"
+          }
         ]
       },
       {
@@ -34,13 +121,34 @@
         "telefon": "495 075 034",
         "email": "pujcho@knihovnahk.cz",
         "tituly": [
-          { "autor": "Válková, Veronika", "nazev": "Terezínské ghetto: tajemný vlak do neznáma" },
-          { "autor": "Vaněček, Michal", "nazev": "Putování labyrintem světa" },
-          { "autor": "Kosatík, Pavel", "nazev": "100x TGM" },
-          { "autor": "Forsyth, Frederick", "nazev": "Mstitel" },
-          { "autor": "Coelho, Paulo", "nazev": "Poutník: Mágův deník (zvukový záznam)" },
-          { "autor": "Ruiz, Miguel", "nazev": "Toltécké umění života a smrti" },
-          { "autor": "Coelho, Paulo", "nazev": "Alchymista" }
+          {
+            "autor": "Vaněček, Michal, 1964-",
+            "nazev": "Putování labyrintem světa : Pocta učiteli národů J. A. Komenskému"
+          },
+          {
+            "autor": "Válková, Veronika, (spisovatelka, učitelka) 1970-",
+            "nazev": "Terezínské ghetto : tajemný vlak do neznáma"
+          },
+          {
+            "autor": "Kosatík, Pavel, 1962-",
+            "nazev": "100x TGM : co Masaryk řekl a napsal, jak to myslel a co to znamená"
+          },
+          {
+            "autor": "Forsyth, Frederick, 1938-2025",
+            "nazev": "Mstitel"
+          },
+          {
+            "autor": "Coelho, Paulo, 1947-",
+            "nazev": "Poutník: Mágův deník / [zvukový záznam]"
+          },
+          {
+            "autor": "Ruiz, Miguel, 1952-",
+            "nazev": "Toltécké umění života a smrti"
+          },
+          {
+            "autor": "Coelho, Paulo, 1947-",
+            "nazev": "Alchymista"
+          }
         ]
       },
       {
@@ -49,13 +157,54 @@
         "telefon": "495 075 034",
         "email": "pujcho@knihovnahk.cz",
         "tituly": [
-          { "autor": "Slušný, Jaromír", "nazev": "Nejkrásnější římské báje a pověsti" },
-          { "autor": "Stančík, Petr", "nazev": "H2O a poklad šíleného oka" },
-          { "autor": "Hulpach, Vladimír", "nazev": "Keltské mýty a báje (zvukový záznam)" },
-          { "autor": "Twain, Mark", "nazev": "Dobrodružství Huckleberryho Finna" },
-          { "autor": "Ransome, Arthur", "nazev": "Trosečníci z Vlaštovky" },
-          { "autor": "Perry, Sarah", "nazev": "Nestvůra z Essexu" },
-          { "autor": "Ščerba, Natalja", "nazev": "Časodějové. Klíč k času" }
+          {
+            "autor": "Slušný, Jaromír, 1949-",
+            "nazev": "Nejkrásnější římské báje a pověsti"
+          },
+          {
+            "autor": "Stančík, Petr, (spisovatel) 1968-",
+            "nazev": "H2O a poklad šíleného oka"
+          },
+          {
+            "autor": "Hulpach, Vladimír, 1935-",
+            "nazev": "Keltské mýty a báje / [zvukový záznam]"
+          },
+          {
+            "autor": "Twain, Mark, 1835-1910",
+            "nazev": "Dobrodružství Huckleberryho Finna"
+          },
+          {
+            "autor": "Ransome, Arthur, 1884-1967",
+            "nazev": "Trosečníci z Vlaštovky"
+          },
+          {
+            "autor": "Perry, Sarah, 1979-",
+            "nazev": "Nestvůra z Essexu"
+          },
+          {
+            "autor": "Ščerba, Natal'ja Vasil'jevna, 1981-",
+            "nazev": "Časodějové. Klíč k času"
+          }
+        ]
+      },
+      {
+        "nazev": "Ústřední půjčovna dospělí",
+        "ctenar": "pavel",
+        "telefon": "495 075 025",
+        "email": "ustrednipujc@knihovnahk.cz",
+        "tituly": [
+          {
+            "autor": "Baťa, Tomáš, 1876-1932",
+            "nazev": "Myšlenky Tomáše Bati"
+          },
+          {
+            "autor": "Baťa, Tomáš, 1876-1932",
+            "nazev": "Úvahy a projevy"
+          },
+          {
+            "autor": "Banáš, Jozef, 1948-",
+            "nazev": "Jsem Baťa, dokážu to! : inspirativní příběh geniálního motivátora"
+          }
         ]
       }
     ]

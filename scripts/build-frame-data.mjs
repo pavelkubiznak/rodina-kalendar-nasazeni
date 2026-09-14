@@ -211,7 +211,7 @@ function blizi(s, po, doDne) {
   platby.forEach(p => v(p.datum, p.text, p.pozn));
   ukoly.filter(u => !u.hotovo).forEach(u => v(u.doKdy, u.nazev));
   vypujcky.forEach(({ v: x, celkem }) => v(x.vratitDo, 'Vrátit knihy do knihovny', `${celkem} titulů`));
-  events.filter(e => !['let', 'ubytovani', 'vylet'].includes(e.typ)).forEach(e => v(e.od, e.nazev, e.misto));
+  events.filter(e => !['let', 'ubytovani', 'vylet', 'pobyt'].includes(e.typ)).forEach(e => v(e.od, e.nazev, e.misto));
   const rok = Number(po.slice(0, 4));
   narozeniny.forEach(n => [rok, rok + 1].forEach(r => v(`${r}-${n.datum.slice(5)}`, `${n.jmeno} má narozeniny`)));
   // doklady se hlásí s delším předstihem, podle svých upomínek
@@ -227,7 +227,7 @@ function blizi(s, po, doDne) {
 
 /* odpočet do velkých cest; u každé i nevyřešené úkoly, které se týkají cílové destinace */
 function cesty(s) {
-  return events.filter(e => e.typ === 'vylet' && e.od > s)
+  return events.filter(e => (e.typ === 'vylet' || e.typ === 'pobyt') && e.od > s)
     .sort((a, b) => podle(a.od, b.od))
     .map(c => {
       const dni = dnuMezi(s, c.od);
@@ -253,7 +253,7 @@ export function frameData(datum) {
     den: DNY[dow(s)],
     datum: `${parse(s).getUTCDate()}. ${MES[parse(s).getUTCMonth()]} ${s.slice(0, 4)} · týden ${tydenISO(s)}`,
     dnes: dnes(s),
-    cesty: cesty(s).slice(0, 2),
+    cesty: cesty(s).slice(0, 3),
     nadpisVpravo: pravy.nadpis,
     dalsiDny: pravy.radky,
     blizi: blizi(s, pravy.posledni, plus(s, OKNO_BLIZI)).slice(0, 4),
