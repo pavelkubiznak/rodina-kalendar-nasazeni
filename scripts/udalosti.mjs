@@ -86,7 +86,7 @@ export function generovane() {
     const d = new Date(start + 'T00:00:00Z');
     while (!dny.includes(d.getUTCDay())) d.setUTCDate(d.getUTCDate() + 1);
     push(`krouzek-${k.id}`, {
-      nazev: `${k.stav === 'kolize' ? '⚠️ ' : ''}${k.nazev} — ${k.kdo.map(jmeno).join(' + ')}`,
+      nazev: `${k.stav === 'kolize' ? '⚠️ ' : k.stav === 'nejiste' ? '❓ ' : ''}${k.nazev} — ${k.kdo.map(jmeno).join(' + ')}`,
       od: d.toISOString().slice(0, 10), cas: k.od, casDo: k.do || k.od,
       celodenni: false, misto: k.misto, popis: [k.poskytovatel, k.poznamka].filter(Boolean).join(' — '),
       rrule: `FREQ=WEEKLY;BYDAY=${dny.map(x => DNI_ICS[x]).join(',')};UNTIL=${den(k.konecKurzu || SKOLNI_ROK.do)}T235900Z`,
@@ -106,7 +106,7 @@ export function generovane() {
     const suma = ks.reduce((a, k) => a + (k.platba.castka || 0), 0);
     const detail = ks.map(k => {
       const vs = k.vs ? ' (VS ' + Object.entries(k.vs).map(([who, v]) => `${jmeno(who)} ${v}`).join(', ') + ')' : '';
-      return `• ${k.nazev}${vs}${k.stav === 'kolize' ? ' ⚠️ zatím neplatit' : ''}`;
+      return `• ${k.nazev}${vs}${k.stav === 'kolize' ? ' ⚠️ zatím neplatit' : k.stav === 'nejiste' ? ' ❓ zatím nerozhodnuto, neplatit' : ''}`;
     }).join('\n');
     push(`platba-${kdy}-${kde.slice(0, 10).replace(/\W/g, '')}`, {
       nazev: `💳 Zaplatit ${suma.toLocaleString('cs-CZ')} Kč — ${kde}`,

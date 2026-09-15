@@ -36,7 +36,7 @@ if (!volno && !vylet && s >= SR.od && s <= SR.do) {
       && (!k.prvniLekce || s >= k.prvniLekce) && (!k.konecKurzu || s <= k.konecKurzu))
     .sort((a, b) => (a.od || '').localeCompare(b.od || ''))
     .forEach(k => radky.push(
-      `${k.od}–${k.do} ${k.nazev} — ${k.kdo.map(jmeno).join(', ')}${k.misto ? ' · ' + k.misto : ''}${k.stav === 'kolize' ? ' ⚠️' : ''}`));
+      `${k.od}–${k.do} ${k.nazev} — ${k.kdo.map(jmeno).join(', ')}${k.misto ? ' · ' + k.misto : ''}${k.stav === 'kolize' ? ' ⚠️' : k.stav === 'nejiste' ? ' ❓' : ''}`));
 }
 
 const upominky = sestavUpominky();

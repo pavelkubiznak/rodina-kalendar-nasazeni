@@ -26,7 +26,7 @@ function proDen(s) {
     krouzky.filter(k => [k.den, k.denDalsi].includes(dow)
         && (!k.prvniLekce || s >= k.prvniLekce) && (!k.konecKurzu || s <= k.konecKurzu))
       .sort((a, b) => (a.od || '').localeCompare(b.od || ''))
-      .forEach(k => r.push(`${k.od || '  ?  '}–${k.do || '?'} ${k.nazev} (${k.kdo.map(jmeno).join(', ')})${k.stav === 'kolize' ? ' ⚠️ KOLIZE' : ''}`));
+      .forEach(k => r.push(`${k.od || '  ?  '}–${k.do || '?'} ${k.nazev} (${k.kdo.map(jmeno).join(', ')})${k.stav === 'kolize' ? ' ⚠️ KOLIZE' : k.stav === 'nejiste' ? ' ❓ nerozhodnuto' : ''}`));
   }
   return r;
 }

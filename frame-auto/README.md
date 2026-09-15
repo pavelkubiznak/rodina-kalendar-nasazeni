@@ -6,9 +6,10 @@ a sám se nahraje na televizi.
 ## Jak to teče
 
 ```
-21:00 GitHub Actions  →  render 3840×2160 JPEG na zítřek z data/*.json  →  publikace na Pages
-      (součást deploy.yml; přerenderuje se i po každém pushi)
-5:30  lokální skript  →  stáhne JPEG  →  nahraje do TV  →  smaže včerejší
+5:00, 14:00, 21:00  GitHub Actions  →  render dnešního (frame.jpg) i zítřejšího (frame-zitra.jpg)
+                    plakátu z data/*.json  →  publikace na Pages (i po každém pushi a sync commitu)
+každých 10 min      launchd na Macu  →  do 17:00 chce dnešek, od 17:00 zítřek  →  když na TV
+                    nevisí (nebo se obsah změnil): stáhne JPEG, nahraje, OVĚŘÍ náhledem, smaže starý
 ```
 
 **Proč to rozdělení:** renderování potřebuje headless Chromium (těžké, ale běží zadarmo

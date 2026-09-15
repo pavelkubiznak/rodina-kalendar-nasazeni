@@ -1,5 +1,5 @@
 /* Sestaví datový objekt pro plakát na The Frame (tvar viz frame-auto/render/priklad-data.json).
-   node scripts/build-frame-data.mjs [--datum 2026-09-11] > frame-data.json
+   node scripts/build-frame-data.mjs [--datum 2026-09-11 | --posun 1] > frame-data.json
    Na stdout jde jen JSON — workflow ho přesměrovává rovnou do souboru. */
 import fs from 'node:fs';
 import { planProWeb } from './plan-knihovna.mjs';
@@ -15,7 +15,8 @@ const V_DEN = ['v neděli','v pondělí','v úterý','ve středu','ve čtvrtek',
 const MES = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
 const SR = { od:'2026-09-01', do:'2027-06-30' };
 const OKNO_BLIZI = 30;      // kolik dní dopředu hledat „Blíží se"
-const ZITREK_OD = 18;       // od této hodiny se renderuje plakát na zítřek (večerní běh v CI)
+// víc informací (výchozí od 15. 9.): předměty dne pod koncem vyučování, šest dalších dní, víc položek „Blíží se"
+let VIC = true;   // --strucne vrátí původní, kratší rozsah
 
 // datumy jsou řetězce YYYY-MM-DD počítané v UTC — výsledek nezávisí na časové zóně stroje
 const parse = s => new Date(s + 'T00:00:00Z');
@@ -25,6 +26,8 @@ const dnuMezi = (a, b) => Math.round((parse(b) - parse(a)) / 86400000);
 const kratce = s => `${parse(s).getUTCDate()}. ${parse(s).getUTCMonth() + 1}.`;
 const malym = t => t[0].toLowerCase() + t.slice(1);
 const podle = (a, b) => (a > b) - (a < b);   // ne localeCompare — ta řadí '~' před číslice
+// kroužek, o kterém se ještě rozhoduje (kolize v rozvrhu, nebo dítě nechce chodit) — neplatí se, na plakátu s poznámkou
+const nerozhodnuto = k => k.stav === 'kolize' || k.stav === 'nejiste';
 
 function tydenISO(s) {
   const d = parse(s);
@@ -72,7 +75,7 @@ const platby = (() => {
     m.get(key).push(k);
   }
   return [...m.values()].map(ks => {
-    const platit = ks.filter(k => k.stav !== 'kolize');
+    const platit = ks.filter(k => !nerozhodnuto(k));   // kolizní a nejisté kroužky se zatím neplatí
     const odlozeno = ks.length - platit.length;
     const suma = platit.reduce((a, k) => a + (k.platba.castka || 0), 0);
     return {
@@ -80,7 +83,7 @@ const platby = (() => {
       text: ks.length === 1
         ? `Zaplatit ${malym(ks[0].nazev)} — ${suma.toLocaleString('cs-CZ')} Kč`
         : `Platba ${ks[0].poskytovatel} — ${suma.toLocaleString('cs-CZ')} Kč`,
-      pozn: odlozeno ? `bez ${odlozeno} ${odlozeno === 1 ? 'kroužku' : 'kroužků'} v kolizi` : undefined,
+      pozn: odlozeno ? `bez ${odlozeno} ${odlozeno === 1 ? 'nerozhodnutého kroužku' : 'nerozhodnutých kroužků'}` : undefined,
     };
   }).filter(p => p.suma > 0);
 })();
@@ -110,17 +113,16 @@ function dnes(s) {
   }
 
   if (skolniDen(s)) {
-    const konce = deti.map(p => ({ p, konec: rozvrhy[p.id]?.konec?.[String(dow(s))] }))
-      .filter(x => x.konec).sort((a, b) => podle(a.konec, b.konec));
-    if (konce.length) {
-      const [prvni, ...dalsi] = konce;
-      pridej(prvni.konec, dalsi.every(x => x.konec === prvni.konec)
-        ? { cas: prvni.konec, kdo: stitek(konce.map(x => x.p.id)), text: 'konec vyučování' }
-        : { cas: prvni.konec, kdo: stitek([prvni.p.id]), text: 'konec vyučování',
-            pozn: dalsi.map(x => `${x.p.jmeno} až ${x.konec}`).join(', ') });
+    // každé dítě má svůj řádek, i když končí ve stejnou dobu (Pavel: „zvlášť")
+    for (const p of deti) {
+      const konec = rozvrhy[p.id]?.konec?.[String(dow(s))];
+      if (!konec) continue;
+      const hodiny = (rozvrhy[p.id]?.dny?.[String(dow(s))] || []).map(h => h[1]);
+      pridej(konec, { cas: konec, kdo: stitek([p.id]), text: 'konec vyučování',
+        pozn: VIC && hodiny.length ? hodiny.join(' · ') : undefined });
     }
     for (const k of krouzkyDne(s)) pridej(k.od, { cas: `${k.od}—${k.do}`, kdo: stitek(k.kdo), text: k.nazev,
-      pozn: k.stav === 'kolize' ? 'kolize — zatím nerozhodnuto' : undefined });
+      pozn: k.stav === 'kolize' ? 'kolize — zatím nerozhodnuto' : k.stav === 'nejiste' ? 'zatím nerozhodnuto' : undefined });
   }
 
   for (const { v, celkem } of vypujcky) {
@@ -159,6 +161,7 @@ function souhrnDne(s) {
   for (const k of krouzkyDne(s)) {
     casti.push(`${k.od} ${k.nazev}`);
     if (k.stav === 'kolize') pozn.push(`kolize: ${k.nazev}`);
+    else if (k.stav === 'nejiste') pozn.push(`${k.nazev}: zatím nerozhodnuto`);
   }
 
   for (const { v, celkem } of vypujcky) {
@@ -188,14 +191,14 @@ function souhrnDne(s) {
    (víc řádků se pod „Blíží se" na výšku nevejde) */
 function dalsiDny(s) {
   const d = dow(s);
-  const nadpis = d === 5 ? 'Víkend' : d === 4 ? 'Zbytek týdne' : 'Další dny';
-  const dny = (d === 5 ? [1, 2] : [1, 2, 3]).map(i => plus(s, i));
+  const nadpis = VIC ? 'Další dny' : d === 5 ? 'Víkend' : d === 4 ? 'Zbytek týdne' : 'Další dny';
+  const dny = (VIC ? [1, 2, 3, 4, 5, 6] : d === 5 ? [1, 2] : [1, 2, 3]).map(i => plus(s, i));
 
   let radky = dny.map(den => ({ datum: den, ...souhrnDne(den) }));
   if (d !== 5) {   // prázdný víkend stačí jedním řádkem
     const so = radky.find(r => dow(r.datum) === 6), ne = radky.find(r => dow(r.datum) === 0);
-    if (so?.prazdny && ne?.prazdny)
-      radky = [...radky.filter(r => r !== so && r !== ne), { den: 'Víkend', text: 'volno' }];
+    if (so?.prazdny && ne?.prazdny)   // řádek „Víkend" zůstává na místě soboty, ne na konci
+      radky = radky.flatMap(r => r === so ? [{ den: 'Víkend', text: 'volno' }] : r === ne ? [] : [r]);
   }
   return { nadpis, radky: radky.map(({ datum, prazdny, ...r }) => r), posledni: dny.at(-1) };
 }
@@ -243,9 +246,12 @@ function cesty(s) {
     });
 }
 
-export function frameData(datum) {
+/* datum = konkrétní den (YYYY-MM-DD), nebo posun = kolik dní od dneška (0 dnešek, 1 zítřek).
+   CI renderuje oba: dnešek do frame.jpg a zítřek do frame-zitra.jpg; od 17:00 uploader
+   na TV věší zítřek, aby večer už visel program na další den. */
+export function frameData(datum, posun = 0) {
   const ted = tedVPraze();
-  const s = datum ?? (ted.hodina >= ZITREK_OD ? plus(ted.datum, 1) : ted.datum);
+  const s = datum ?? plus(ted.datum, posun);
   plany = planProWeb(s);
   const pravy = dalsiDny(s);
   return {
@@ -257,11 +263,13 @@ export function frameData(datum) {
     cesty: cesty(s).slice(0, 3),
     nadpisVpravo: pravy.nadpis,
     dalsiDny: pravy.radky,
-    blizi: blizi(s, pravy.posledni, plus(s, OKNO_BLIZI)).slice(0, 4),
+    blizi: blizi(s, pravy.posledni, plus(s, OKNO_BLIZI)).slice(0, VIC ? 6 : 4),
   };
 }
 
 if (process.argv[1]?.endsWith('build-frame-data.mjs')) {
-  const i = process.argv.indexOf('--datum');
-  console.log(JSON.stringify(frameData(i > 0 ? process.argv[i + 1] : undefined), null, 2));
+  const i = process.argv.indexOf('--datum'), j = process.argv.indexOf('--posun');
+  VIC = !process.argv.includes('--strucne');
+  console.log(JSON.stringify(frameData(i > 0 ? process.argv[i + 1] : undefined,
+    j > 0 ? Number(process.argv[j + 1]) : 0), null, 2));
 }

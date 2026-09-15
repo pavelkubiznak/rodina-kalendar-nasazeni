@@ -4,22 +4,29 @@ Denni upload plakatu na The Frame + hlidka zobrazeni.
 
 Spousti ho launchd kazdych 10 minut (viz nainstaluj-mac.sh).
 
-1) Kdyz dnesni plakat jeste nahrany neni: overi, ze na Pages je plakat na DNESEK
-   - ne vcerejsi, kdyz render v GitHub Actions selhal - nahraje ho, OVERI, ze si ho
-   televize opravdu ulozila, nastavi jako aktualni, vypne slideshow a smaze
-   drivejsi plakaty, jinak se uloziste TV zaplni.
+Ktery den ma na TV viset: do 17:00 dnesek, od 17:00 ZITREK (vecer uz rodina kouka,
+co bude zitra). CI publikuje oba plakaty (frame.jpg + frame-zitra.jpg s jejich
+frame-data*.json); skript si vybere ten, jehoz datumIso odpovida.
 
-2) Kdyz uz nahrany je: jen se podiva, co TV opravdu ukazuje. Kdyz se mezitim
-   prepnula na obrazek z Art Store (typicky po zapnuti slideshow nebo po
-   restartu televize), vrati nas plakat zpatky. Vlastni fotky, ktere si clovek
-   na TV vybere rucne, necha byt.
+1) Kdyz plakat na cilovy den jeste nahrany neni: overi, ze na Pages plakat s tim
+   datem je - ne stary, kdyz render v GitHub Actions selhal - nahraje ho, OVERI,
+   ze si ho televize opravdu ulozila, nastavi jako aktualni, vypne slideshow
+   a smaze drivejsi plakaty, jinak se uloziste TV zaplni.
+
+2) Kdyz uz nahrany je: porovna otisk obsahu plakatu na Pages s tim, co visi
+   (bez casoveho razitka) - kdyz se obsah zmenil (nova udalost), nahraje znovu.
+   Jinak se jen podiva, co TV opravdu ukazuje. Kdyz se mezitim prepnula na
+   obrazek z Art Store (typicky po zapnuti slideshow nebo po restartu televize),
+   vrati nas plakat zpatky. Vlastni fotky, ktere si clovek na TV vybere rucne,
+   necha byt.
 
 Proc se overuje (15. 9. 2026): televize prideluje vlastnim obrazkum ID MY_F0001 az
 MY_F0007 dokola. Obcas potvrdi "image_added" a vrati nove ID, ale v tom slotu si
 necha STARY soubor - na zdi pak visi plakat z jineho dne (v utery sobotni, v
-pondeli patecni). Proto se po nahrani stahne nahled z TV a porovna se (a) s tim,
-co v tom slotu bylo minule, a (b) s plakatem, ktery se nahraval. Pri neshode se
-spatny obrazek smaze a nahrani se zopakuje.
+pondeli patecni). Proto se po nahrani stahne nahled z TV a porovna se s nahledy
+vsech drivejsich plakatu (nahledy/MY_F000N.jpg): kdyz se nadpis shoduje s nekterym
+z nich, TV podstrcila stary obrazek - spatny se smaze a nahrani se zopakuje.
+Soubor se navic posila najednou a spojeni se hned zavre (jako upstream knihovna).
 
 Rucni zasahy (soubor vedle skriptu):
   inventura.zadej  - vypise, co ma TV ulozeno, a stahne nahledy do nahledy/
@@ -43,6 +50,7 @@ SIPS     = "/usr/bin/sips"                       # macOS: zmenseni a prevod na B
 POKUSU_V_BEHU   = 3    # kolikrat zkusit nahrat v jednom behu, kdyz TV podstrci stary obrazek
 BEHU_NEZ_VZDAT  = 4    # po kolika neuspesnych bezich (po 10 min) vzit i neovereny obrazek
 PAUZA_PO_UPLOADU = 4   # s - dat TV cas soubor dopsat, nez se vybere a stahne nahled
+ZITREK_OD = 17         # od teto hodiny visi na TV plakat na zitrek
 
 def log(*a):
     print(time.strftime("%F %T"), *a, flush=True)
@@ -50,6 +58,32 @@ def log(*a):
 def stahni(nazev):
     # Pages drzi cache 10 minut, parametr s casem ji obejde
     return urllib.request.urlopen("%s%s?t=%d" % (PAGES, nazev, time.time()), timeout=30).read()
+
+def cilove_datum():
+    """Do 17:00 dnesek, od 17:00 zitrek. Mac jede v prazskem case."""
+    ted = datetime.datetime.now()
+    den = ted.date() + datetime.timedelta(days=1 if ted.hour >= ZITREK_OD else 0)
+    return den.isoformat()
+
+def otisk_dat(data):
+    """Otisk obsahu plakatu bez casoveho razitka - stejna data = stejny otisk, i kdyz CI rendrovalo znovu."""
+    d = dict(data)
+    d.pop("razitko", None)
+    return hashlib.sha256(json.dumps(d, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
+
+def plakat_na_pages(cil):
+    """Vrati (data, nazev_jpg) plakatu s datumIso == cil, nebo (None, popis toho, co na Pages je)."""
+    nalezeno = []
+    for nazev_json, nazev_jpg in (("frame-data.json", "frame.jpg"), ("frame-data-zitra.json", "frame-zitra.jpg")):
+        try:
+            data = json.loads(stahni(nazev_json))
+        except Exception as e:
+            nalezeno.append("%s: %s" % (nazev_json, type(e).__name__))
+            continue
+        if data.get("datumIso") == cil:
+            return data, nazev_jpg
+        nalezeno.append("%s: %s" % (nazev_json, data.get("datumIso")))
+    return None, ", ".join(nalezeno)
 
 def art_spoj():
     return SamsungTVWS(host=TV_IP, port=8002, token_file=TOKEN).art(timeout=20)
@@ -289,6 +323,7 @@ def smaz_na_tv(art, ids):
 
 os.makedirs(NAHLEDY, exist_ok=True)
 dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
+cil = cilove_datum()                              # ktery den ma ted na TV viset
 stav = json.load(open(STATE)) if os.path.exists(STATE) else {}
 
 # --------------------------------------------------- jednorazova inventura TV
@@ -328,14 +363,29 @@ if os.path.exists(ZADOST):
 ZNOVU = os.path.join(HERE, "znovu.zadej")
 if os.path.exists(ZNOVU):
     os.remove(ZNOVU)
-    if stav.get("datum") == dnes:
-        log("znovu.zadej: dnesni plakat se nahraje znovu (dosud %s)" % stav.get("content_id"))
+    if stav.get("datum") == cil:
+        log("znovu.zadej: plakat na %s se nahraje znovu (dosud %s)" % (cil, stav.get("content_id")))
         stav["datum"] = None
         stav["pokusy"] = {}
         uloz(stav)
 
+# ------------------------------------------- zmenil se obsah plakatu na Pages?
+# Kdyz uz plakat na cilovy den visi, ale CI mezitim vyrenderovalo jiny obsah (pribyla
+# udalost), nahraje se znovu. Razitko "aktualizovano" se do otisku nepocita.
+if stav.get("datum") == cil and stav.get("otisk_dat"):
+    try:
+        data_pages, _ = plakat_na_pages(cil)
+        if data_pages and otisk_dat(data_pages) != stav["otisk_dat"]:
+            log("plakat na %s se na Pages zmenil (%s -> %s), nahraji znovu"
+                % (cil, stav["otisk_dat"], otisk_dat(data_pages)))
+            stav["datum"] = None
+            stav["pokusy"] = {}
+            uloz(stav)
+    except Exception as e:
+        log("kontrola zmeny plakatu selhala:", type(e).__name__, e)
+
 # ---------------------------------------------------------------- 2) hlidka
-if stav.get("datum") == dnes:
+if stav.get("datum") == cil:
     nas = stav.get("content_id")
     if not nas:
         sys.exit(0)
@@ -383,12 +433,12 @@ if stav.get("datum") == dnes:
 
 # ------------------------------------------------------------- 1) novy den
 try:
-    data = json.loads(stahni("frame-data.json"))
-    if data.get("datumIso") != dnes:
+    data, nazev_jpg = plakat_na_pages(cil)
+    if not data:
         # stary plakat nenahravat - a hlavne kvuli nemu nesmazat ten, co na TV visi
-        log("na Pages je plakat na %s, ne na %s - cekam" % (data.get("datumIso"), dnes))
+        log("na Pages neni plakat na %s (%s) - cekam" % (cil, nazev_jpg))
         sys.exit(1)
-    jpg = stahni("frame.jpg")
+    jpg = stahni(nazev_jpg)
     # kontrolni kopie toho, co se opravdu stahlo z Pages - at je videt, jestli chyba
     # vznikla uz pri stahovani, nebo az na televizi
     cesta_plakatu = os.path.join(NAHLEDY, "stazeno.jpg")
@@ -399,7 +449,7 @@ try:
         log("sips nedal zmenseninu plakatu - nahrani se overi jen proti minulemu obsahu slotu")
 
     pokusy = stav.get("pokusy") or {}
-    behu = (pokusy.get("n", 0) if pokusy.get("datum") == dnes else 0) + 1
+    behu = (pokusy.get("n", 0) if pokusy.get("datum") == cil else 0) + 1
     vzdat_overovani = behu > BEHU_NEZ_VZDAT
 
     art = art_spoj()
@@ -444,7 +494,7 @@ try:
                 art.select_image(stav["content_id"], show=True)
             except Exception:
                 pass
-        stav["pokusy"] = {"datum": dnes, "n": behu}
+        stav["pokusy"] = {"datum": cil, "n": behu}
         stav["nesmazane"] = sorted(set(stav.get("nesmazane", [])) | set(nesmazane))
         uloz(stav)
         log("dnesni plakat se nepodarilo nahrat spravne (beh %d), dalsi pokus za 10 min" % behu)
@@ -456,11 +506,11 @@ try:
     stare = (set(stav.get("nesmazane", [])) | {stav.get("content_id")} | set(spatne)) - {None, novy}
     nesmazane = smaz_na_tv(art, stare)
 
-    uloz({"content_id": novy, "nesmazane": nesmazane, "datum": dnes,
+    uloz({"content_id": novy, "nesmazane": nesmazane, "datum": cil, "otisk_dat": otisk_dat(data),
           "otisk": hashlib.sha256(nahled).hexdigest()[:16] if nahled else None,
           "kdy": time.strftime("%F %T"), "pokusy": {}})
     uloz_hlidku(stav="cerstve nahrano", nas=novy, slideshow=stav_slideshow(art)[1])
-    log("ok:", novy, "plakat na", dnes)
+    log("ok:", novy, "plakat na", cil, "(zitrek)" if cil != dnes else "")
 except SystemExit:
     raise
 except Exception as e:

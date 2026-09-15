@@ -153,7 +153,7 @@ function skolaDne(s) {
 }
 function stitekKrouzku(k) {
   const p = el('div','pill krouzek', `${k.od ? k.od + ' ' : ''}${k.nazev}`);
-  if (k.stav === 'kolize') p.classList.add('nejisty');
+  if (k.stav === 'kolize' || k.stav === 'nejiste') p.classList.add('nejisty');
   p.style.setProperty('--c', osoba(k.kdo[0]).barva);
   return p;
 }
@@ -478,6 +478,7 @@ function otevriDen(s) {
       const meta = [k.poskytovatel, k.misto].filter(Boolean).join(' · ');
       if (meta) w.append(el('div','hint', meta));
       if (k.stav === 'kolize') w.append(el('span','tbd','kolize — nutné dořešit'));
+      if (k.stav === 'nejiste') w.append(el('span','tbd','zatím nerozhodnuto'));
       if (k.poznamka) w.append(el('div','hint', k.poznamka));
       it.append(w);
       k.kdo.forEach(id => { const b = el('span','who', osoba(id).jmeno); b.style.setProperty('--c', osoba(id).barva); it.append(b); });
@@ -508,7 +509,7 @@ function renderUkoly() {
 }
 
 /* ---------- kroužky + platby ---------- */
-const STAVY = { aktivni:['ok','Jede'], kolize:['danger','Kolize'], prihlaseno:['warn','Přihlášeno'] };
+const STAVY = { aktivni:['ok','Jede'], kolize:['danger','Kolize'], nejiste:['warn','Nerozhodnuto'], prihlaseno:['warn','Přihlášeno'] };
 
 function renderTabulky() {
   const tb = $('#tab-krouzky'); tb.innerHTML = '';
@@ -562,11 +563,12 @@ function renderTabulky() {
       c.append(el('div','hint','termín zatím neznámý — pokyny přijdou přes Bakaláře'));
     }
     const u = el('div','hint'); u.style.marginTop = '8px';
-    u.textContent = ks.map(k => k.nazev + (k.stav === 'kolize' ? ' ⚠️' : '')).join(', ');
+    u.textContent = ks.map(k => k.nazev + (k.stav === 'kolize' ? ' ⚠️' : k.stav === 'nejiste' ? ' ❓' : '')).join(', ');
     c.append(u);
     const vs = ks.flatMap(k => k.vs ? Object.entries(k.vs).map(([kdo, v]) => `${osoba(kdo).jmeno} ${v}`) : []);
     if (vs.length) { const m = el('div','hint mono'); m.style.marginTop = '6px'; m.textContent = 'VS ' + vs.join(' · '); c.append(m); }
     if (ks.some(k => k.stav === 'kolize')) c.append(el('div','hint warnline','⚠️ Obsahuje kolizní přihlášky — ty zatím neplať.'));
+    if (ks.some(k => k.stav === 'nejiste')) c.append(el('div','hint warnline','❓ Obsahuje kroužek, o kterém se ještě rozhoduje — zatím neplať.'));
     pc.append(c);
   }
 }

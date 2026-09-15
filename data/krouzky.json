@@ -22,8 +22,8 @@
     "poskytovatel": "SK Karate Spartak Hradec Králové", "den": 1, "denDalsi": 3,
     "od": "16:45", "do": "17:30", "misto": null,
     "prvniLekce": "2026-09-09", "konecKurzu": "2027-06-30",
-    "stav": "aktivni", "cena": 2900, "za": "pololetí",
-    "poznamka": "Skupina 7–9 let, pondělí a středa. Kontakt: 721 317 764, info@spartak.cz. Doplnit adresu tělocvičny.",
+    "stav": "nejiste", "cena": 2900, "za": "pololetí",
+    "poznamka": "❓ Tomáš nechce chodit — zatím nerozhodnuto, velmi pravděpodobně se odhlásí (15. 9. 2026). Do rozhodnutí neplatit. Skupina 7–9 let, pondělí a středa. Kontakt: 721 317 764, info@spartak.cz. Doplnit adresu tělocvičny.",
     "platba": { "castka": 2900, "splatnost": "2026-09-21", "zaplaceno": false, "kde": "SK Karate Spartak – 1. pololetí" }
   },
   {
@@ -85,5 +85,14 @@
     "vs": { "matej": "161319007" },
     "poznamka": "⚠️ Kryje se s druhou hodinou leteckých modelářů (15:00–17:00), kam jdou kluci spolu. Jiný termín DDM nevypisuje. Zatím neplatit.",
     "platba": { "castka": 1900, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
+  },
+  {
+    "id": "sachy", "nazev": "Šachy", "kdo": ["matej"],
+    "poskytovatel": null, "den": 2, "od": "13:35", "do": "14:35",
+    "misto": null,
+    "prvniLekce": null, "konecKurzu": "2027-06-30",
+    "stav": "aktivni", "cena": null, "za": null,
+    "poznamka": "Každé úterý po vyučování (Matěj končí 12:35). Doplnit místo a poskytovatele.",
+    "platba": { "castka": null, "splatnost": null, "zaplaceno": false, "kde": null }
   }
 ]

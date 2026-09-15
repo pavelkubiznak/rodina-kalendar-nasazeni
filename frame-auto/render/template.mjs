@@ -61,6 +61,18 @@ body{padding:150px 170px 130px;display:flex;flex-direction:column}
 .sitem .dd{font-size:46px;color:var(--acc);min-width:220px;font-variant-numeric:tabular-nums}
 .sitem .ss{font-size:48px;line-height:1.24}
 .sitem .ss small{display:block;font-size:36px;color:var(--mut);margin-top:6px}
+/* těsnější rozestupy — zapíná vejit.mjs, až když se obsah nevejde; velikosti písma zůstávají */
+.compact .events{margin-top:60px}
+.compact .ev{padding:26px 0}
+.compact .trips{padding-top:44px}
+.compact .trip{padding:16px 0}
+.compact .row{padding:26px 0}
+.compact .soon{margin-top:80px}
+.compact .sitem{padding:22px 0}
+/* cesty na jeden řádek — další stupeň, než by se některá cesta vynechala */
+.trips.inline .trip .l b{display:inline;margin-right:26px}
+.trips.inline .trip{padding:12px 0}
+.trips.inline .trip .n{font-size:76px;min-width:150px}
 </style></head><body>
 <div class="top"><div class="eyebrow">Rodinný kalendář</div><div class="stamp">${esc(d.razitko)}</div></div>
 <div class="main">
