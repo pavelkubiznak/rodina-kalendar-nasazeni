@@ -7,7 +7,7 @@ name: Sync s Google Kalendářem
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7 * * * *'   # jednou za hodinu; GitHub plánované běhy stejně zpožďuje a */15 se prakticky nedodržovalo
   push:
     branches: [main]
     paths:
@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # nastartování Build & Deploy po commitu (push GITHUB_TOKENem další workflow nespouští)
 
 # ať se dva běhy nepoperou o push do main
 concurrency:
@@ -48,7 +49,17 @@ jobs:
             git commit -m "sync: ruční události z Google Kalendáře"
             git pull --rebase --autostash origin main
             git push
+            echo "ZMENA=1" >> "$GITHUB_ENV"
           fi
+
+      # Push přes GITHUB_TOKEN schválně nespouští další workflow (ochrana proti smyčce),
+      # takže Build & Deploy musíme po commitu ručních událostí nastartovat výslovně —
+      # jinak by se web, feed a plakát přegenerovaly až při nejbližším denním běhu.
+      - name: Přegenerovat web (Build & Deploy)
+        if: env.ZMENA == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
 
       - name: Nasypat generované události do Google
         env:
