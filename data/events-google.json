@@ -1,20 +1,5 @@
 [
   {
-    "id": "g-38tlkfi18jp2v4dob0a8h06fgk",
-    "nazev": "Test synchronizace",
-    "ikona": "🧪",
-    "kdo": [
-      "rodina"
-    ],
-    "typ": "google",
-    "celodenni": true,
-    "upominky": [
-      1
-    ],
-    "od": "2026-09-16",
-    "popis": "Zkušební událost — můžeš smazat."
-  },
-  {
     "id": "g-u36cedis02kvfaeq35tuh5fj1o",
     "nazev": "matěj: počítej v pohybu biřička",
     "ikona": "📌",
