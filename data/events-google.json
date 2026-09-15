@@ -1,5 +1,19 @@
 [
   {
+    "id": "g-413agbtftkmf19re9boucs9fr7",
+    "nazev": "Test sync po nasazení",
+    "ikona": "🧪",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-17"
+  },
+  {
     "id": "g-u36cedis02kvfaeq35tuh5fj1o",
     "nazev": "matěj: počítej v pohybu biřička",
     "ikona": "📌",
