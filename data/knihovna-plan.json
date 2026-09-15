@@ -23,12 +23,7 @@
         "do": "18:00"
       }
     ],
-    "denD": {
-      "popis": "úterý 13. října",
-      "od": "12:55",
-      "do": "15:25",
-      "brzda": "Chovatelský kroužek 4 v 15:45"
-    },
+    "denD": null,
     "box": {
       "datum": "2026-10-12",
       "popis": "pondělí 12. října"
