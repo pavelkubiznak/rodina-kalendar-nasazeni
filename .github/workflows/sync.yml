@@ -7,7 +7,7 @@ name: Sync s Google Kalendářem
 
 on:
   schedule:
-    - cron: '7 * * * *'   # jednou za hodinu; GitHub plánované běhy stejně zpožďuje a */15 se prakticky nedodržovalo
+    - cron: '*/15 * * * *'
   push:
     branches: [main]
     paths:
@@ -18,7 +18,7 @@ on:
 
 permissions:
   contents: write
-  actions: write   # nastartování Build & Deploy po commitu (push GITHUB_TOKENem další workflow nespouští)
+  actions: write   # aby sync mohl po commitu nastartovat Build & Deploy
 
 # ať se dva běhy nepoperou o push do main
 concurrency:
@@ -39,26 +39,28 @@ jobs:
         run: node scripts/google-pull.mjs
 
       - name: Commitnout, když se něco změnilo
+        id: commit
         run: |
           git config user.name  "rodinny-kalendar-bot"
           git config user.email "actions@github.com"
           git add data/events-google.json
           if git diff --staged --quiet; then
             echo "Beze změny, není co commitovat."
+            echo "zmena=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "sync: ruční události z Google Kalendáře"
             git pull --rebase --autostash origin main
             git push
-            echo "ZMENA=1" >> "$GITHUB_ENV"
+            echo "zmena=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # Push přes GITHUB_TOKEN schválně nespouští další workflow (ochrana proti smyčce),
-      # takže Build & Deploy musíme po commitu ručních událostí nastartovat výslovně —
-      # jinak by se web, feed a plakát přegenerovaly až při nejbližším denním běhu.
-      - name: Přegenerovat web (Build & Deploy)
-        if: env.ZMENA == '1'
+      # Push udělaný GITHUB_TOKENem schválně NESPOUŠTÍ další workflow (ochrana proti smyčce),
+      # takže by se web po ručně přidané události přegeneroval až při nejbližším denním běhu.
+      # Proto Build & Deploy nastartujeme výslovně.
+      - name: Přegenerovat web a feed
+        if: steps.commit.outputs.zmena == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy.yml --ref main
 
       - name: Nasypat generované události do Google

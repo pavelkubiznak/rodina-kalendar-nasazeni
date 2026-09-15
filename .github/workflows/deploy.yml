@@ -4,8 +4,9 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 3 * * *'   # denně 5:00 SELČ – přegeneruje svátky a .ics
-    - cron: '0 19 * * *'  # 21:00 SELČ / 20:00 SEČ – plakát na zítřek pro The Frame (viz krok níže)
+    - cron: '0 3 * * *'   # denně 5:00 SELČ – přegeneruje svátky, .ics a plakáty (dnešek + zítřek)
+    - cron: '0 12 * * *'  # 14:00 SELČ – čerstvý zítřek pro TV, která na něj přepíná v 17:00 (běhy chodí i o hodiny později)
+    - cron: '0 19 * * *'  # 21:00 SELČ – ještě jednou, kdyby odpolední běh nedoběhl
   workflow_dispatch:
 
 permissions:
@@ -48,16 +49,19 @@ jobs:
           git push
         continue-on-error: true
 
-      # Plakát pro The Frame (frame-auto/). Po 18:00 pražského času se renderuje zítřek:
-      # plánované běhy GitHubu tu chodí i o 4–5 hodin později, takže na ranní cron se
-      # upload v 5:30 spolehnout nemůže — večerní běh má rezervu přes celou noc.
-      - name: Plakát pro The Frame
+      # Plakáty pro The Frame (frame-auto/): vždy dnešek (frame.jpg) i zítřek (frame-zitra.jpg).
+      # Uploader na Macu si vybere podle data — do 17:00 dnešek, od 17:00 zítřek — a když se
+      # obsah plakátu změní (nová událost), nahraje ho znovu. Plánované běhy GitHubu chodí
+      # i o 4–5 hodin později, proto se renderuje třikrát denně a oba dny najednou.
+      - name: Plakáty pro The Frame
         continue-on-error: true   # když selže Chromium, web se nasadí i tak, jen bez plakátu
         run: |
           npm ci
           npx playwright install --with-deps chromium
-          node scripts/build-frame-data.mjs > frame-data.json
+          node scripts/build-frame-data.mjs --posun 0 > frame-data.json
           node frame-auto/render/render.mjs frame-data.json frame.jpg
+          node scripts/build-frame-data.mjs --posun 1 > frame-data-zitra.json
+          node frame-auto/render/render.mjs frame-data-zitra.json frame-zitra.jpg
 
       - name: Úklid před publikací
         if: always()
@@ -65,6 +69,7 @@ jobs:
           rm -rf node_modules
           # rozbitý render nesmí na Pages nechat prázdný frame-data.json
           if [ ! -s frame.jpg ]; then rm -f frame.jpg frame-data.json; fi
+          if [ ! -s frame-zitra.jpg ]; then rm -f frame-zitra.jpg frame-data-zitra.json; fi
 
       - uses: actions/configure-pages@v5
         with:

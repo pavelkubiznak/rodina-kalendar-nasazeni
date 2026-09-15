@@ -172,13 +172,22 @@ def nahraj(art, data, file_type="jpg"):
     return hotovo["content_id"] if hotovo else None
 
 # --------------------------------------------------------- porovnani nahledu
-def nahled_z_tv(art, cid):
-    try:
-        n = art.get_thumbnail(cid)
-        return bytes(n) if n else None
-    except Exception as e:
-        log("nahled %s z TV se nepodarilo stahnout:" % cid, type(e).__name__, e)
-        return None
+def nahled_z_tv(art, cid, pokusu=3):
+    """Nahled z TV; po nahrani byva D2D kanal chvili rozhozeny (EADDRNOTAVAIL, broken pipe),
+    tak se to zkousi vickrat a pokazde s cerstvym spojenim."""
+    for i in range(pokusu):
+        try:
+            n = art.get_thumbnail(cid)
+            if n:
+                return bytes(n), art
+        except Exception as e:
+            log("nahled %s z TV se nepodarilo stahnout (%d/%d):" % (cid, i + 1, pokusu), type(e).__name__, e)
+        time.sleep(3)
+        try:
+            art = art_spoj()
+        except Exception as e:
+            log("nove spojeni s TV selhalo:", type(e).__name__, e)
+    return None, art
 
 def sedy_obrazek(cesta_jpg, w=320, h=180):
     """
@@ -250,7 +259,7 @@ def glob_overeni():
 
 def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
     """
-    Vrati (ok, popis, nahled_bytes). ok=False jen kdyz je jiste, ze TV ukazuje neco jineho,
+    Vrati (ok, popis, nahled_bytes, art). ok=False jen kdyz je jiste, ze TV ukazuje neco jineho,
     nez co jsme poslali. Kdyz nejde nic porovnat, ok=True (radeji neoverene nez nic).
 
     Rozhoduje se jen podle nahledu ze same televize (stejny scaler, stejna komprese):
@@ -259,9 +268,9 @@ def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
     meni kazdy den. Porovnani s nasi vlastni zmenseninou plakatu se jen loguje (jiny scaler,
     cisla nejsou spolehliva) - hodi se pro pozdejsi kalibraci.
     """
-    nahled = nahled_z_tv(art, cid)
+    nahled, art = nahled_z_tv(art, cid)
     if not nahled:
-        return True, "nahled nedostupny, neovereno", None
+        return True, "nahled nedostupny, neovereno", None, art
     popis = {}
     cesta_novy = os.path.join(NAHLEDY, "_overeni_%s.jpg" % cid)
     with open(cesta_novy, "wb") as f:
@@ -277,7 +286,7 @@ def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
             if f.read() == nahled:
                 popis["stejny_jako"] = jmeno
                 popis["shoda"] = "bajt po bajtu"
-                return False, popis, nahled
+                return False, popis, nahled, art
         d = rozdil(sedy_novy, sedy_obrazek(cesta), VYREZ_NADPIS)
         if d is not None:
             shody[jmeno[:-4]] = round(d, 2)
@@ -286,11 +295,11 @@ def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
         nej = min(shody, key=shody.get)
         if shody[nej] < PRAH_STEJNY:
             popis["stejny_jako"] = nej
-            return False, popis, nahled
+            return False, popis, nahled, art
 
     d = rozdil(sedy_novy, sedy_plakat, VYREZ_NADPIS)
     popis["nadpis_vs_plakat"] = None if d is None else round(d, 2)   # jen informativne
-    return True, popis, nahled
+    return True, popis, nahled, art
 
 def uloz(stav):
     json.dump(stav, open(STATE, "w"))
@@ -320,6 +329,17 @@ def smaz_na_tv(art, ids):
     except Exception as e:
         log("nepodarilo se smazat, zkusi se priste:", ", ".join(ids), type(e).__name__, e)
         return ids
+
+def smaz_na_tv_s_opakovanim(art, ids):
+    """Mazani: pri chybe spojeni jeste jednou na cerstvem websocketu."""
+    zbyle = smaz_na_tv(art, ids)
+    if zbyle:
+        time.sleep(3)
+        try:
+            zbyle = smaz_na_tv(art_spoj(), zbyle)
+        except Exception as e:
+            log("nove spojeni s TV pro mazani selhalo:", type(e).__name__, e)
+    return zbyle
 
 os.makedirs(NAHLEDY, exist_ok=True)
 dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
@@ -460,9 +480,15 @@ try:
         if not cid:
             raise RuntimeError("TV nevratila content_id")
         time.sleep(PAUZA_PO_UPLOADU)
+        # po prenosu souboru byva websocket i D2D kanal TV chvili rozhozeny - dal jedeme
+        # na cerstvem spojeni, at kvuli tomu neselze vyber, overeni ani mazani
+        try:
+            art = art_spoj()
+        except Exception as e:
+            log("nove spojeni s TV po nahrani selhalo, pokracuji na starem:", type(e).__name__, e)
         art.select_image(cid, show=True)
         vypni_slideshow(art)
-        ok, popis, nahled = over_nahrani(art, cid, cesta_plakatu, sedy_plakat)
+        ok, popis, nahled, art = over_nahrani(art, cid, cesta_plakatu, sedy_plakat)
         if ok or vzdat_overovani:
             if not ok:
                 log("POZOR: %s neprosel overenim %s, ale po %d bezich ho beru i tak" % (cid, popis, behu - 1))
@@ -488,7 +514,7 @@ try:
 
     if novy is None:
         # vratit na zed to, co tam bylo (plakat z minuleho dne je porad lepsi nez cizi obrazek)
-        nesmazane = smaz_na_tv(art, spatne)
+        nesmazane = smaz_na_tv_s_opakovanim(art, spatne)
         if stav.get("content_id"):
             try:
                 art.select_image(stav["content_id"], show=True)
@@ -504,7 +530,7 @@ try:
     # nepovedlo, a dnesni pokazene pokusy. Maze jen to, co nahral tenhle skript, rucne
     # nahrane fotky ne.
     stare = (set(stav.get("nesmazane", [])) | {stav.get("content_id")} | set(spatne)) - {None, novy}
-    nesmazane = smaz_na_tv(art, stare)
+    nesmazane = smaz_na_tv_s_opakovanim(art, stare)
 
     uloz({"content_id": novy, "nesmazane": nesmazane, "datum": cil, "otisk_dat": otisk_dat(data),
           "otisk": hashlib.sha256(nahled).hexdigest()[:16] if nahled else None,
