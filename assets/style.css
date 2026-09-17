@@ -315,6 +315,26 @@ a{color:var(--accent)}
 tr.rowbad td:first-child{box-shadow:inset 3px 0 0 var(--danger)}
 .badge.danger{background:var(--danger-soft);color:var(--danger)}
 
+/* ---------- úpravy: hotovo / zrušit / vyřadit ---------- */
+.card.ukol{display:flex;flex-direction:column}
+.akce-radek{margin-top:auto;padding-top:12px;gap:8px}
+.btn.mini{padding:5px 12px;font-size:13px;border-radius:9px;min-height:32px}
+.btn.mini.ptam{background:var(--danger);border-color:transparent;color:#fff}
+.akce-bunka{text-align:right;white-space:nowrap;vertical-align:middle}
+.toast{position:fixed;left:50%;bottom:24px;z-index:80;max-width:min(520px,calc(100% - 32px));
+  transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:.2s;
+  background:var(--ink);color:var(--bg);border-radius:12px;padding:11px 16px;font-size:14px;
+  box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+.toast.videt{opacity:1;transform:translate(-50%,0)}
+.toast.chyba{background:var(--danger);color:#fff}
+body.display .akce-radek{display:none}
+.akce-mobil{display:none;margin-top:8px}
+@media (max-width:760px){
+  .toast{bottom:84px}
+  .akce-bunka{display:none}
+  .akce-mobil{display:block}
+}
+
 /* ---------- knihovna ---------- */
 .card.knihovna{grid-column:1/-1}
 .odd{margin-top:10px;border-top:1px solid var(--line-2);padding-top:8px}

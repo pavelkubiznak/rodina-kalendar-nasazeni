@@ -18,15 +18,6 @@
     "platba": { "castka": 1000, "splatnost": null, "zaplaceno": false, "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)" }
   },
   {
-    "id": "karate", "nazev": "Karate", "kdo": ["tomas"],
-    "poskytovatel": "SK Karate Spartak Hradec Králové", "den": 1, "denDalsi": 3,
-    "od": "16:45", "do": "17:30", "misto": null,
-    "prvniLekce": "2026-09-09", "konecKurzu": "2027-06-30",
-    "stav": "nejiste", "cena": 2900, "za": "pololetí",
-    "poznamka": "❓ Tomáš nechce chodit — zatím nerozhodnuto, velmi pravděpodobně se odhlásí (15. 9. 2026). Do rozhodnutí neplatit. Skupina 7–9 let, pondělí a středa. Kontakt: 721 317 764, info@spartak.cz. Doplnit adresu tělocvičny.",
-    "platba": { "castka": 2900, "splatnost": "2026-09-21", "zaplaceno": false, "kde": "SK Karate Spartak – 1. pololetí" }
-  },
-  {
     "id": "elektronik", "nazev": "Mladý elektronik – začátečníci", "kdo": ["matej"],
     "poskytovatel": "DDM Barák", "den": 1, "od": "15:00", "do": "17:00",
     "misto": "DDM Rautenkrancova 1241",
@@ -51,9 +42,9 @@
     "poskytovatel": "DDM Barák", "den": 3, "od": "16:00", "do": "17:00",
     "misto": "Přírodovědné centrum, Bezručova 1468",
     "prvniLekce": "2026-09-30", "konecKurzu": "2027-06-02",
-    "stav": "kolize", "cena": 1500, "za": "rok",
+    "stav": "aktivni", "cena": 1500, "za": "rok",
     "vs": { "matej": "262115002", "tomas": "262115001" },
-    "poznamka": "⚠️ Tomášovi se kryje se středečním karate (16:45–17:30). Buď karate jen v pondělí, nebo vybrat mezi karate a chovatelským.",
+    "poznamka": "Kluci spolu.",
     "platba": { "castka": 3000, "splatnost": "2026-09-30", "zaplaceno": false, "kde": "DDM Barák – účet 365464684/0300" }
   },
   {

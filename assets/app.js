@@ -504,6 +504,12 @@ function renderUkoly() {
     c.append(el('h3', null, `${u.ikona || ''} ${u.nazev}`.trim()));
     c.append(el('div','hint', u.popis));
     c.append(el('div','hint termin', `ideálně do ${datumKr(u.doKdy)}`));
+    const r = el('div','row akce-radek');
+    r.append(
+      tlacitko('✓ Hotovo', null, () => oznacHotovo(u.id)),
+      tlacitko('Zrušit', 'Opravdu zrušit?', () => odeberZaznam('ukoly', u.id)),
+    );
+    c.append(r);
     box.append(c);
   }
 }
@@ -517,7 +523,10 @@ function renderTabulky() {
     if (!projde(k.kdo)) continue;
     const tr = el('tr');
     if (k.stav === 'kolize') tr.classList.add('rowbad');
-    const c1 = el('td'); c1.append(el('div', null, k.nazev), el('div','hint', k.poskytovatel)); tr.append(c1);
+    const vyradit = () => tlacitko('Vyřadit', 'Opravdu vyřadit?', () => odeberZaznam('krouzky', k.id));
+    const c1 = el('td'); c1.append(el('div', null, k.nazev), el('div','hint', k.poskytovatel));
+    const m = el('div','akce-mobil'); m.append(vyradit()); c1.append(m);   // na telefonu je poslední sloupec mimo obrazovku
+    tr.append(c1);
     const c2 = el('td');
     k.kdo.forEach(id => {
       const b = el('span','badge', osoba(id).jmeno);
@@ -532,6 +541,9 @@ function renderTabulky() {
     const c6 = el('td','mono'); c6.textContent = k.cena ? `${kc(k.cena)}/${k.za}` : '—'; tr.append(c6);
     const [cls, txt] = STAVY[k.stav] || ['','—'];
     const c7 = el('td'); c7.append(el('span','badge ' + cls, txt)); tr.append(c7);
+    const c8 = el('td','akce-bunka');
+    c8.append(vyradit());
+    tr.append(c8);
     tb.append(tr);
   }
 
@@ -594,6 +606,9 @@ function renderDoklady() {
     c.append(el('div','hint termin',
       `platnost do ${datumKr(dok.platnostDo)} ${dok.platnostDo.slice(0,4)}${dok.presne === false ? ' (datum ověřit)' : ''}`));
     if (dok.poznamka) c.append(el('div','hint', dok.poznamka));
+    const r = el('div','row akce-radek');
+    r.append(tlacitko('Smazat', 'Opravdu smazat?', () => odeberZaznam('doklady', dok.id)));
+    c.append(r);
     box.append(c);
   }
 }
@@ -868,22 +883,160 @@ function vykresliQR(box, odkaz) {
   document.head.append(s);
 }
 
-async function ulozDoRepa(soubor, zaznam, popisZmeny) {
+// Přečte JSON pole z repa, nechá ho upravit a zapíše zpátky.
+// `uprava` vrací nové pole, nebo null, když není co měnit (záznam už je pryč).
+// Když mezitím zapsal někdo jiný (409 — jiné sha), zkusí to znovu nad čerstvými daty.
+async function upravRepo(soubor, uprava, popisZmeny) {
   const cfg = gh.nacti();
   if (!cfg || !cfg.repo || !cfg.token) return { ok:false, duvod:'bez-tokenu' };
   const url = `https://api.github.com/repos/${cfg.repo}/contents/${soubor}`;
   const hlavicky = { Authorization: `Bearer ${cfg.token}`, Accept: 'application/vnd.github+json' };
-  const r1 = await fetch(url, { headers: hlavicky });
-  if (!r1.ok) return { ok:false, duvod:`čtení selhalo (${r1.status})` };
-  const meta = await r1.json();
-  const pole = JSON.parse(zb64(meta.content));
-  pole.push(zaznam);
-  const r2 = await fetch(url, {
-    method:'PUT', headers: { ...hlavicky, 'Content-Type':'application/json' },
-    body: JSON.stringify({ message: popisZmeny, content: b64(JSON.stringify(pole, null, 2) + '\n'), sha: meta.sha }),
-  });
-  if (!r2.ok) return { ok:false, duvod:`zápis selhal (${r2.status})` };
-  return { ok:true };
+  for (let pokus = 0; pokus < 3; pokus++) {
+    let r1;
+    try { r1 = await fetch(url, { headers: hlavicky, cache: 'no-store' }); }
+    catch { return { ok:false, duvod:'bez připojení' }; }
+    if (!r1.ok) return { ok:false, duvod:`čtení selhalo (${r1.status})` };
+    const meta = await r1.json();
+    const nove = uprava(JSON.parse(zb64(meta.content)));
+    if (nove === null) return { ok:true, beze:true };
+    const r2 = await fetch(url, {
+      method:'PUT', headers: { ...hlavicky, 'Content-Type':'application/json' },
+      body: JSON.stringify({ message: popisZmeny, content: b64(JSON.stringify(nove, null, 2) + '\n'), sha: meta.sha }),
+    });
+    if (r2.ok) return { ok:true };
+    if (r2.status !== 409 && r2.status !== 422) return { ok:false, duvod:`zápis selhal (${r2.status})` };
+    await new Promise(res => setTimeout(res, 800));
+  }
+  return { ok:false, duvod:'soubor se mezitím změnil, zkus to znovu' };
+}
+
+const ulozDoRepa = (soubor, zaznam, popisZmeny) =>
+  upravRepo(soubor, pole => pole.some(x => x.id === zaznam.id) ? null : [...pole, zaznam], popisZmeny);
+
+/* ---------- mazání a odškrtávání (úkoly, doklady, kroužky) ---------- */
+// Web se po zápisu přegeneruje až za minutu dvě. Aby smazaná věc mezitím po obnovení
+// stránky znovu nevyskočila, pamatuje si prohlížeč, co se tu smazalo („náhrobky").
+// Jakmile ji čerstvá data z webu už neobsahují, náhrobek se uklidí.
+const NAHROBKY = 'rk-smazane';
+const nahrobky = {
+  vse: () => { try { return JSON.parse(localStorage.getItem(NAHROBKY) || '{}'); } catch { return {}; } },
+  zapis: v => { try { localStorage.setItem(NAHROBKY, JSON.stringify(v)); } catch {} },
+  pridej(klic, id) { const v = this.vse(); v[`${klic}#${id}`] = Date.now(); this.zapis(v); },
+  odeber(klic, id) { const v = this.vse(); delete v[`${klic}#${id}`]; this.zapis(v); },
+};
+const ZMENY = {
+  ukoly:   { soubor:'data/ukoly.json',   co:'Úkol',    hotovo:'zrušen' },
+  doklady: { soubor:'data/doklady.json', co:'Doklad',  hotovo:'smazán' },
+  krouzky: { soubor:'data/krouzky.json', co:'Kroužek', hotovo:'vyřazen' },
+};
+const LOKALNI = { ukoly:'rk-lokalni-ukol', doklady:'rk-lokalni-doklad', krouzky:null };
+
+function odeberLokalni(klic, id) {
+  const k = LOKALNI[klic]; if (!k) return;
+  try {
+    const p = JSON.parse(localStorage.getItem(k) || '[]');
+    localStorage.setItem(k, JSON.stringify(p.filter(x => x.id !== id)));
+  } catch {}
+}
+
+function oznam(text, chyba) {
+  let t = $('#toast');
+  if (!t) { t = el('div','toast'); t.id = 'toast'; t.setAttribute('role','status'); document.body.append(t); }
+  t.textContent = text;
+  t.classList.toggle('chyba', !!chyba);
+  t.classList.add('videt');
+  clearTimeout(oznam._t);
+  oznam._t = setTimeout(() => t.classList.remove('videt'), chyba ? 9000 : 5000);
+}
+
+// Tlačítko s potvrzením na druhé klepnutí (bez systémového dialogu — na telefonu je to příjemnější).
+function tlacitko(text, otazka, akce) {
+  const b = el('button','btn mini', text);
+  b.type = 'button';
+  let casovac = null;
+  b.onclick = async e => {
+    e.stopPropagation();
+    if (otazka && !b.classList.contains('ptam')) {
+      b.classList.add('ptam'); b.textContent = otazka;
+      casovac = setTimeout(() => { b.classList.remove('ptam'); b.textContent = text; }, 4000);
+      return;
+    }
+    clearTimeout(casovac);
+    b.disabled = true; b.textContent = '…';
+    await akce();
+  };
+  return b;
+}
+
+const maUkladani = () => { const c = gh.nacti(); return !!(c && c.repo && c.token); };
+const BEZ_UKLADANI = 'Měnit uložené věci jde jen se zapnutým ukládáním — nastav ho přes ⚙ u rychlého zadání.';
+
+async function odeberZaznam(klic, id) {
+  const { soubor, co, hotovo } = ZMENY[klic];
+  const pole = state.data[klic];
+  const i = pole.findIndex(x => x.id === id);
+  if (i < 0) return;
+  const zaznam = pole[i];
+  const jenTady = !state.zRepa[klic].has(id);   // přidané bez ukládání, žije jen v tomhle prohlížeči
+
+  if (!jenTady && !maUkladani()) { oznam(BEZ_UKLADANI, true); render(); return; }
+  pole.splice(i, 1);
+  odeberLokalni(klic, id);
+  if (jenTady) { render(); oznam(`${co} „${zaznam.nazev}“ ${hotovo}.`); return; }
+
+  nahrobky.pridej(klic, id);
+  render();
+  const v = await upravRepo(soubor, p => p.some(x => x.id === id) ? p.filter(x => x.id !== id) : null,
+    `web: ${co.toLowerCase()} ${hotovo} — ${zaznam.nazev}`);
+  if (v.ok) {
+    oznam(`${co} „${zaznam.nazev}“ ${hotovo}. Web, plakát i Google Kalendář se srovnají během pár minut.`);
+  } else {
+    pole.splice(i, 0, zaznam);
+    nahrobky.odeber(klic, id);
+    render();
+    oznam(`Nepovedlo se (${v.duvod}). Nic se nesmazalo.`, true);
+  }
+}
+
+async function oznacHotovo(id) {
+  const u = state.data.ukoly.find(x => x.id === id);
+  if (!u) return;
+  const jenTady = !state.zRepa.ukoly.has(id);
+  if (!jenTady && !maUkladani()) { oznam(BEZ_UKLADANI, true); render(); return; }
+  u.hotovo = true;
+  odeberLokalni('ukoly', id);
+  if (jenTady) { render(); oznam(`Hotovo: ${u.nazev}`); return; }
+
+  nahrobky.pridej('ukoly', id);
+  render();
+  const dnes = dnesISO();
+  const v = await upravRepo('data/ukoly.json',
+    p => p.some(x => x.id === id && !x.hotovo) ? p.map(x => x.id === id ? { ...x, hotovo:true, hotovoDne:dnes } : x) : null,
+    `web: hotovo — ${u.nazev}`);
+  if (v.ok) {
+    oznam(`Hotovo: ${u.nazev}. Upomínky k němu už chodit nebudou.`);
+  } else {
+    u.hotovo = false;
+    nahrobky.odeber('ukoly', id);
+    render();
+    oznam(`Nepovedlo se (${v.duvod}). Úkol zůstává otevřený.`, true);
+  }
+}
+
+// Při načtení: schovat, co se tu nedávno smazalo, a uklidit náhrobky, které už data dohnala.
+function pouzijNahrobky() {
+  const v = nahrobky.vse();
+  const TYDEN = 7 * 86400000;
+  for (const [kl, cas] of Object.entries(v)) {
+    const [klic, id] = kl.split('#');
+    const pole = state.data[klic];
+    if (!pole) { delete v[kl]; continue; }
+    const i = pole.findIndex(x => x.id === id);
+    const dohnano = i < 0 || (klic === 'ukoly' && pole[i].hotovo);
+    if (dohnano || Date.now() - cas > TYDEN) { delete v[kl]; continue; }
+    if (klic === 'ukoly') pole[i].hotovo = true; else pole.splice(i, 1);
+  }
+  nahrobky.zapis(v);
 }
 
 /* ---------- rychlé přidání: návrh a potvrzení ---------- */
@@ -973,12 +1126,17 @@ function render() { renderOvladani(); renderHero(); renderKalendar(); renderKnih
 (async function init() {
   state.data = await nacti();
   state.data.doklady = state.data.doklady || [];
+  state.zRepa = Object.fromEntries(['ukoly','doklady','krouzky'].map(k => [k, new Set((state.data[k] || []).map(x => x.id))]));
   for (const [klic, cil] of [['akce','events'], ['ukol','ukoly'], ['doklad','doklady']]) {
     try {
-      JSON.parse(localStorage.getItem('rk-lokalni-' + klic) || '[]')
-        .forEach(e => { if (!state.data[cil].some(x => x.id === e.id)) state.data[cil].push(e); });
+      const lok = JSON.parse(localStorage.getItem('rk-lokalni-' + klic) || '[]');
+      // co už je v repu, je uložené — v prohlížeči to držet nemusíme (a nesmíme: po smazání by to vyskočilo znovu)
+      const zbyva = lok.filter(e => !state.data[cil].some(x => x.id === e.id));
+      zbyva.forEach(e => state.data[cil].push(e));
+      if (zbyva.length !== lok.length) localStorage.setItem('rk-lokalni-' + klic, JSON.stringify(zbyva));
     } catch {}
   }
+  pouzijNahrobky();
 
   if (new URLSearchParams(location.search).has('display')) {
     document.body.classList.add('display');

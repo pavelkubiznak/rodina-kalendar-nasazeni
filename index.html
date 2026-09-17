@@ -51,8 +51,8 @@
       <div id="navrh" class="proposal" style="display:none"></div>
       <div id="nastaveni" class="nastaveni" hidden>
         <div class="eyebrow">Ukládání do repozitáře</div>
-        <p class="sub">Bez tohohle ti kalendář návrh jen ukáže a dá JSON ke zkopírování.
-          S vyplněnými údaji ho rovnou zapíše do GitHubu a web se za chvíli přebuildí — uvidí to i Šárka.</p>
+        <p class="sub">Bez tohohle se úkoly a doklady uloží jen do tohohle prohlížeče a nic nejde mazat.
+          S vyplněnými údaji se přidávání, odškrtávání i mazání rovnou zapíše do GitHubu a web se za chvíli přebuildí — uvidí to i Šárka.</p>
         <div class="pole"><label for="gh-repo">Repozitář</label>
           <input id="gh-repo" placeholder="ucet/rodinny-kalendar" autocomplete="off"></div>
         <div class="pole"><label for="gh-token">Token</label>
@@ -102,7 +102,7 @@
 
   <section class="blockz" id="sekce-ukoly">
     <h2>Vyžaduje rozhodnutí</h2>
-    <p class="sub">Věci, které se samy nevyřeší. Seřazeno podle toho, co hoří nejdřív.</p>
+    <p class="sub">Věci, které se samy nevyřeší. Seřazeno podle toho, co hoří nejdřív. Vyřízené odklikni, zbytečné zruš.</p>
     <div id="ukoly" class="paycards"></div>
   </section>
 
@@ -114,10 +114,10 @@
 
   <section class="blockz" id="sekce-krouzky">
     <h2>Kroužky ve školním roce 2026/2027</h2>
-    <p class="sub">Červeně jsou kroužky, které se s něčím kryjí — ty zatím neplať.</p>
+    <p class="sub">Červeně jsou kroužky, které se s něčím kryjí — ty zatím neplať. Kroužek, na který se chodit nebude, vyřaď — zmizí z kalendáře, plakátu i plateb.</p>
     <div class="scroller">
       <table>
-        <thead><tr><th>Kroužek</th><th>Kdo</th><th>Den</th><th>Čas</th><th>První lekce</th><th>Cena</th><th>Stav</th></tr></thead>
+        <thead><tr><th>Kroužek</th><th>Kdo</th><th>Den</th><th>Čas</th><th>První lekce</th><th>Cena</th><th>Stav</th><th class="akce-bunka"></th></tr></thead>
         <tbody id="tab-krouzky"></tbody>
       </table>
     </div>
