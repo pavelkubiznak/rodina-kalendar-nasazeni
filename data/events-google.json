@@ -1,5 +1,54 @@
 [
   {
+    "id": "g-pl7o83g00lf5edb733jqv7nb6g",
+    "nazev": "18.9. vlčák celý den ve svobodě",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-18",
+    "popis": "18.9. vlčák celý den ve svobodě"
+  },
+  {
+    "id": "g-q0nasnlth3nqmp9m3ckbnntsk4",
+    "nazev": "18.9. matěj Všestary archeopark 11:15 až 13:30 návrat 14:15",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-18",
+    "cas": "11:15",
+    "casDo": "12:15",
+    "popis": "18.9. matěj Všestary archeopark 11:15 až 13:30 návrat 14:15"
+  },
+  {
+    "id": "g-v1f68idibc4met9pc1ui5emla0",
+    "nazev": "23.9. v 18:00 shromáždění SVJ libuše",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-23",
+    "cas": "18:00",
+    "casDo": "19:00",
+    "popis": "23.9. v 18:00 shromáždění SVJ libuše"
+  },
+  {
     "id": "g-u36cedis02kvfaeq35tuh5fj1o",
     "nazev": "matěj: počítej v pohybu biřička",
     "ikona": "📌",
@@ -13,5 +62,91 @@
     ],
     "od": "2026-09-25",
     "popis": "25.9.2026 matěj: počítej v pohybu biřička"
+  },
+  {
+    "id": "g-krmntrj1onupovrdn7cjktap2g",
+    "nazev": "9.10. volby zkrácená výuka",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-09",
+    "cas": "08:00",
+    "casDo": "09:00",
+    "popis": "9.10. volby zkrácená výuka"
+  },
+  {
+    "id": "g-52agmh1j5tlii19g0noqp6k7r4",
+    "nazev": "13.10. sběr žaludů a kaštanů škola",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-13",
+    "cas": "07:20",
+    "casDo": "08:20",
+    "popis": "13.10. sběr žaludů a kaštanů škola"
+  },
+  {
+    "id": "g-v4go47ja9oenst8opv7eu6h2ck",
+    "nazev": "11.11. sbírka pro diagnostický ústav potrvá do 12.12. Petra jelínková",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-11",
+    "cas": "08:00",
+    "casDo": "09:00",
+    "popis": "11.11. sbírka pro diagnostický ústav potrvá do 12.12. Petra jelínková"
+  },
+  {
+    "id": "g-0q1v9ohj6370ald6ht920190gc",
+    "nazev": "16.11. štafeta ve škole běh za svobodu",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-16",
+    "cas": "08:00",
+    "casDo": "09:00",
+    "misto": "škole",
+    "popis": "16.11. štafeta ve škole běh za svobodu"
+  },
+  {
+    "id": "g-jf9ntjiiu25odqus75sc7sknh4",
+    "nazev": "8.12. mikulášská besídka",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-08",
+    "cas": "08:00",
+    "casDo": "09:00",
+    "popis": "8.12. mikulášská besídka"
   }
 ]
