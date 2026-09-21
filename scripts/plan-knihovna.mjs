@@ -2,6 +2,7 @@
    Priorita: jít tam s dětma a půjčit si nové. Až když to nevyjde, spočítá poslední
    termín pro vhození do biblioboxu, aby se konto odepsalo včas. */
 import fs from 'node:fs';
+import { tydenSedi } from './udalosti.mjs';
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = J('events'), svatky = J('svatky'),
       rozvrhy = J('rozvrhy'), knihovna = J('knihovna'), oteviraci = J('knihovna-oteviraci');
@@ -64,6 +65,7 @@ function oknoDne(s, oddeleniPotreba, kdoJde) {
   let brzda = null;
   for (const k of krouzky) {
     if (![k.den, k.denDalsi].includes(d)) continue;
+    if (!tydenSedi(k, s)) continue;
     if (k.prvniLekce && s < k.prvniLekce) continue;
     if (k.konecKurzu && s > k.konecKurzu) continue;
     if (!k.kdo.some(x => kdoJde.includes(x))) continue;

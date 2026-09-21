@@ -41,11 +41,14 @@ function jeVolno(d) {
 const naVylete = d => state.data.events.some(e =>
   (e.typ === 'vylet' || e.typ === 'pobyt') && d >= e.od && d <= (e.do || e.od));
 
+const isoTyden = s => { const d = new Date(s + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7)); const r = new Date(Date.UTC(d.getUTCFullYear(), 0, 1)); return Math.ceil(((d - r) / 864e5 + 1) / 7); };
+const tydenSedi = (k, s) => !k.tydny || (isoTyden(s) % 2 === 0) === (k.tydny === 'sude');
 function krouzkyDne(dISO) {
   const dow = parse(dISO).getDay();
   if (jeVolno(dISO) || naVylete(dISO)) return [];
   return state.data.krouzky.filter(k => {
     if (![k.den, k.denDalsi].filter(x => x != null).includes(dow)) return false;
+    if (!tydenSedi(k, dISO)) return false;
     if (k.prvniLekce && dISO < k.prvniLekce) return false;
     if (k.konecKurzu && dISO > k.konecKurzu) return false;
     return true;

@@ -12,6 +12,16 @@ const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 
 export const SKOLNI_ROK = { od: '2026-09-01', do: '2027-06-30' };
 
+/* ISO číslo týdne — kvůli kroužkům, které běží jen v sudé/liché týdny. */
+export const isoTyden = s => {
+  const d = new Date(s + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const r = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d - r) / 864e5 + 1) / 7);
+};
+export const tydenSedi = (k, s) => !k.tydny || (isoTyden(s) % 2 === 0) === (k.tydny === 'sude');
+
+
 /* Ruční události z Google Kalendáře, které stáhl google-pull.mjs.
    Když soubor není (první běh, nebo sync vypnutý), vrátí prázdno. */
 export function googleEvents() {
@@ -77,18 +87,33 @@ export function generovane() {
       upominky: v.upominky || [7, 3, 1] });
   }
 
-  // 5) kroužky – týdenní opakování do konce školního roku
+  // 5) kroužky – týdenní opakování do konce školního roku.
+  // Kroužek s `tydny: "sude"|"liche"` běží 1× za 14 dní podle parity ISO týdne —
+  // RRULE INTERVAL=2 by se v roce s 53 týdny (2026) rozešel, proto samostatné události.
   const DNI_ICS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   for (const k of krouzky) {
     const dny = [k.den, k.denDalsi].filter(x => x != null);
     if (!dny.length || !k.od) continue;               // bez dne nebo času nemá smysl generovat
     const start = k.prvniLekce || SKOLNI_ROK.od;
+    const nazev = `${k.stav === 'kolize' ? '⚠️ ' : k.stav === 'nejiste' ? '❓ ' : ''}${k.nazev} — ${k.kdo.map(jmeno).join(' + ')}`;
+    const popis = [k.poskytovatel, k.poznamka].filter(Boolean).join(' — ');
+    if (k.tydny) {
+      const konec = new Date((k.konecKurzu || SKOLNI_ROK.do) + 'T00:00:00Z');
+      for (const d = new Date(start + 'T00:00:00Z'); d <= konec; d.setUTCDate(d.getUTCDate() + 1)) {
+        const sIso = d.toISOString().slice(0, 10);
+        if (!dny.includes(d.getUTCDay()) || !tydenSedi(k, sIso)) continue;
+        push(`krouzek-${k.id}-${sIso.replace(/-/g, '')}`, {
+          nazev, od: sIso, cas: k.od, casDo: k.do || k.od,
+          celodenni: false, misto: k.misto, popis, upominky: [] });
+      }
+      continue;
+    }
     const d = new Date(start + 'T00:00:00Z');
     while (!dny.includes(d.getUTCDay())) d.setUTCDate(d.getUTCDate() + 1);
     push(`krouzek-${k.id}`, {
-      nazev: `${k.stav === 'kolize' ? '⚠️ ' : k.stav === 'nejiste' ? '❓ ' : ''}${k.nazev} — ${k.kdo.map(jmeno).join(' + ')}`,
+      nazev,
       od: d.toISOString().slice(0, 10), cas: k.od, casDo: k.do || k.od,
-      celodenni: false, misto: k.misto, popis: [k.poskytovatel, k.poznamka].filter(Boolean).join(' — '),
+      celodenni: false, misto: k.misto, popis,
       rrule: `FREQ=WEEKLY;BYDAY=${dny.map(x => DNI_ICS[x]).join(',')};UNTIL=${den(k.konecKurzu || SKOLNI_ROK.do)}T235900Z`,
       upominky: [] });
   }

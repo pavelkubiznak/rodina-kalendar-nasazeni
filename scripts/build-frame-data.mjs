@@ -3,7 +3,7 @@
    Na stdout jde jen JSON — workflow ho přesměrovává rovnou do souboru. */
 import fs from 'node:fs';
 import { planProWeb } from './plan-knihovna.mjs';
-import { vsechnyEvents } from './udalosti.mjs';
+import { vsechnyEvents, tydenSedi } from './udalosti.mjs';
 
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(), svatky = J('svatky'),
@@ -57,7 +57,7 @@ const pracovni = s => dow(s) >= 1 && dow(s) <= 5 && !svatek(s);
 const skolniDen = s => s >= SR.od && s <= SR.do && pracovni(s) && !naCestach(s);
 const pristiPracovni = s => { let d = plus(s, 1); while (!pracovni(d)) d = plus(d, 1); return d; };
 const krouzkyDne = s => !skolniDen(s) ? [] : krouzky
-  .filter(k => [k.den, k.denDalsi].includes(dow(s))
+  .filter(k => [k.den, k.denDalsi].includes(dow(s)) && tydenSedi(k, s)
     && (!k.prvniLekce || s >= k.prvniLekce) && (!k.konecKurzu || s <= k.konecKurzu))
   .sort((a, b) => podle(a.od, b.od));
 const narozeninyDne = s => narozeniny.filter(n => n.datum.slice(5) === s.slice(5));
