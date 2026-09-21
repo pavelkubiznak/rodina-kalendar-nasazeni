@@ -32,6 +32,56 @@
     "popis": "18.9. matěj Všestary archeopark 11:15 až 13:30 návrat 14:15"
   },
   {
+    "id": "g-9qk3reahuuu7kq1u5kup68vepc",
+    "nazev": "22. září v 7 hod. ráno tomík chirurgie Palec",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-22",
+    "cas": "07:00",
+    "casDo": "08:00",
+    "popis": "22. září v 7 hod. ráno tomík chirurgie Palec"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20260922T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-22",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-jlegmc9g7f1frtjdvhoi9mkvcc",
+    "nazev": "Zítra ve 14:15 si má máta udělat úkol z přírodovědy voda a vzduch",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-22",
+    "cas": "14:15",
+    "casDo": "15:15",
+    "popis": "Zítra ve 14:15 si má máta udělat úkol z přírodovědy voda a vzduch"
+  },
+  {
     "id": "g-v1f68idibc4met9pc1ui5emla0",
     "nazev": "23.9. v 18:00 shromáždění SVJ libuše",
     "ikona": "📌",
@@ -81,6 +131,22 @@
     "popis": "25.9. v 16:30, holič sarka"
   },
   {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20260929T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-29",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
     "id": "g-a4tdkg3onh2prgpstfl6q98hno",
     "nazev": "30.9. v 7.00 matěj zubař",
     "ikona": "📌",
@@ -96,6 +162,22 @@
     "cas": "07:00",
     "casDo": "08:00",
     "popis": "30.9. v 7 hod. matěj zubař"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261006T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-06",
+    "cas": "12:35",
+    "casDo": "13:05"
   },
   {
     "id": "g-krmntrj1onupovrdn7cjktap2g",
@@ -132,6 +214,70 @@
     "popis": "13.10. sběr žaludů a kaštanů škola"
   },
   {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261013T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-13",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261020T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-20",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261027T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-27",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261103T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-03",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
     "id": "g-2miif2mdfti73hqb83v2gj8aug",
     "nazev": "9.11. v 17:05, kosmetika šárka",
     "ikona": "📌",
@@ -147,6 +293,22 @@
     "cas": "09:11",
     "casDo": "10:11",
     "popis": "9.11. v 17:05, kosmetika šárka"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261110T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-10",
+    "cas": "12:35",
+    "casDo": "13:05"
   },
   {
     "id": "g-v4go47ja9oenst8opv7eu6h2ck",
@@ -184,6 +346,54 @@
     "popis": "16.11. štafeta ve škole běh za svobodu"
   },
   {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261117T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-17",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261124T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-24",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261201T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-01",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
     "id": "g-jf9ntjiiu25odqus75sc7sknh4",
     "nazev": "8.12. mikulášská besídka",
     "ikona": "📌",
@@ -199,5 +409,757 @@
     "cas": "08:00",
     "casDo": "09:00",
     "popis": "8.12. mikulášská besídka"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261208T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-08",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261215T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-15",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261222T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-22",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261229T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-29",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270105T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-05",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270112T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-12",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270119T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-19",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270126T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-26",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270202T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-02-02",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270209T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-02-09",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270216T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-02-16",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270223T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-02-23",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270302T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-03-02",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270309T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-03-09",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270316T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-03-16",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270323T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-03-23",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270330T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-03-30",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270406T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-04-06",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270413T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-04-13",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270420T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-04-20",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270427T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-04-27",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270504T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-05-04",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270511T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-05-11",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270518T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-05-18",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270525T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-05-25",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270601T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-06-01",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270608T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-06-08",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270615T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-06-15",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270622T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-06-22",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270629T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-06-29",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270706T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-07-06",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270713T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-07-13",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270720T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-07-20",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270727T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-07-27",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270803T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-08-03",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270810T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-08-10",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270817T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-08-17",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270824T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-08-24",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270831T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-08-31",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270907T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-09-07",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270914T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-09-14",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270921T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-09-21",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270928T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-09-28",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271005T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-10-05",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271012T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-10-12",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271019T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-10-19",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271026T103500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-10-26",
+    "cas": "12:35",
+    "casDo": "13:05"
   }
 ]
