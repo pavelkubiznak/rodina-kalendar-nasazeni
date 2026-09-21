@@ -64,6 +64,23 @@
     "popis": "25.9.2026 matěj: počítej v pohybu biřička"
   },
   {
+    "id": "g-mf6g0i47eqd2b8imlq4v30084s",
+    "nazev": "25.9. v 16:30 šárka holič",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-25",
+    "cas": "16:30",
+    "casDo": "17:30",
+    "popis": "25.9. v 16:30, holič sarka"
+  },
+  {
     "id": "g-a4tdkg3onh2prgpstfl6q98hno",
     "nazev": "30.9. v 7.00 matěj zubař",
     "ikona": "📌",
@@ -113,6 +130,23 @@
     "cas": "07:20",
     "casDo": "08:20",
     "popis": "13.10. sběr žaludů a kaštanů škola"
+  },
+  {
+    "id": "g-2miif2mdfti73hqb83v2gj8aug",
+    "nazev": "9.11. v 17:05, kosmetika šárka",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-09",
+    "cas": "09:11",
+    "casDo": "10:11",
+    "popis": "9.11. v 17:05, kosmetika šárka"
   },
   {
     "id": "g-v4go47ja9oenst8opv7eu6h2ck",
