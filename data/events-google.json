@@ -64,6 +64,23 @@
     "popis": "25.9.2026 matěj: počítej v pohybu biřička"
   },
   {
+    "id": "g-a4tdkg3onh2prgpstfl6q98hno",
+    "nazev": "30.9. v 7.00 matěj zubař",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-09-30",
+    "cas": "07:00",
+    "casDo": "08:00",
+    "popis": "30.9. v 7 hod. matěj zubař"
+  },
+  {
     "id": "g-krmntrj1onupovrdn7cjktap2g",
     "nazev": "9.10. volby zkrácená výuka",
     "ikona": "📌",
