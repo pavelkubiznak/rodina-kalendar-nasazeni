@@ -14,15 +14,27 @@
     "ikona": "🚗"
   },
   {
-    "id": "dds-kolize",
-    "nazev": "Dořešit s DDM Robotiku a Scratch",
+    "id": "ddm-zrusit-robotiku",
+    "nazev": "Zrušit v DDM přihlášku Robotika pro nejmenší 2",
     "doKdy": "2026-09-25",
-    "popis": "Obojí se kryje. Zeptat se na náhradní skupinu nebo přihlášky zrušit — do té doby neplatit (dohromady 4 100 Kč).",
+    "popis": "Kryla se s Matějovou středeční výtvarkou, z kalendáře vyřazena 21. 9. Zrušit v klientském centru barak.iddm.cz a NEPLATIT (2 200 Kč, VS 161302008).",
     "upominky": [
-      7,
-      2
+      2,
+      1
     ],
     "hotovo": false,
     "ikona": "⚠️"
+  },
+  {
+    "id": "scratch-tomas-prihlaska",
+    "nazev": "Podat Tomášovu přihlášku na Scratch",
+    "doKdy": "2026-09-30",
+    "popis": "Domluveno s lektorem — Tomáš bude chodit s Matějem (ČT 16:00–17:00). Přihlásit v klientském centru barak.iddm.cz, pak zaplatit 1 900 Kč pod novým VS.",
+    "upominky": [
+      3,
+      1
+    ],
+    "hotovo": false,
+    "ikona": "📝"
   }
 ]
