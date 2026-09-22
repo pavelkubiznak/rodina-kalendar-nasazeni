@@ -23,10 +23,25 @@ frame-data*.json); skript si vybere ten, jehoz datumIso odpovida.
 Proc se overuje (15. 9. 2026): televize prideluje vlastnim obrazkum ID MY_F0001 az
 MY_F0007 dokola. Obcas potvrdi "image_added" a vrati nove ID, ale v tom slotu si
 necha STARY soubor - na zdi pak visi plakat z jineho dne (v utery sobotni, v
-pondeli patecni). Proto se po nahrani stahne nahled z TV a porovna se s nahledy
-vsech drivejsich plakatu (nahledy/MY_F000N.jpg): kdyz se nadpis shoduje s nekterym
-z nich, TV podstrcila stary obrazek - spatny se smaze a nahrani se zopakuje.
-Soubor se navic posila najednou a spojeni se hned zavre (jako upstream knihovna).
+pondeli patecni). Soubor se navic posila najednou a spojeni se hned zavre
+(jako upstream knihovna).
+
+Jak se overuje (prepsano 22. 9. 2026): puvodni kontrola porovnavala nadpis nove
+stazeneho nahledu s nadpisy VSECH drivejsich nahledu a kdyz nekteremu odpovidal,
+prohlasila nahrani za pokazene. To bylo spatne polozena otazka a delalo to jen
+falesne poplachy - za 21. 9. ctyri behy po trech pokusech, tedy 12 zbytecnych
+nahrani denne, a nakonec se obrazek stejne vzal ("po 4 bezich ho beru i tak").
+Duvody jsou dva a oba jsou v datech videt:
+  - Tyz den se plakat nahrava znovu, kdyz se na Pages zmeni obsah. Novy nahled ma
+    pak pochopitelne stejny nadpis jako ten predchozi (MY_F0105 vs MY_F0118 pro
+    22. 9. = vzdalenost 0.18, MY_F0063/0078/0092 pro 21. 9. = 0.00).
+  - Vyrez nadpisu zabira nazev dne, ale ne dost z datumu, takze tyz den v tydnu
+    o tyden pozdeji vyjde jako shoda (MY_F0004 ze 14. 9. vs MY_F0063 z 21. 9.,
+    presne 7 dni, vzdalenost 0.58).
+Misto toho se ted overuje primo proti televizi: slot s nasim content_id musi
+existovat a nest image_date, ktere jsme pri nahrani poslali. Kdyz si TV v slotu
+necha stary soubor, nese i jeho stare razitko - a presne to je ta porucha.
+Podobnost nadpisu se uz jen loguje pro diagnostiku a o nicem nerozhoduje.
 
 Rucni zasahy (soubor vedle skriptu):
   inventura.zadej  - vypise, co ma TV ulozeno, a stahne nahledy do nahledy/
@@ -51,6 +66,11 @@ POKUSU_V_BEHU   = 3    # kolikrat zkusit nahrat v jednom behu, kdyz TV podstrci 
 BEHU_NEZ_VZDAT  = 4    # po kolika neuspesnych bezich (po 10 min) vzit i neovereny obrazek
 PAUZA_PO_UPLOADU = 4   # s - dat TV cas soubor dopsat, nez se vybere a stahne nahled
 ZITREK_OD = 17         # od teto hodiny visi na TV plakat na zitrek
+# O kolik se smi lisit image_date v slotu od razitka, ktere jsme pri nahrani poslali.
+# Chyba, kterou hledame, je plakat z JINEHO DNE, takze i 6 hodin ji spolehlive chyti;
+# siroka tolerance zaroven pohlti pripadny posun hodin mezi Macem a televizi. Radeji
+# neoverene nez falesny poplach - to je cela lekce z 21. 9.
+TOLERANCE_RAZITKA = 6 * 3600   # s
 
 def log(*a):
     print(time.strftime("%F %T"), *a, flush=True)
@@ -125,8 +145,9 @@ def nahraj(art, data, file_type="jpg"):
     dlouho po select_image. Upstream samsungtvws 3.x naopak posle vse najednou
     (sendall) a socket ZAVRE, teprve pak ceka na "image_added". Delame to stejne:
     televize dostane konec souboru drive, nez se po ni chce cokoli dalsiho.
-    Vraci content_id.
+    Vraci (content_id, razitko), kde razitko je image_date poslane televizi.
     """
+    razitko = datetime.datetime.now().strftime("%Y:%m:%d %H:%M:%S")
     odpoved = art._send_art_request(
         {
             "request": "send_image",
@@ -138,7 +159,7 @@ def nahraj(art, data, file_type="jpg"):
                 "connection_id": random.randrange(4 * 1024 * 1024 * 1024),
                 "id": art.art_uuid,
             },
-            "image_date": datetime.datetime.now().strftime("%Y:%m:%d %H:%M:%S"),
+            "image_date": razitko,
             "matte_id": "none",
             "portrait_matte_id": "none",
             "file_size": len(data),
@@ -169,7 +190,7 @@ def nahraj(art, data, file_type="jpg"):
         except OSError:
             pass
     hotovo = art.wait_for_response("image_added")
-    return hotovo["content_id"] if hotovo else None
+    return (hotovo["content_id"] if hotovo else None), razitko
 
 # --------------------------------------------------------- porovnani nahledu
 def nahled_z_tv(art, cid, pokusu=3):
@@ -250,33 +271,83 @@ def rozdil(a, b, vyrez=None):
 
 # kde na plakatu je velky nazev dne ("Uterý", "Sobota") a datum - tam se ruzne dny lisi vzdy
 VYREZ_NADPIS = (6, 18, 96, 58)     # v 320x180: x 6-96, y 18-58
-# nadpis nahledu vs. nadpis drive stazeneho nahledu z TV: pod timhle je to tentyz obrazek.
+# Orientacni prah pro cteni cisel v logu: pod nim jde o tentyz obrazek.
 # Kalibrace 15. 9.: tentyz nahled znovu zkomprimovany JPEGem ~3-5, jiny den 10-16.
+# Od 22. 9. uz nic nezamita, nahrani se overuje razitkem primo na TV (viz over_nahrani).
 PRAH_STEJNY  = 6.0
 
 def glob_overeni():
     return [os.path.join(NAHLEDY, f) for f in os.listdir(NAHLEDY) if f.startswith("_overeni_")]
 
-def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
-    """
-    Vrati (ok, popis, nahled_bytes, art). ok=False jen kdyz je jiste, ze TV ukazuje neco jineho,
-    nez co jsme poslali. Kdyz nejde nic porovnat, ok=True (radeji neoverene nez nic).
+def polozka_na_tv(art, cid):
+    """Vrati polozku se zadanym content_id ze seznamu obrazku na TV, nebo None."""
+    for a in art.available():
+        if a.get("content_id") == cid:
+            return a
+    return None
 
-    Rozhoduje se jen podle nahledu ze same televize (stejny scaler, stejna komprese):
-    kdyz se nadpis noveho nahledu shoduje s nadpisem kterehokoli drive stazeneho nahledu
-    (nahledy/MY_F000N.jpg), TV nam podstrcila stary obrazek - nazev dne a datum se totiz
-    meni kazdy den. Porovnani s nasi vlastni zmenseninou plakatu se jen loguje (jiny scaler,
-    cisla nejsou spolehliva) - hodi se pro pozdejsi kalibraci.
+
+def razitko_na_datum(s):
+    """'2026:09:22 07:15:03' -> datetime; pri jakemkoli jinem tvaru None."""
+    try:
+        return datetime.datetime.strptime(str(s), "%Y:%m:%d %H:%M:%S")
+    except Exception:
+        return None
+
+
+def over_nahrani(art, cid, razitko, cesta_plakatu, sedy_plakat):
     """
+    Vrati (ok, popis, nahled_bytes, art). ok=False jen kdyz je JISTE, ze v slotu neni to,
+    co jsme prave poslali. Kdyz nejde nic overit, ok=True (radeji neoverene nez nic).
+
+    Overuje se:
+      1) slot s nasim content_id na TV opravdu existuje,
+      2) jeho image_date sedi na razitko, ktere jsme pri nahrani poslali (TOLERANCE_RAZITKA);
+         kdyz si TV v slotu nechala stary soubor, nese i jeho stare razitko,
+      3) nahled ze slotu neni BAJT PO BAJTU shodny s nahledem nektereho drivejsiho plakatu
+         (to by znamenalo doslova tentyz ulozeny soubor - jina komprese by bajtovou shodu nedala).
+
+    Podobnost nadpisu s drivejsimi nahledy se uz jen LOGUJE a nerozhoduje; proc, viz hlavicka.
+    """
+    popis = {}
+
+    # 1) + 2) existence slotu a jeho razitko - hlavni dukaz
+    polozka = None
+    try:
+        polozka = polozka_na_tv(art, cid)
+    except Exception as e:
+        popis["seznam_z_tv"] = "chyba %s" % type(e).__name__
+        log("seznam obrazku z TV se nepodarilo nacist:", type(e).__name__, e)
+    else:
+        if polozka is None:
+            popis["chyba"] = "slot %s na TV vubec neni" % cid
+            return False, popis, None, art
+        popis["image_date"] = polozka.get("image_date")
+        na_tv = razitko_na_datum(polozka.get("image_date"))
+        poslano = razitko_na_datum(razitko)
+        if na_tv and poslano:
+            lisi = abs((na_tv - poslano).total_seconds())
+            popis["razitko_lisi_o_s"] = int(lisi)
+            if lisi > TOLERANCE_RAZITKA:
+                popis["chyba"] = ("slot %s nese razitko %s, poslali jsme %s - TV si nechala stary soubor"
+                                  % (cid, polozka.get("image_date"), razitko))
+                nahled, art = nahled_z_tv(art, cid)
+                return False, popis, nahled, art
+        else:
+            popis["razitko"] = "neporovnatelne"
+
+    # nahled ze slotu: pro bajtovou shodu, pro ulozeni jako novy znamy obsah slotu a pro diagnostiku
     nahled, art = nahled_z_tv(art, cid)
     if not nahled:
-        return True, "nahled nedostupny, neovereno", None, art
-    popis = {}
+        popis["nahled"] = "nedostupny, neoveren obrazem"
+        return True, popis, None, art
+
     cesta_novy = os.path.join(NAHLEDY, "_overeni_%s.jpg" % cid)
     with open(cesta_novy, "wb") as f:
         f.write(nahled)
     sedy_novy = sedy_obrazek(cesta_novy)
 
+    # 3) bajtova shoda = doslova tentyz ulozeny soubor
     shody = {}
     for jmeno in sorted(os.listdir(NAHLEDY)):
         if not (jmeno.startswith("MY_") and jmeno.endswith(".jpg")):
@@ -290,16 +361,13 @@ def over_nahrani(art, cid, cesta_plakatu, sedy_plakat):
         d = rozdil(sedy_novy, sedy_obrazek(cesta), VYREZ_NADPIS)
         if d is not None:
             shody[jmeno[:-4]] = round(d, 2)
-    popis["nadpis_vs_drivejsi"] = shody
-    if shody:
-        nej = min(shody, key=shody.get)
-        if shody[nej] < PRAH_STEJNY:
-            popis["stejny_jako"] = nej
-            return False, popis, nahled, art
 
+    # uz jen diagnostika do logu, nic nezamita
+    popis["nadpis_vs_drivejsi"] = shody
     d = rozdil(sedy_novy, sedy_plakat, VYREZ_NADPIS)
-    popis["nadpis_vs_plakat"] = None if d is None else round(d, 2)   # jen informativne
+    popis["nadpis_vs_plakat"] = None if d is None else round(d, 2)
     return True, popis, nahled, art
+
 
 def uloz(stav):
     json.dump(stav, open(STATE, "w"))
@@ -476,7 +544,7 @@ try:
     spatne = []            # dnesni nahrani, ktera TV pokazila - smazat
     novy = None
     for pokus in range(1, POKUSU_V_BEHU + 1):
-        cid = nahraj(art, jpg)
+        cid, razitko = nahraj(art, jpg)
         if not cid:
             raise RuntimeError("TV nevratila content_id")
         time.sleep(PAUZA_PO_UPLOADU)
@@ -488,7 +556,7 @@ try:
             log("nove spojeni s TV po nahrani selhalo, pokracuji na starem:", type(e).__name__, e)
         art.select_image(cid, show=True)
         vypni_slideshow(art)
-        ok, popis, nahled, art = over_nahrani(art, cid, cesta_plakatu, sedy_plakat)
+        ok, popis, nahled, art = over_nahrani(art, cid, razitko, cesta_plakatu, sedy_plakat)
         if ok or vzdat_overovani:
             if not ok:
                 log("POZOR: %s neprosel overenim %s, ale po %d bezich ho beru i tak" % (cid, popis, behu - 1))
@@ -501,7 +569,7 @@ try:
                     f.write(nahled)      # od ted je tohle znamy obsah slotu
             novy = cid
             break
-        log("POZOR: TV do %s ulozila jiny obrazek nez poslany (%s) - pokus %d/%d"
+        log("POZOR: v slotu %s neni to, co jsme poslali (%s) - pokus %d/%d"
             % (cid, popis, pokus, POKUSU_V_BEHU))
         spatne.append(cid)
         time.sleep(3)
