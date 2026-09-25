@@ -29,12 +29,13 @@
     "id": "scratch-tomas-prihlaska",
     "nazev": "Podat Tomášovu přihlášku na Scratch",
     "doKdy": "2026-09-30",
-    "popis": "Domluveno s lektorem — Tomáš bude chodit s Matějem (ČT 16:00–17:00). Přihlásit v klientském centru barak.iddm.cz, pak zaplatit 1 900 Kč pod novým VS.",
+    "popis": "Přihláška schválena 22. 9. 2026 pod č. 161319018. Zbývá zaplatit 1 900 Kč (platební údaje v klientském centru barak.iddm.cz).",
     "upominky": [
       3,
       1
     ],
-    "hotovo": false,
-    "ikona": "📝"
+    "hotovo": true,
+    "ikona": "📝",
+    "hotovoDne": "2026-09-22"
   }
 ]

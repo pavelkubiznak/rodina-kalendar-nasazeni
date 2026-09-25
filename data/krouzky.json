@@ -48,6 +48,31 @@
     }
   },
   {
+    "id": "doucovani-matej",
+    "nazev": "Doučování",
+    "kdo": [
+      "matej"
+    ],
+    "poskytovatel": null,
+    "den": 2,
+    "denDalsi": 4,
+    "od": "12:35",
+    "do": "13:35",
+    "misto": null,
+    "prvniLekce": "2026-09-22",
+    "konecKurzu": "2027-06-30",
+    "stav": "aktivni",
+    "cena": null,
+    "za": null,
+    "poznamka": "Každé úterý a čtvrtek hned po vyučování.",
+    "platba": {
+      "castka": null,
+      "splatnost": null,
+      "zaplaceno": false,
+      "kde": null
+    }
+  },
+  {
     "id": "elektronik",
     "nazev": "Mladý elektronik – začátečníci",
     "kdo": [
@@ -66,38 +91,9 @@
     "vs": {
       "matej": "161314001"
     },
-    "poznamka": "",
+    "poznamka": "Sraz ve vestibulu DDM u informací, přezůvky s sebou. Omluvy předem e-mailem/SMS — vedoucí Petr Dočekal, 777 758 431. Poplatek oficiálně do 30. 11.",
     "platba": {
       "castka": 2400,
-      "splatnost": "2026-09-30",
-      "zaplaceno": false,
-      "kde": "DDM Barák – účet 365464684/0300"
-    }
-  },
-  {
-    "id": "chovatelsky-4",
-    "nazev": "Chovatelský kroužek 4",
-    "kdo": [
-      "matej",
-      "tomas"
-    ],
-    "poskytovatel": "DDM Barák",
-    "den": 2,
-    "od": "15:45",
-    "do": "16:45",
-    "misto": "DDM Rautenkrancova 1241",
-    "prvniLekce": "2026-09-29",
-    "konecKurzu": "2027-06-01",
-    "stav": "aktivni",
-    "cena": 2000,
-    "za": "rok",
-    "vs": {
-      "matej": "161524001",
-      "tomas": "161524002"
-    },
-    "poznamka": "Matějova přihláška schválena 4. 9. 2026 — kluci tam jdou spolu.",
-    "platba": {
-      "castka": 4000,
       "splatnost": "2026-09-30",
       "zaplaceno": false,
       "kde": "DDM Barák – účet 365464684/0300"
@@ -113,7 +109,7 @@
     "poskytovatel": "DDM Barák",
     "den": 3,
     "od": "16:00",
-    "do": "17:00",
+    "do": "17:30",
     "misto": "Přírodovědné centrum, Bezručova 1468",
     "prvniLekce": "2026-09-30",
     "konecKurzu": "2027-06-02",
@@ -124,7 +120,7 @@
       "matej": "262115002",
       "tomas": "262115001"
     },
-    "poznamka": "Kluci spolu.",
+    "poznamka": "Kluci spolu. Na Bezručově, kroužky PC začínají v týdnu od 29. 9. (info z rodičovské schůzky 21. 9.). Nosit neklouzavé přezůvky a oblečení, které se může ušpinit. Omluvy vedoucímu SMS/e-mailem; ve středu má PC na starosti Vojtěch Trousil, jinak Hana Jiroutová (777 758 441).",
     "platba": {
       "castka": 3000,
       "splatnost": "2026-09-30",
@@ -179,9 +175,10 @@
     "cena": 1900,
     "za": "rok",
     "vs": {
-      "matej": "161319007"
+      "matej": "161319007",
+      "tomas": "161319018"
     },
-    "poznamka": "Kryje se s druhou hodinou modelářů — domluveno s lektorem, kluci chodí ve čtvrtek na oboje. Nově chodí i Tomáš; jeho přihlášku ještě podat v klientském centru (VS má zatím jen Matěj).",
+    "poznamka": "Kryje se s druhou hodinou modelářů — domluveno s lektorem, kluci chodí ve čtvrtek na oboje. Tomášova přihláška schválena 22. 9. (č. 161319018). Sraz ve vestibulu DDM u informací, přezůvky s sebou. Vedoucí Petr Dočekal, 777 758 431.",
     "platba": {
       "castka": 3800,
       "splatnost": "2026-09-30",
@@ -195,22 +192,22 @@
     "kdo": [
       "matej"
     ],
-    "poskytovatel": null,
+    "poskytovatel": "ZŠ SNP – p. Jiří Kuta (sdružení rodičů)",
     "den": 2,
     "od": "13:35",
     "do": "14:35",
-    "misto": null,
-    "prvniLekce": null,
+    "misto": "ZŠ tř. SNP 694, třída 5.A",
+    "prvniLekce": "2026-09-22",
     "konecKurzu": "2027-06-30",
     "stav": "aktivni",
-    "cena": null,
-    "za": null,
-    "poznamka": "Každé úterý po vyučování (Matěj končí 12:35). Doplnit místo a poskytovatele.",
+    "cena": 650,
+    "za": "rok",
+    "poznamka": "Každé úterý po vyučování, od cca 13:35–13:40. Hned před tím doučování (12:35–13:35).",
     "platba": {
-      "castka": null,
-      "splatnost": null,
+      "castka": 650,
+      "splatnost": "2026-09-30",
       "zaplaceno": false,
-      "kde": null
+      "kde": "účet sdružení rodičů ZŠ SNP, VS 6426271"
     }
   },
   {
