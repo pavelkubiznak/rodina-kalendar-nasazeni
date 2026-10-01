@@ -164,6 +164,23 @@
     "popis": "30.9. v 7 hod. matěj zubař"
   },
   {
+    "id": "g-h1qp1hg42rf32lcakj9btfma1k",
+    "nazev": "návštěva babičky a IKEA",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-03",
+    "cas": "03:10",
+    "casDo": "04:10",
+    "popis": "Sobota 3.10. návštěva babičkya  IKEA"
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261006T103500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
