@@ -53,7 +53,22 @@ import os, sys, json, time, datetime, urllib.request, hashlib, random, socket, s
 from samsungtvws import SamsungTVWS
 from samsungtvws.helper import get_ssl_context
 
-TV_IP    = os.environ.get("FRAME_IP", "10.0.0.116")
+# IP televize: 1) soubor tv-ip.txt vedle skriptu, 2) FRAME_IP z launchd, 3) vychozi.
+# Soubor ma prednost schvalne - launchd plist drzi FRAME_IP z doby instalace a jeho zmena
+# chce `launchctl bootout/bootstrap`; prepsat jeden radek v souboru je jednodussi.
+# 30. 9. 2026 se TV pri prestavbe routeru (MikroTik RouterOS 7, WireGuard na vilu) presunula
+# z 10.0.0.116 na pevnou 10.0.0.101 - plakat se pak den a pul nenahral ("TV unreachable").
+def _tv_ip():
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tv-ip.txt")) as f:
+            ip = f.read().strip()
+            if ip:
+                return ip
+    except OSError:
+        pass
+    return os.environ.get("FRAME_IP", "10.0.0.101")
+
+TV_IP    = _tv_ip()
 PAGES    = "https://pavelkubiznak.github.io/rodina-kalendar-nasazeni/"
 HERE     = os.path.dirname(os.path.abspath(__file__))
 TOKEN    = os.path.join(HERE, "tv-token.txt")
@@ -608,5 +623,5 @@ try:
 except SystemExit:
     raise
 except Exception as e:
-    log("nepovedlo se, dalsi pokus za 10 min:", type(e).__name__, e)
+    log("nepovedlo se, dalsi pokus za 10 min:", type(e).__name__, e, "(TV %s)" % TV_IP)
     sys.exit(1)

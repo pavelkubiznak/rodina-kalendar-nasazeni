@@ -83,8 +83,9 @@ v 5:30: televize v noci spí a API nepřijme, takže se plakát nahraje, jakmile
 Když už dnešní plakát visí, skript hned skončí a nic nestahuje.
 
 Nahraje jen plakát s `datumIso` na dnešek. Když render na GitHubu selže, zůstane na TV
-včerejší — a kvůli starému plakátu se nesmaže ten, co tam visí. IP televize je v `FRAME_IP`
-(výchozí 10.0.0.116), odinstalace v hlavičce `nainstaluj-mac.sh`.
+včerejší — a kvůli starému plakátu se nesmaže ten, co tam visí. IP televize je v souboru
+`upload/tv-ip.txt` (má přednost), jinak v `FRAME_IP` z launchd, jinak výchozí 10.0.0.101 — pevná
+adresa v DHCP MikroTiku od 30. 9. 2026 (dřív 10.0.0.116). Odinstalace v hlavičce `nainstaluj-mac.sh`.
 
 ## Na co si dát pozor
 

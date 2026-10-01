@@ -35,7 +35,7 @@ cat > "$PLIST" <<EOF
     <string>$DIR/denni-upload.py</string>
   </array>
   <key>EnvironmentVariables</key>
-  <dict><key>FRAME_IP</key><string>${FRAME_IP:-10.0.0.116}</string></dict>
+  <dict><key>FRAME_IP</key><string>${FRAME_IP:-10.0.0.101}</string></dict>
   <key>StartInterval</key><integer>600</integer>
   <key>RunAtLoad</key><true/>
   <key>StandardOutPath</key><string>$LOG</string>
