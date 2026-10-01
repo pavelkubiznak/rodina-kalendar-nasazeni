@@ -230,6 +230,8 @@ def sedy_obrazek(cesta_jpg, w=320, h=180):
     Zmensi obrazek pres sips na w x h a vrati ho jako seznam radku hodnot jasu 0-255.
     Bez PIL - BMP z sips se precte rucne. Pri jakekoli chybe vrati None.
     """
+    if not os.path.exists(SIPS):
+        return None                   # sips je jen na Macu; na NASu se podobnost jen nespocita
     bmp = cesta_jpg + ".%dx%d.bmp" % (w, h)
     try:
         r = subprocess.run([SIPS, "-z", str(h), str(w), "-s", "format", "bmp", cesta_jpg, "--out", bmp],
@@ -424,6 +426,11 @@ def smaz_na_tv_s_opakovanim(art, ids):
             log("nove spojeni s TV pro mazani selhalo:", type(e).__name__, e)
     return zbyle
 
+# Soubor "vypnuto" vedle skriptu = tahle instalace nic nedela (na Macu od prechodu na NAS,
+# aby se dve kopie neprali o televizi). Smazat ho = zase jede.
+if os.path.exists(os.path.join(HERE, "vypnuto")):
+    sys.exit(0)
+
 os.makedirs(NAHLEDY, exist_ok=True)
 dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
 cil = cilove_datum()                              # ktery den ma ted na TV viset
@@ -548,7 +555,7 @@ try:
     with open(cesta_plakatu, "wb") as f:
         f.write(jpg)
     sedy_plakat = sedy_obrazek(cesta_plakatu)
-    if sedy_plakat is None:
+    if sedy_plakat is None and os.path.exists(SIPS):
         log("sips nedal zmenseninu plakatu - nahrani se overi jen proti minulemu obsahu slotu")
 
     pokusy = stav.get("pokusy") or {}
