@@ -129,35 +129,6 @@
     }
   },
   {
-    "id": "modelari",
-    "nazev": "Letečtí modeláři – začátečníci",
-    "kdo": [
-      "matej",
-      "tomas"
-    ],
-    "poskytovatel": "DDM Barák",
-    "den": 4,
-    "od": "15:00",
-    "do": "17:00",
-    "misto": "DDM Rautenkrancova 1241",
-    "prvniLekce": "2026-10-01",
-    "konecKurzu": "2027-06-03",
-    "stav": "aktivni",
-    "cena": 2900,
-    "za": "rok",
-    "vs": {
-      "matej": "161322002",
-      "tomas": "161322004"
-    },
-    "poznamka": "Oba kluci spolu.",
-    "platba": {
-      "castka": 5800,
-      "splatnost": "2026-09-30",
-      "zaplaceno": false,
-      "kde": "DDM Barák – účet 365464684/0300"
-    }
-  },
-  {
     "id": "scratch",
     "nazev": "Programování ve Scratchi",
     "kdo": [
@@ -178,7 +149,7 @@
       "matej": "161319007",
       "tomas": "161319018"
     },
-    "poznamka": "Kryje se s druhou hodinou modelářů — domluveno s lektorem, kluci chodí ve čtvrtek na oboje. Tomášova přihláška schválena 22. 9. (č. 161319018). Sraz ve vestibulu DDM u informací, přezůvky s sebou. Vedoucí Petr Dočekal, 777 758 431.",
+    "poznamka": "Tomášova přihláška schválena 22. 9. (č. 161319018). Sraz ve vestibulu DDM u informací, přezůvky s sebou. Vedoucí Petr Dočekal, 777 758 431.",
     "platba": {
       "castka": 3800,
       "splatnost": "2026-09-30",
@@ -206,7 +177,7 @@
     "platba": {
       "castka": 650,
       "splatnost": "2026-09-30",
-      "zaplaceno": false,
+      "zaplaceno": true,
       "kde": "účet sdružení rodičů ZŠ SNP, VS 6426271"
     }
   },
