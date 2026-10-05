@@ -181,6 +181,23 @@
     "popis": "Sobota 3.10. návštěva babičkya  IKEA"
   },
   {
+    "id": "g-0t5s0r6ir3rp6uksskan56nvl4",
+    "nazev": "12:30 až 12:45 podpis dokumenty Česká spořitelna",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-10-06",
+    "cas": "12:30",
+    "casDo": "12:45",
+    "popis": "UterY 12:30 až 12:45 podpis dokumenty Česká spořitelna"
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261006T103500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
