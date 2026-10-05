@@ -274,5 +274,4 @@ Prvních dvou se týká 4 100 Kč, které je lepší nezaplatit, dokud se to nev
 ## Co ještě chybí doplnit
 
 - adresa tělocvičny karate (ať jde spočítat přesun ze školy)
-- termín splatnosti školních kroužků p. McKinnon (pokyny přijdou přes Bakaláře)
 - termíny školních prázdnin 2026/27 (nebyly ověřeny, záměrně nevyplněny)

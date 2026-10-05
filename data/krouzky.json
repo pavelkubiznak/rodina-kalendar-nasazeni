@@ -18,9 +18,19 @@
     "poznamka": "Start posunut na 21. 9. (p. McKinnon byla 14.–18. 9. na školním výletě). Přislíben plný počet lekcí včetně týdne před Vánoci.",
     "platba": {
       "castka": 1000,
-      "splatnost": null,
+      "splatnost": "2027-02-01",
       "zaplaceno": false,
-      "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)"
+      "kde": "Spolek rodičů ZŠ SNP – 2. pololetí, účet 2700509843/2010",
+      "uhrazeno": [
+        {
+          "obdobi": "1. pololetí 2026/27",
+          "castka": 1000,
+          "datum": "2026-10-05"
+        }
+      ]
+    },
+    "vs": {
+      "matej": "265051001"
     }
   },
   {
@@ -42,9 +52,19 @@
     "poznamka": "Česky „Výtvarná a řemeslná činnost v angličtině“. Start posunut na 23. 9.",
     "platba": {
       "castka": 1000,
-      "splatnost": null,
+      "splatnost": "2027-02-01",
       "zaplaceno": false,
-      "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)"
+      "kde": "Spolek rodičů ZŠ SNP – 2. pololetí, účet 2700509843/2010",
+      "uhrazeno": [
+        {
+          "obdobi": "1. pololetí 2026/27",
+          "castka": 1000,
+          "datum": "2026-10-05"
+        }
+      ]
+    },
+    "vs": {
+      "matej": "265051002"
     }
   },
   {
@@ -172,13 +192,23 @@
     "konecKurzu": "2027-06-30",
     "stav": "aktivni",
     "cena": 650,
-    "za": "rok",
+    "za": "pololetí",
     "poznamka": "Každé úterý po vyučování, od cca 13:35–13:40. Hned před tím doučování (12:35–13:35).",
     "platba": {
       "castka": 650,
-      "splatnost": "2026-09-30",
-      "zaplaceno": true,
-      "kde": "účet sdružení rodičů ZŠ SNP, VS 6426271"
+      "splatnost": "2027-02-01",
+      "zaplaceno": false,
+      "kde": "Spolek rodičů ZŠ SNP – 2. pololetí, účet 2700509843/2010",
+      "uhrazeno": [
+        {
+          "obdobi": "1. pololetí 2026/27",
+          "castka": 650,
+          "datum": "2026-10-01"
+        }
+      ]
+    },
+    "vs": {
+      "matej": "6426271"
     }
   },
   {
@@ -188,7 +218,7 @@
       "matej",
       "tomas"
     ],
-    "poskytovatel": "ZŠ SNP",
+    "poskytovatel": "ZŠ SNP – p. Filip Cihlář (spolek rodičů)",
     "den": 5,
     "od": "14:00",
     "do": "15:30",
@@ -196,15 +226,26 @@
     "prvniLekce": null,
     "konecKurzu": "2027-06-30",
     "stav": "aktivni",
-    "cena": 1000,
+    "cena": 1100,
     "za": "pololetí",
     "poznamka": "1× za 14 dní (sudé týdny). Chodí oba kluci.",
     "platba": {
-      "castka": 2000,
-      "splatnost": null,
+      "castka": 2200,
+      "splatnost": "2027-02-01",
       "zaplaceno": false,
-      "kde": "ZŠ SNP (pokyny přijdou přes Bakaláře)"
+      "kde": "Spolek rodičů ZŠ SNP – 2. pololetí, účet 2700509843/2010",
+      "uhrazeno": [
+        {
+          "obdobi": "1. pololetí 2026/27",
+          "castka": 2200,
+          "datum": "2026-10-05"
+        }
+      ]
     },
-    "tydny": "sude"
+    "tydny": "sude",
+    "vs": {
+      "matej": "26111502",
+      "tomas": "26111502"
+    }
   }
 ]
