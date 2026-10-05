@@ -1211,5 +1211,21 @@
     "od": "2027-11-02",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271109T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-11-09",
+    "cas": "12:35",
+    "casDo": "13:05"
   }
 ]
