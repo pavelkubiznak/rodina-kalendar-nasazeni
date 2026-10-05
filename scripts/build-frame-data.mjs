@@ -65,6 +65,27 @@ const ukolyDne = s => ukoly.filter(u => !u.hotovo && u.doKdy === s);
 const dokladyDne = s => doklady.filter(d => d.platnostDo === s);
 const letyDne = s => events.filter(e => e.typ === 'let' && e.od === s && e.cas);
 
+/* Jednorázové akce — z events.json i ručně zapsané v Google Kalendáři. Cesty, lety a ubytování mají vlastní řádky. */
+const jeAkce = e => !['let', 'ubytovani', 'vylet', 'pobyt'].includes(e.typ);
+const bezDiakritiky = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+// „Doučování čeština" opakované v Google Kalendáři je tentýž kroužek, který už je v krouzky.json — stačí jednou.
+// Porovnává se s rozvrhem kroužku, ne s tím, jestli se ten den koná: o prázdninách nemá zůstat viset ani kopie z Googlu.
+const jeKopieKrouzku = e => !!e.cas && krouzky.some(k => [k.den, k.denDalsi].includes(dow(e.od)) && k.od === e.cas
+  && (bezDiakritiky(e.nazev).startsWith(bezDiakritiky(k.nazev)) || bezDiakritiky(k.nazev).startsWith(bezDiakritiky(e.nazev))));
+const akceDne = s => events.filter(e => e.od === s && jeAkce(e) && !jeKopieKrouzku(e));
+/* Kdo diktuje „9.10. volby, zkrácená výuka", má datum i v názvu. Na plakátu stojí den hned vedle, takže se z názvu
+   sundá — ale jen když je to opravdu datum té události. */
+function nazevBezData(e) {
+  const m = e.nazev.match(/^\s*(\d{1,2})\.\s*(?:(\d{1,2})\.(?:\s*\d{4})?|(ledna|února|března|dubna|května|června|července|srpna|září|října|listopadu|prosince))[\s,:–—-]*/i);
+  if (!m || Number(m[1]) !== parse(e.od).getUTCDate()) return e.nazev;
+  const mesic = m[2] ? Number(m[2]) - 1 : MES.indexOf(m[3].toLowerCase());
+  if (mesic !== parse(e.od).getUTCMonth()) return e.nazev;
+  return e.nazev.slice(m[0].length).replace(/^(?:v|ve)\s+(?=\d)/i, '') || e.nazev;
+}
+const maCasVNazvu = t => /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2}\s*(?:hodin|hod|h)\b/i.test(t);
+// text akce do jednoho řádku: čas z kalendáře jen tehdy, když ho neříká už název („12:30 až 12:45 podpis…")
+const popisAkce = e => { const t = nazevBezData(e); return e.cas && !maCasVNazvu(t) ? `${e.cas} ${t}` : t; };
+
 // splatnosti seskupené stejně jako v ICS; kroužky v kolizi se zatím neplatí, do částky nejdou
 const platby = (() => {
   const m = new Map();
@@ -107,9 +128,10 @@ function dnes(s) {
   const cesta = naCestach(s);
   if (cesta) pridej('', { text: cesta.nazev, pozn: cesta.od === s ? 'dnes odjezd'
     : cesta.do === s ? 'poslední den' : `${dnuMezi(cesta.od, s) + 1}. den z ${dnuMezi(cesta.od, cesta.do || cesta.od) + 1}` });
-  for (const e of events.filter(e => e.od === s && e.typ !== 'vylet' && e.typ !== 'pobyt')) {
-    if (e.cas) pridej(e.cas, { cas: e.casDo ? `${e.cas}—${e.casDo}` : e.cas, text: e.nazev, pozn: e.misto, hi: true });
-    else pridej(e.typ === 'ubytovani' ? '24:00' : '', { text: e.nazev, pozn: e.misto });   // ubytování až za cestou
+  for (const e of events.filter(e => e.od === s && e.typ !== 'vylet' && e.typ !== 'pobyt' && !jeKopieKrouzku(e))) {
+    const text = nazevBezData(e);
+    if (e.cas) pridej(e.cas, { cas: e.casDo ? `${e.cas}—${e.casDo}` : e.cas, text, pozn: e.misto, hi: true });
+    else pridej(e.typ === 'ubytovani' ? '24:00' : '', { text, pozn: e.misto });   // ubytování až za cestou
   }
 
   if (skolniDen(s)) {
@@ -156,24 +178,32 @@ function souhrnDne(s) {
   const cesta = naCestach(s);
   if (cesta?.od === s) { casti.push(`Odjezd: ${cesta.nazev}`); warn = true; }
   else if (cesta) { casti.push(cesta.nazev); pozn.push('na cestách'); }
-  for (const e of letyDne(s)) casti.push(`${e.cas} ${e.nazev}`);
-
+  // lety, kroužky a ruční akce z kalendáře dohromady podle času; celodenní akce před nimi
+  const body = [];
+  for (const e of letyDne(s)) body.push({ klic: e.cas, text: `${e.cas} ${e.nazev}` });
   for (const k of krouzkyDne(s)) {
-    casti.push(`${k.od} ${k.nazev}`);
+    body.push({ klic: k.od, text: `${k.od} ${k.nazev}` });
     if (k.stav === 'kolize') pozn.push(`kolize: ${k.nazev}`);
     else if (k.stav === 'nejiste') pozn.push(`${k.nazev}: zatím nerozhodnuto`);
+  }
+  for (const e of akceDne(s)) {
+    body.push({ klic: e.cas || '', text: popisAkce(e) });
+    if (e.cas) warn = true;   // jednorázová věc s časem vybočuje z týdenní rutiny — stejně jako vlevo se zvýrazní
   }
 
   for (const { v, celkem } of vypujcky) {
     const plan = planPro(v);
-    if (plan?.nejlepsi?.datum === s) { casti.push(`${plan.nejlepsi.od} Knihovna — vrátit ${celkem} titulů`); warn = true; }
+    if (plan?.nejlepsi?.datum === s) {
+      body.push({ klic: plan.nejlepsi.od, text: `${plan.nejlepsi.od} Knihovna — vrátit ${celkem} titulů` }); warn = true;
+    }
     if (plan?.box?.datum === s) {
-      casti.push('Bibliobox — poslední možnost');
+      body.push({ klic: '~', text: 'Bibliobox — poslední možnost' });   // '~' = termíny až za vším, co má čas
       pozn.push(`z boxu se konto odepíše až ${V_DEN[dow(pristiPracovni(s))]}`);
       warn = true;
     }
-    if (v.vratitDo === s) { casti.push('Knihovna — poslední den vrácení'); warn = true; }
+    if (v.vratitDo === s) { body.push({ klic: '~', text: 'Knihovna — poslední den vrácení' }); warn = true; }
   }
+  casti.push(...body.sort((a, b) => podle(a.klic, b.klic)).map(b => b.text));
   for (const u of ukolyDne(s)) { casti.push(`Termín: ${malym(u.nazev)}`); warn = true; }
   for (const p of platby.filter(p => p.datum === s)) { casti.push(p.text); warn = true; }
   for (const d of dokladyDne(s)) { casti.push(`Končí platnost: ${d.nazev}`); warn = true; }
@@ -203,29 +233,35 @@ function dalsiDny(s) {
   return { nadpis, radky: radky.map(({ datum, prazdny, ...r }) => r), posledni: dny.at(-1) };
 }
 
-/* „Blíží se" — nejdřív co propadlo a není odškrtnuté, pak všechno s termínem po posledním dni pravého sloupce */
-function blizi(s, po, doDne) {
-  const out = [];
-  const v = (datum, text, pozn) => { if (datum > po && datum <= doDne) out.push({ datum, text, pozn }); };
-
-  // propadlé mají starší datum, takže se po seřazení samy dostanou nahoru
-  ukoly.filter(u => !u.hotovo && u.doKdy < s).forEach(u => out.push({ datum: u.doKdy, text: u.nazev, pozn: 'po termínu' }));
-  platby.filter(p => p.datum < s).forEach(p => out.push({ datum: p.datum, text: p.text, pozn: 'po splatnosti' }));
+/* „Blíží se" — napřed to, co teprve přijde (po posledním dni pravého sloupce), a až pod tím,
+   co propadlo a nikdo to neodškrtl. Dřív stálo propadlé nahoře a v říjnu sekci vedlo září.
+   Propadlé ale nesmí vypadnout úplně: z `mist` řádků si drží až dva, i když je před námi plno. */
+function blizi(s, po, doDne, mist) {
+  const ceka = [];
+  const v = (datum, text, pozn, cas = '') => { if (datum > po && datum <= doDne) ceka.push({ datum, cas, text, pozn }); };
 
   platby.forEach(p => v(p.datum, p.text, p.pozn));
   ukoly.filter(u => !u.hotovo).forEach(u => v(u.doKdy, u.nazev));
   vypujcky.forEach(({ v: x, celkem }) => v(x.vratitDo, 'Vrátit knihy do knihovny', `${celkem} titulů`));
-  events.filter(e => !['let', 'ubytovani', 'vylet', 'pobyt'].includes(e.typ)).forEach(e => v(e.od, e.nazev, e.misto));
+  events.filter(e => jeAkce(e) && !jeKopieKrouzku(e)).forEach(e => v(e.od, nazevBezData(e), e.misto, e.cas));
   const rok = Number(po.slice(0, 4));
   narozeniny.forEach(n => [rok, rok + 1].forEach(r => v(`${r}-${n.datum.slice(5)}`, `${n.jmeno} má narozeniny`)));
   // doklady se hlásí s delším předstihem, podle svých upomínek
   doklady.forEach(d => {
     if (d.platnostDo > po && dnuMezi(po, d.platnostDo) <= Math.max(...(d.upominky || [90])))
-      out.push({ datum: d.platnostDo, text: `Končí platnost: ${d.nazev}`,
+      ceka.push({ datum: d.platnostDo, cas: '', text: `Končí platnost: ${d.nazev}`,
         pozn: d.presne === false ? 'datum ověřit v dokladu' : undefined });
   });
 
-  return out.sort((a, b) => podle(a.datum, b.datum))
+  const propadle = [
+    ...ukoly.filter(u => !u.hotovo && u.doKdy < s).map(u => ({ datum: u.doKdy, text: u.nazev, pozn: 'po termínu' })),
+    ...platby.filter(p => p.datum < s).map(p => ({ datum: p.datum, text: p.text, pozn: 'po splatnosti' })),
+  ];
+
+  const radit = (a, b) => podle(a.datum, b.datum) || podle(a.cas ?? '', b.cas ?? '');
+  propadle.sort(radit);
+  const napred = ceka.sort(radit).slice(0, mist - Math.min(propadle.length, 2));
+  return [...napred, ...propadle.slice(0, mist - napred.length)]
     .map(p => ({ datum: kratce(p.datum), text: p.text, pozn: p.pozn }));
 }
 
@@ -263,7 +299,7 @@ export function frameData(datum, posun = 0) {
     cesty: cesty(s).slice(0, 3),
     nadpisVpravo: pravy.nadpis,
     dalsiDny: pravy.radky,
-    blizi: blizi(s, pravy.posledni, plus(s, OKNO_BLIZI)).slice(0, VIC ? 6 : 4),
+    blizi: blizi(s, pravy.posledni, plus(s, OKNO_BLIZI), VIC ? 6 : 4),
   };
 }
 

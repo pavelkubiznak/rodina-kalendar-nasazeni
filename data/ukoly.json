@@ -17,13 +17,14 @@
     "id": "ddm-zrusit-robotiku",
     "nazev": "Zrušit v DDM přihlášku Robotika pro nejmenší 2",
     "doKdy": "2026-09-25",
-    "popis": "Kryla se s Matějovou středeční výtvarkou, z kalendáře vyřazena 21. 9. Zrušit v klientském centru barak.iddm.cz a NEPLATIT (2 200 Kč, VS 161302008).",
+    "popis": "Kryla se s Matějovou středeční výtvarkou, z kalendáře vyřazena 21. 9. Zrušit v klientském centru barak.iddm.cz a NEPLATIT (2 200 Kč, VS 161302008). Zrušení odesláno e-mailem na info@barak.cz 29. 9. 2026.",
     "upominky": [
       2,
       1
     ],
-    "hotovo": false,
-    "ikona": "⚠️"
+    "hotovo": true,
+    "ikona": "⚠️",
+    "hotovoDne": "2026-09-29"
   },
   {
     "id": "scratch-tomas-prihlaska",
