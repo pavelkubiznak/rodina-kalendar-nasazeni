@@ -768,7 +768,12 @@ function parseText(t) {
   const dnes = new Date();
 
   const { datum, presne } = urciDatum(low, dnes);
-  const mc = low.match(/\b(\d{1,2})[:.](\d{2})\b/) || low.match(/\bv\s+(\d{1,2})\s*(?:hodin|hod|h)\b/);
+  // Čas: napřed „17:05", pak „v 7 hod" a tvar s tečkou („7.30") až po odmazání dat —
+  // jinak se „3.10." přečte jako 03:10 a „9.11. v 17:05" jako 09:11.
+  const bezDat = low.replace(/\b\d{1,2}\.\s?(?:0?[1-9]|1[0-2])\.(?:\s?\d{4})?/g, ' ');
+  const mc = low.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/)
+    || bezDat.match(/\bv\s+(\d{1,2})\s*(?:hodin|hod|h)\b/)
+    || bezDat.match(/\b([01]?\d|2[0-3])\.([0-5]\d)\b/);
   const cas = mc ? `${String(mc[1]).padStart(2,'0')}:${mc[2] || '00'}` : null;
 
   const kdo = [];
