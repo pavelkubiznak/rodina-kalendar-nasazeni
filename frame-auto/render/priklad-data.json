@@ -2,6 +2,7 @@
   "razitko": "aktualizováno 11. 9. v 5:30",
   "den": "Pátek",
   "datum": "11. září 2026 · týden 37",
+  "hlaska": { "text": "Neodvažujeme se ne proto, že jsou věci těžké. Těžké jsou proto, že se neodvažujeme.", "autor": "Seneca" },
   "dnes": [
     { "cas": "11:40", "kdo": "OBA", "text": "konec vyučování" },
     { "cas": "12:00—18:00", "text": "Knihovna — vrátit 19 titulů", "pozn": "Wonkova 1262/1a", "hi": true },

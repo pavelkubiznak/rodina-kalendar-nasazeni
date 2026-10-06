@@ -53,6 +53,12 @@ stejnými pravidly jako ICS a denní souhrn; knihovnu počítá plánovač. Kdy�
 na plakát nevejde, `render/vejit.mjs` vynechá nejdřív nejvzdálenější položky „Blíží se",
 pak cesty — měří se ve skutečném Chromiu, takže to sedí i na fonty v CI.
 
+**Hláška dne** (vpravo od názvu dne) se bere z `data/hlasky.json` — každý den další v pořadí,
+takže se neopakují, dokud seznam nedojde. Položka je `{ "text": …, "autor": … }`; `autor` je jen
+u citátů a přísloví, vlastní hlášky ho nemají. Uvozovky doplní šablona. Nové hlášky přidávat
+**na konec** souboru a držet je do 90 znaků (tři řádky); delší `vejit.mjs` zmenší nebo vynechá,
+kalendáři nesmí ubrat místo.
+
 ## Krok 2 — GitHub Action
 
 Render je krok v `.github/workflows/deploy.yml`, **ne samostatný workflow**. Pages nasazuje

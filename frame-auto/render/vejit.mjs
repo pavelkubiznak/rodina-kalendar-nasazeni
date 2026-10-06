@@ -1,6 +1,8 @@
 // Když se obsah nevejde na plakát, nejdřív zhustí rozestupy (třída .compact) a pak vynechá to nejméně naléhavé:
 // nejvzdálenější položky „Blíží se", pak nejvzdálenější „Další dny" (tři zůstanou), pak cesty
 // od té nejvzdálenější. Dnešek se nekrátí.
+// Hláška dne nesmí kalendáři ubrat ani řádek: když by hlavičku zvýšila, zmenší se jí písmo, a když
+// nestačí ani to, vynechá se celá.
 // Měří se ve skutečném Chromiu, takže to sedí i na fonty v CI, které se liší od Macu.
 const LIMIT = 2160 - 130;   // výška plakátu minus spodní padding body v template.mjs
 
@@ -20,6 +22,14 @@ export function vejitSe(page) {
       if (b && !b.querySelector(sel)) b.remove();
       return true;
     };
+    const hl = document.querySelector('.hlaska'), kdy = document.querySelector('.head .kdy');
+    if (hl && kdy) {
+      const q = hl.querySelector('.q'), puvodni = parseFloat(getComputedStyle(q).fontSize);
+      let px = puvodni;
+      while (hl.offsetHeight > kdy.offsetHeight && px > 46) q.style.fontSize = (px -= 4) + 'px';
+      if (hl.offsetHeight > kdy.offsetHeight) { hl.remove(); vynechano.push('(hláška dne se nevešla)'); }
+      else if (px < puvodni) vynechano.push(`(hláška dne menším písmem: ${px} px)`);
+    }
     // nejdřív zkusit těsnější rozestupy (stejné písmo), teprve pak něco vynechávat
     if (pravy() > limit || levy() > limit) {
       document.body.classList.add('compact');

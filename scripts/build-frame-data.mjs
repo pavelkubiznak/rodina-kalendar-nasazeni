@@ -8,7 +8,8 @@ import { vsechnyEvents, tydenSedi, otevrenePlatby, kcText } from './udalosti.mjs
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(), svatky = J('svatky'),
       narozeniny = J('narozeniny'), ukoly = J('ukoly'), doklady = J('doklady'),
-      rozvrhy = J('rozvrhy'), knihovna = J('knihovna'), oteviraci = J('knihovna-oteviraci');
+      rozvrhy = J('rozvrhy'), knihovna = J('knihovna'), oteviraci = J('knihovna-oteviraci'),
+      hlasky = J('hlasky');
 
 const DNY = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
 const V_DEN = ['v neděli','v pondělí','v úterý','ve středu','ve čtvrtek','v pátek','v sobotu'];
@@ -268,6 +269,18 @@ function cesty(s) {
     });
 }
 
+/* Hláška dne pro kluky — každý den další v pořadí z data/hlasky.json, takže se neopakují, dokud seznam
+   nedojde; pak se jede znovu od začátku. Nové patří na konec souboru: vložení doprostřed by pořadí
+   posunulo a včerejší hláška by se ukázala ještě jednou. Patří ke dni plakátu, ne ke dni renderu —
+   večerní plakát na zítřek má už zítřejší. */
+const HLASKY_OD = '2026-10-06';
+function hlaskaDne(s) {
+  const n = hlasky.length;
+  if (!n) return undefined;
+  const h = hlasky[((dnuMezi(HLASKY_OD, s) % n) + n) % n];
+  return { text: h.text, autor: h.autor };
+}
+
 /* datum = konkrétní den (YYYY-MM-DD), nebo posun = kolik dní od dneška (0 dnešek, 1 zítřek).
    CI renderuje oba: dnešek do frame.jpg a zítřek do frame-zitra.jpg; od 17:00 uploader
    na TV věší zítřek, aby večer už visel program na další den. */
@@ -281,6 +294,7 @@ export function frameData(datum, posun = 0) {
     razitko: `aktualizováno ${kratce(ted.datum)} v ${ted.cas}`,
     den: DNY[dow(s)],
     datum: `${parse(s).getUTCDate()}. ${MES[parse(s).getUTCMonth()]} ${s.slice(0, 4)} · týden ${tydenISO(s)}`,
+    hlaska: hlaskaDne(s),
     dnes: dnes(s),
     cesty: cesty(s).slice(0, 3),
     nadpisVpravo: pravy.nadpis,

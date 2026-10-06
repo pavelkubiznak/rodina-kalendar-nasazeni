@@ -21,6 +21,10 @@ const trip = t => `<div class="trip">
   <div class="n">${esc(t.dni)}</div>
   <div class="l"><b>${esc(t.kam)}</b>${esc(t.pozn)}</div></div>`;
 
+// Hláška dne vpravo od názvu dne — na místě, které bylo vždycky prázdné. Autor jen tam, kde nějaký je.
+const hlaska = h => h?.text ? `<div class="hlaska"><div class="q">„${esc(h.text)}“</div>${
+  h.autor ? `<div class="kdo">— ${esc(h.autor)}</div>` : ""}</div>` : "";
+
 export function plakat(d) {
   return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -34,7 +38,13 @@ body{padding:150px 170px 130px;display:flex;flex-direction:column}
 .main{display:flex;gap:150px;flex:1;margin-top:96px}
 .today{width:56%;display:flex;flex-direction:column}
 .dayname{font-family:Lora,Georgia,"Liberation Serif",serif;font-size:230px;line-height:.94;letter-spacing:-.015em}
-.daydate{font-size:62px;color:var(--mut);margin-top:34px;letter-spacing:.05em}
+.daydate{font-size:62px;color:var(--mut);margin-top:34px;letter-spacing:.05em;white-space:nowrap}
+/* hlavička: den a datum drží svou šířku, hláška bere zbytek; výšku hlídá vejit.mjs */
+.head{display:flex;align-items:center;gap:100px}
+.head .kdy{flex:none}
+.hlaska{flex:1;min-width:0;padding-left:56px;border-left:3px solid var(--acc)}
+.hlaska .q{font-family:Lora,Georgia,"Liberation Serif",serif;font-style:italic;font-size:58px;line-height:1.3;text-wrap:balance}
+.hlaska .kdo{font-size:38px;color:var(--mut);letter-spacing:.04em;margin-top:18px}
 .events{margin-top:88px}
 .ev{display:flex;align-items:baseline;gap:44px;padding:36px 0;border-top:2px solid var(--line)}
 .ev:last-child{border-bottom:2px solid var(--line)}
@@ -77,8 +87,8 @@ body{padding:150px 170px 130px;display:flex;flex-direction:column}
 <div class="top"><div class="eyebrow">Rodinný kalendář</div><div class="stamp">${esc(d.razitko)}</div></div>
 <div class="main">
   <div class="today">
-    <div class="dayname">${esc(d.den)}</div>
-    <div class="daydate">${esc(d.datum)}</div>
+    <div class="head"><div class="kdy"><div class="dayname">${esc(d.den)}</div>
+    <div class="daydate">${esc(d.datum)}</div></div>${hlaska(d.hlaska)}</div>
     <div class="events">${(d.dnes ?? []).map(ev).join("")}</div>
     ${d.cesty?.length ? `<div class="trips"><div class="h">Cesty</div>${d.cesty.map(trip).join("")}</div>` : ""}
   </div>
