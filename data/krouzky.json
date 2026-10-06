@@ -115,8 +115,15 @@
     "platba": {
       "castka": 2400,
       "splatnost": "2026-09-30",
-      "zaplaceno": false,
-      "kde": "DDM Barák – účet 365464684/0300"
+      "zaplaceno": true,
+      "kde": "DDM Barák – účet 365464684/0300",
+      "uhrazeno": [
+        {
+          "obdobi": "školní rok 2026/27",
+          "castka": 2400,
+          "datum": "2026-10-06"
+        }
+      ]
     }
   },
   {
