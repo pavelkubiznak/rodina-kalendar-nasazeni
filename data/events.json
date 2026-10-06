@@ -40,5 +40,16 @@
   { "id": "benidorm-let-zpet", "nazev": "Let Alicante → Pardubice", "kdo": ["rodina"], "typ": "let",
     "od": "2027-01-01", "cas": "07:10", "casDo": "10:05", "celodenni": false,
     "misto": "Alicante → Pardubice", "popis": "Ryanair FR1494, rezervace B4YIPWT. Doba letu 2 h 55 min. Brzký ranní let hned po Silvestru — proto ta noc v hotelu u letiště.",
-    "upominky": [1], "ikona": "✈️" }
+    "upominky": [1], "ikona": "✈️" },
+
+  { "id": "svj-uhelna-info-2026-10-08", "nazev": "SVJ Uhelná 867 – informační setkání", "kdo": ["pavel"], "typ": "akce",
+    "od": "2026-10-08", "cas": "18:00", "casDo": "19:00", "celodenni": false,
+    "misto": "Sušárna domu, Uhelná 867, Hradec Králové",
+    "popis": "Neoficiální informační setkání výboru SVJ — prostor pro dotazy k nabídkám správcovských a účetních firem před shromážděním 15. 10. Konec je odhad, v pozvánce není.",
+    "upominky": [1], "ikona": "🏢" },
+  { "id": "svj-uhelna-shromazdeni-2026-10-15", "nazev": "SVJ Uhelná 867 – shromáždění vlastníků", "kdo": ["pavel"], "typ": "akce",
+    "od": "2026-10-15", "cas": "18:00", "casDo": "20:00", "celodenni": false,
+    "misto": "Budova HSC (býv. Stavoprojekt), Jižní 870/2, Hradec Králové",
+    "popis": "Prezence od 17:45. Program: výběr nového správce nemovitosti a vedení účetnictví ze 7 nabídek (Vodák 110 Kč/BJ, Anibia 122, BeHome 135, CESORG účetnictví 143, Toman správa 170, CESORG komplexní správa 200, CESORG předseda 250), zmocnění výboru k podpisu příkazní smlouvy. Kdo nemůže osobně, potřebuje písemnou plnou moc — formulář je 3. list pozvánky. Konec je odhad, v pozvánce není.",
+    "upominky": [3, 1], "ikona": "🏢" }
 ]
