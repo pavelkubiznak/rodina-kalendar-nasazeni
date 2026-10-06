@@ -1,5 +1,6 @@
 /* Textový souhrn na dnešek + zítřek + blížící se termíny. Používá ho denní workflow. */
 import fs from 'node:fs';
+import { otevrenePlatby } from './udalosti.mjs';
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = J('events'),
       svatky = J('svatky'), narozeniny = J('narozeniny'), ukoly = J('ukoly'), rozvrhy = J('rozvrhy'), doklady = J('doklady');
@@ -35,12 +36,11 @@ const blok = (t, r) => `${t}\n${r.length ? r.map(x => '  • ' + x).join('\n') :
 
 const radky = [blok(`DNES — ${nadpis(dnes)}`, proDen(iso(dnes))), '', blok(`ZÍTRA — ${nadpis(zitra)}`, proDen(iso(zitra)))];
 
-const terminy = krouzky.filter(k => k.platba?.splatnost && !k.platba.zaplaceno)
-  .map(k => ({ k, dnu: Math.round((new Date(k.platba.splatnost) - dnes) / 86400000) }))
+const terminy = otevrenePlatby(krouzky).filter(p => !p.neplatit)
+  .map(p => ({ p, dnu: Math.round((new Date(p.datum) - dnes) / 86400000) }))
   .filter(x => x.dnu >= 0 && x.dnu <= 30);
 if (terminy.length) {
-  const uniq = [...new Set(terminy.map(x => `${x.dnu} dní: ${x.k.platba.kde} (${x.k.platba.splatnost})`))];
-  radky.push('', 'PLATBY DO 30 DNŮ', ...uniq.map(x => '  • ' + x));
+  radky.push('', 'PLATBY DO 30 DNŮ', ...terminy.map(x => `  • ${x.dnu} dní: ${x.p.text} (${x.p.datum})`));
 }
 const otevrene = ukoly.filter(u => !u.hotovo)
   .map(u => ({ u, dnu: Math.round((new Date(u.doKdy) - dnes) / 86400000) }))

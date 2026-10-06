@@ -3,7 +3,7 @@
    Na stdout jde jen JSON — workflow ho přesměrovává rovnou do souboru. */
 import fs from 'node:fs';
 import { planProWeb } from './plan-knihovna.mjs';
-import { vsechnyEvents, tydenSedi } from './udalosti.mjs';
+import { vsechnyEvents, tydenSedi, otevrenePlatby, kcText } from './udalosti.mjs';
 
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(), svatky = J('svatky'),
@@ -86,28 +86,10 @@ const maCasVNazvu = t => /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2}\s*(?:hodin|hod|h)\b/i.t
 // text akce do jednoho řádku: čas z kalendáře jen tehdy, když ho neříká už název („12:30 až 12:45 podpis…")
 const popisAkce = e => { const t = nazevBezData(e); return e.cas && !maCasVNazvu(t) ? `${e.cas} ${t}` : t; };
 
-// splatnosti seskupené stejně jako v ICS; kroužky v kolizi se zatím neplatí, do částky nejdou
-const platby = (() => {
-  const m = new Map();
-  for (const k of krouzky) {
-    if (!k.platba?.splatnost || k.platba.zaplaceno) continue;
-    const key = `${k.platba.splatnost}|${k.platba.kde}`;
-    if (!m.has(key)) m.set(key, []);
-    m.get(key).push(k);
-  }
-  return [...m.values()].map(ks => {
-    const platit = ks.filter(k => !nerozhodnuto(k));   // kolizní a nejisté kroužky se zatím neplatí
-    const odlozeno = ks.length - platit.length;
-    const suma = platit.reduce((a, k) => a + (k.platba.castka || 0), 0);
-    return {
-      datum: ks[0].platba.splatnost, suma,
-      text: ks.length === 1
-        ? `Zaplatit ${malym(ks[0].nazev)} — ${suma.toLocaleString('cs-CZ')} Kč`
-        : `Platba ${ks[0].poskytovatel} — ${suma.toLocaleString('cs-CZ')} Kč`,
-      pozn: odlozeno ? `bez ${odlozeno} ${odlozeno === 1 ? 'nerozhodnutého kroužku' : 'nerozhodnutých kroužků'}` : undefined,
-    };
-  }).filter(p => p.suma > 0);
-})();
+// splatnosti — každý kroužek na vlastním řádku (stejný text jako ve feedu);
+// kroužky v kolizi a nerozhodnuté se zatím neplatí, na plakát nejdou
+const platby = otevrenePlatby(krouzky).filter(p => !p.neplatit)
+  .map(p => ({ datum: p.datum, suma: p.castka, text: p.text }));
 
 const vypujcky = knihovna.filter(v => !v.vraceno).map(v => ({
   v, celkem: v.oddeleni.reduce((a, o) => a + o.tituly.length, 0),
@@ -205,7 +187,11 @@ function souhrnDne(s) {
   }
   casti.push(...body.sort((a, b) => podle(a.klic, b.klic)).map(b => b.text));
   for (const u of ukolyDne(s)) { casti.push(`Termín: ${malym(u.nazev)}`); warn = true; }
-  for (const p of platby.filter(p => p.datum === s)) { casti.push(p.text); warn = true; }
+  // v jednořádkovém přehledu dne by se víc plateb nevešlo — tam jedním součtem
+  const plDne = platby.filter(p => p.datum === s);
+  if (plDne.length === 1) casti.push(plDne[0].text);
+  else if (plDne.length) casti.push(`Platby kroužků (${plDne.length}) — ${kcText(plDne.reduce((a, p) => a + p.suma, 0))}`);
+  if (plDne.length) warn = true;
   for (const d of dokladyDne(s)) { casti.push(`Končí platnost: ${d.nazev}`); warn = true; }
 
   return {

@@ -21,6 +21,25 @@ export const isoTyden = s => {
 };
 export const tydenSedi = (k, s) => !k.tydny || (isoTyden(s) % 2 === 0) === (k.tydny === 'sude');
 
+/* Otevřené platby — každý kroužek zvlášť, se svým termínem a částkou.
+   Jediné místo, kde se to počítá: bere si to feed, Google, plakát i upomínky,
+   aby všude stál stejný řádek. Seřazeno podle termínu.
+     { k, datum, castka, naDite, text, neplatit } */
+export const kcText = n => `${n.toLocaleString('cs-CZ')} Kč`;
+export function otevrenePlatby(krouzky) {
+  return krouzky
+    .filter(k => k.platba?.splatnost && !k.platba.zaplaceno && k.platba.castka)
+    .map(k => {
+      const castka = k.platba.castka;
+      // když chodí víc dětí a každé platí zvlášť, ukáže se i částka na jedno
+      const naDite = k.kdo.length > 1 && k.cena && k.cena * k.kdo.length === castka ? k.cena : null;
+      return { k, datum: k.platba.splatnost, castka, naDite,
+        neplatit: k.stav === 'kolize' || k.stav === 'nejiste',
+        text: `${k.nazev} — zaplatit ${kcText(castka)}` };
+    })
+    .sort((a, b) => a.datum.localeCompare(b.datum) || a.k.nazev.localeCompare(b.k.nazev, 'cs'));
+}
+
 
 /* Ruční události z Google Kalendáře, které stáhl google-pull.mjs.
    Když soubor není (první běh, nebo sync vypnutý), vrátí prázdno. */
@@ -118,24 +137,17 @@ export function generovane() {
       upominky: [] });
   }
 
-  // 6) splatnosti
-  const splat = new Map();
-  for (const k of krouzky) {
-    if (!k.platba?.splatnost || k.platba.zaplaceno) continue;
-    const key = `${k.platba.splatnost}|${k.platba.kde}`;
-    if (!splat.has(key)) splat.set(key, []);
-    splat.get(key).push(k);
-  }
-  for (const [key, ks] of splat) {
-    const [kdy, kde] = key.split('|');
-    const suma = ks.reduce((a, k) => a + (k.platba.castka || 0), 0);
-    const detail = ks.map(k => {
-      const vs = k.vs ? ' (VS ' + Object.entries(k.vs).map(([who, v]) => `${jmeno(who)} ${v}`).join(', ') + ')' : '';
-      return `• ${k.nazev}${vs}${k.stav === 'kolize' ? ' ⚠️ zatím neplatit' : k.stav === 'nejiste' ? ' ❓ zatím nerozhodnuto, neplatit' : ''}`;
-    }).join('\n');
-    push(`platba-${kdy}-${kde.slice(0, 10).replace(/\W/g, '')}`, {
-      nazev: `💳 Zaplatit ${suma.toLocaleString('cs-CZ')} Kč — ${kde}`,
-      od: kdy, celodenni: true, popis: `${kde}\n${detail}`, upominky: [21, 7, 3, 1] });
+  // 6) splatnosti — každý kroužek má vlastní událost se svým termínem a částkou
+  for (const p of otevrenePlatby(krouzky)) {
+    const k = p.k;
+    const stav = k.stav === 'kolize' ? ' ⚠️ zatím neplatit' : k.stav === 'nejiste' ? ' ❓ zatím nerozhodnuto, neplatit' : '';
+    const deti = k.kdo.map(who =>
+      `• ${jmeno(who)}${p.naDite ? ' — ' + kcText(p.naDite) : ''}${k.vs?.[who] ? ', VS ' + k.vs[who] : ''}`);
+    push(`platba-${p.datum}-${k.id}`, {
+      nazev: `💳 ${p.text}${stav}`,
+      od: p.datum, celodenni: true,
+      popis: [`${kcText(p.castka)}${k.za ? ' za ' + k.za : ''}`, k.platba.kde, ...deti].join('\n'),
+      upominky: k.platba.upominky || [21, 7, 3, 1] });
   }
 
   // 7) narozeniny (opakující se ročně)

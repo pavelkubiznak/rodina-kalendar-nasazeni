@@ -2,7 +2,7 @@
    Když není co hlásit, nevypíše nic (workflow pak nic neposílá). */
 import fs from 'node:fs';
 import { naplanuj, textPlanu } from './plan-knihovna.mjs';
-import { vsechnyEvents } from './udalosti.mjs';
+import { vsechnyEvents, otevrenePlatby, kcText } from './udalosti.mjs';
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(),
       ukoly = J('ukoly'), doklady = J('doklady'), narozeniny = J('narozeniny'), knihovna = J('knihovna');
@@ -37,19 +37,12 @@ for (const d of doklady) {
   pridej(d.ikona || '📄', `Končí platnost: ${d.nazev}`, d.platnostDo,
     `${d.kdo.map(jmeno).join(', ')}${d.presne === false ? ' · datum ověřit v dokladu' : ''}`);
 }
-const platby = new Map();
-for (const k of krouzky) {
-  if (!k.platba?.splatnost || k.platba.zaplaceno) continue;
-  if (!sedi(k.platba.splatnost, k.platba.upominky || [21, 7, 3, 1])) continue;
-  const key = `${k.platba.splatnost}|${k.platba.kde}`;
-  if (!platby.has(key)) platby.set(key, []);
-  platby.get(key).push(k);
-}
-for (const [key, ks] of platby) {
-  const [kdy, kde] = key.split('|');
-  const suma = ks.reduce((a, k) => a + (k.platba.castka || 0), 0);
-  pridej('💳', `Zaplatit ${suma.toLocaleString('cs-CZ')} Kč — ${kde}`, kdy,
-    ks.map(k => k.nazev).join(', '));
+// každý kroužek zvlášť — vlastní řádek s termínem a částkou
+for (const p of otevrenePlatby(krouzky)) {
+  if (p.neplatit || !sedi(p.datum, p.k.platba.upominky || [21, 7, 3, 1])) continue;
+  const vs = p.k.vs ? ' · VS ' + p.k.kdo.filter(w => p.k.vs[w]).map(w => `${jmeno(w)} ${p.k.vs[w]}`).join(', ') : '';
+  pridej('💳', p.text, p.datum,
+    `${p.naDite ? `${p.k.kdo.length} × ${kcText(p.naDite)} · ` : ''}${p.k.platba.kde}${vs}`);
 }
 for (const n of narozeniny) {
   const letos = `${dnes.getFullYear()}-${n.datum.slice(5)}`;

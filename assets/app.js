@@ -550,42 +550,42 @@ function renderTabulky() {
     tb.append(tr);
   }
 
+  /* platby — každý kroužek na vlastním řádku: termín, částka, účet a variabilní symboly */
   const pc = $('#platby'); pc.innerHTML = '';
   const d = dnesISO();
-  const otevrene = state.data.krouzky.filter(k => k.platba && !k.platba.zaplaceno && projde(k.kdo));
-  const skupiny = new Map();
+  const otevrene = state.data.krouzky
+    .filter(k => k.platba && !k.platba.zaplaceno && k.platba.castka && projde(k.kdo))
+    .sort((a,b) => (a.platba.splatnost || '9999').localeCompare(b.platba.splatnost || '9999') || a.nazev.localeCompare(b.nazev, 'cs'));
+  if (!otevrene.length) { pc.append(el('div','empty','Žádné otevřené platby.')); return; }
   for (const k of otevrene) {
-    const key = `${k.platba.splatnost || 'neurceno'}|${k.platba.kde}`;
-    if (!skupiny.has(key)) skupiny.set(key, []);
-    skupiny.get(key).push(k);
-  }
-  if (!skupiny.size) { pc.append(el('div','empty','Žádné otevřené platby.')); return; }
-  const razeni = [...skupiny.entries()].sort((a,b) => a[0].localeCompare(b[0]));
-  for (const [key, ks] of razeni) {
-    const [splatnost, kde] = key.split('|');
-    const c = el('div','card');
-    c.append(el('div','eyebrow', kde));
-    const suma = ks.reduce((s,k) => s + (k.platba.castka || 0), 0);
-    c.append(el('h3', null, kc(suma)));
-    if (splatnost !== 'neurceno') {
-      const n = diffDays(d, splatnost);
-      if (n <= 14) c.classList.add('urgent');
-      const cnt = el('div','count', n < 0 ? 'po termínu' : n === 0 ? 'dnes' : String(n));
-      if (n > 0) cnt.append(el('small', null, dnu(n)));
-      c.append(cnt);
-      c.append(el('div','hint', `splatnost ${datumKr(splatnost)} ${splatnost.slice(0,4)}`));
+    const p = k.platba, r = el('div','payrow');
+    const kdy = el('div','payrow-kdy');
+    if (p.splatnost) {
+      const n = diffDays(d, p.splatnost);
+      if (n <= 14) r.classList.add('urgent');
+      kdy.append(el('div','payrow-datum', `${datumKr(p.splatnost)} ${p.splatnost.slice(0,4)}`),
+                 el('div','hint', n < 0 ? 'po termínu' : n === 0 ? 'dnes' : `za ${n} ${dnu(n)}`));
     } else {
-      c.append(el('div','hint','termín zatím neznámý — pokyny přijdou přes Bakaláře'));
+      kdy.append(el('div','payrow-datum','termín neznámý'));
     }
-    const u = el('div','hint'); u.style.marginTop = '8px';
-    u.textContent = ks.map(k => k.nazev + (k.stav === 'kolize' ? ' ⚠️' : k.stav === 'nejiste' ? ' ❓' : '')).join(', ');
-    c.append(u);
-    const vs = ks.flatMap(k => k.vs ? Object.entries(k.vs).map(([kdo, v]) => `${osoba(kdo).jmeno} ${v}`) : []);
-    if (vs.length) { const m = el('div','hint mono'); m.style.marginTop = '6px'; m.textContent = 'VS ' + vs.join(' · '); c.append(m); }
-    if (ks.some(k => k.stav === 'kolize')) c.append(el('div','hint warnline','⚠️ Obsahuje kolizní přihlášky — ty zatím neplať.'));
-    if (ks.some(k => k.stav === 'nejiste')) c.append(el('div','hint warnline','❓ Obsahuje kroužek, o kterém se ještě rozhoduje — zatím neplať.'));
-    pc.append(c);
+    const co = el('div','payrow-co');
+    co.append(el('div','payrow-nazev', k.nazev + (k.stav === 'kolize' ? ' ⚠️' : k.stav === 'nejiste' ? ' ❓' : '')));
+    // když chodí víc dětí a každé platí zvlášť, ukáže se i částka na jedno
+    const naDite = k.kdo.length > 1 && k.cena && k.cena * k.kdo.length === p.castka ? k.cena : null;
+    for (const id of k.kdo) {
+      const casti = [osoba(id).jmeno, naDite ? kc(naDite) : null, k.vs?.[id] ? 'VS ' + k.vs[id] : null].filter(Boolean);
+      if (casti.length > 1) co.append(el('div','hint mono', casti.join(' · ')));
+    }
+    co.append(el('div','hint', p.kde));
+    if (k.stav === 'kolize') co.append(el('div','hint warnline','⚠️ Kolizní přihláška — zatím neplať.'));
+    if (k.stav === 'nejiste') co.append(el('div','hint warnline','❓ O kroužku se ještě rozhoduje — zatím neplať.'));
+    r.append(kdy, co, el('div','payrow-castka mono', kc(p.castka)));
+    pc.append(r);
   }
+  const sum = el('div','payrow payrow-sum');
+  sum.append(el('div','payrow-kdy'), el('div','payrow-co','Celkem zbývá zaplatit'),
+             el('div','payrow-castka mono', kc(otevrene.reduce((a,k) => a + k.platba.castka, 0))));
+  pc.append(sum);
 }
 
 /* ---------- doklady ---------- */
