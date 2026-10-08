@@ -53,6 +53,11 @@ stejnými pravidly jako ICS a denní souhrn; knihovnu počítá plánovač. Kdy�
 na plakát nevejde, `render/vejit.mjs` vynechá nejdřív nejvzdálenější položky „Blíží se",
 pak cesty — měří se ve skutečném Chromiu, takže to sedí i na fonty v CI.
 
+**Vynutit nové nahrání na TV na dálku:** přepsat `frame-auto/nahrat-znovu.txt` (stačí aktuální datum
+a čas) a pushnout. Hodnota jde do `frame-data*.json`, tím se změní otisk obsahu a uploader si plakát
+při nejbližším běhu nahraje znovu, i když se v kalendáři nic nezměnilo. Hodí se, když na TV visí
+rozbitý obrázek a k Macu nebo NASu není přístup (`znovu.zadej` vedle skriptu dělá totéž lokálně).
+
 **Hláška dne** (vpravo od názvu dne) se bere z `data/hlasky.json` — každý den další v pořadí,
 takže se neopakují, dokud seznam nedojde. Položka je `{ "text": …, "autor": … }`; `autor` je jen
 u citátů a přísloví, vlastní hlášky ho nemají. Uvozovky doplní šablona. Nové hlášky přidávat

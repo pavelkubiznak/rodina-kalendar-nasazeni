@@ -281,6 +281,14 @@ function hlaskaDne(s) {
   return { text: h.text, autor: h.autor };
 }
 
+/* Dálkové „nahraj to na televizi znovu". Uploader pozná změnu plakátu podle otisku frame-data.json (bez razítka);
+   když na TV visí rozbitý obrázek, ale data jsou stejná, sám by ho nevyměnil. Stačí přepsat
+   frame-auto/nahrat-znovu.txt (čímkoli jiným než dosud) a po nasazení si plakát do 10 minut nahraje znovu —
+   bez přístupu k Macu nebo NASu, kde uploader běží. Šablona to pole nepoužívá. */
+const nahratZnovu = (() => {
+  try { return fs.readFileSync('frame-auto/nahrat-znovu.txt', 'utf8').trim() || undefined; } catch { return undefined; }
+})();
+
 /* datum = konkrétní den (YYYY-MM-DD), nebo posun = kolik dní od dneška (0 dnešek, 1 zítřek).
    CI renderuje oba: dnešek do frame.jpg a zítřek do frame-zitra.jpg; od 17:00 uploader
    na TV věší zítřek, aby večer už visel program na další den. */
@@ -291,6 +299,7 @@ export function frameData(datum, posun = 0) {
   const pravy = dalsiDny(s);
   return {
     datumIso: s,   // šablona nepoužívá; uploader podle něj pozná, že nestahuje včerejší plakát
+    nahratZnovu,
     razitko: `aktualizováno ${kratce(ted.datum)} v ${ted.cas}`,
     den: DNY[dow(s)],
     datum: `${parse(s).getUTCDate()}. ${MES[parse(s).getUTCMonth()]} ${s.slice(0, 4)} · týden ${tydenISO(s)}`,
