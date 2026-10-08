@@ -321,8 +321,11 @@ def over_nahrani(art, cid, razitko, cesta_plakatu, sedy_plakat):
       1) slot s nasim content_id na TV opravdu existuje,
       2) jeho image_date sedi na razitko, ktere jsme pri nahrani poslali (TOLERANCE_RAZITKA);
          kdyz si TV v slotu nechala stary soubor, nese i jeho stare razitko,
-      3) nahled ze slotu neni BAJT PO BAJTU shodny s nahledem nektereho drivejsiho plakatu
-         (to by znamenalo doslova tentyz ulozeny soubor - jina komprese by bajtovou shodu nedala).
+      3) nahled ze slotu neni BAJT PO BAJTU shodny s nahledem, ktery TENHLE SLOT mel driv
+         (= TV v slotu nechala stary soubor). Jen proti stejnemu slotu: 8. 10. 2026 byly na TV
+         po zaseknutych behech osirele kopie tehoz plakatu (MY_F0142 = MY_F0143) a jejich nahledy
+         jsou s novym nahranim pochopitelne shodne bajt po bajtu - kontrola proti vsem nahledum
+         pak kazde nahrani zamitla.
 
     Podobnost nadpisu s drivejsimi nahledy se uz jen LOGUJE a nerozhoduje; proc, viz hlavicka.
     """
@@ -364,17 +367,19 @@ def over_nahrani(art, cid, razitko, cesta_plakatu, sedy_plakat):
         f.write(nahled)
     sedy_novy = sedy_obrazek(cesta_novy)
 
-    # 3) bajtova shoda = doslova tentyz ulozeny soubor
+    # 3) bajtova shoda s drivejsim obsahem TEHOZ slotu = TV si v nem nechala stary soubor
     shody = {}
+    driv = os.path.join(NAHLEDY, "%s.jpg" % cid)
+    if os.path.exists(driv):
+        with open(driv, "rb") as f:
+            if f.read() == nahled:
+                popis["stejny_jako"] = os.path.basename(driv)
+                popis["shoda"] = "bajt po bajtu se starym obsahem slotu"
+                return False, popis, nahled, art
     for jmeno in sorted(os.listdir(NAHLEDY)):
         if not (jmeno.startswith("MY_") and jmeno.endswith(".jpg")):
             continue
         cesta = os.path.join(NAHLEDY, jmeno)
-        with open(cesta, "rb") as f:
-            if f.read() == nahled:
-                popis["stejny_jako"] = jmeno
-                popis["shoda"] = "bajt po bajtu"
-                return False, popis, nahled, art
         d = rozdil(sedy_novy, sedy_obrazek(cesta), VYREZ_NADPIS)
         if d is not None:
             shody[jmeno[:-4]] = round(d, 2)
