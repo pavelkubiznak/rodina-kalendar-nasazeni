@@ -436,6 +436,18 @@ def smaz_na_tv_s_opakovanim(art, ids):
 if os.path.exists(os.path.join(HERE, "vypnuto")):
     sys.exit(0)
 
+# Ktera instalace smi nahravat - prepinac na dalku. NAS si tenhle skript stahuje z GitHubu
+# pri kazdem behu (nas/spust.sh), takze zmena tady a push ho zapne/vypne do 10 minut, bez
+# pristupu k NASu. Mac jede z lokalniho klonu (po git pull).
+# 8. 10. 2026: NAS vracel na TV rozbity (bily) obrazek pres spravny plakat z Macu; nez se
+# zjisti proc, nahrava jen Mac. Az bude NAS opraveny: "nas" a na Macu soubor "vypnuto".
+NAHRAVA = "mac"                       # "mac" nebo "nas"
+NA_NASU = HERE.startswith("/volume")  # Synology: /volume1/NAS_6TB/frame-upload
+if (NAHRAVA == "nas") != NA_NASU:
+    if NA_NASU and time.localtime().tm_min < 10:
+        log("vypnuto na dalku (NAHRAVA = %s v denni-upload.py) - nic nenahravam" % NAHRAVA)
+    sys.exit(0)
+
 os.makedirs(NAHLEDY, exist_ok=True)
 dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
 cil = cilove_datum()                              # ktery den ma ted na TV viset
