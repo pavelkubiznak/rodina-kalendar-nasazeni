@@ -153,6 +153,34 @@ def vypni_slideshow(art):
             pass
 
 # ------------------------------------------------------------------ upload
+BEZ_FILTRU = ("none", "original", "off", "zadny", "\u017e\u00e1dn\u00fd")
+
+def zrus_filtr(art, cid):
+    """
+    Vypne fotofiltr na nasem plakatu. 8.-9. 10. 2026 ukazovala TV plakat s filtrem typu "Ink":
+    z tmaveho plakatu udelal cerne obrysy na bilem pozadi ("celé bílé, rozjeté"). Soubor v TV
+    i jeho nahled byly pritom v poradku - filtr se aplikuje az pri zobrazeni a novym obrazkum
+    ho TV dava taky. Proto se po kazdem nahrani a v hlidce nastavuje filtr "zadny".
+    Vraci id pouziteho filtru; seznam filtru z TV se kvuli diagnostice loguje.
+    """
+    seznam = []
+    try:
+        seznam = art.get_photo_filter_list() or []
+    except Exception as e:
+        log("seznam fotofiltru z TV se nepodarilo nacist:", type(e).__name__, e)
+    fid = None
+    for f in seznam:
+        if not isinstance(f, dict):
+            continue
+        i, n = str(f.get("filter_id", "")), str(f.get("filter_name", ""))
+        if i.lower() in BEZ_FILTRU or n.lower() in BEZ_FILTRU:
+            fid = i
+            break
+    if fid is None:
+        fid = "None"
+    art.set_photo_filter(cid, fid)
+    return fid, seznam
+
 def nahraj(art, data, file_type="jpg"):
     """
     Vlastni odeslani obrazku pres D2D socket. Knihovna (fork NickWaterton 3.0.5)
@@ -541,7 +569,20 @@ if stav.get("datum") == cil:
             sys.exit(1)
         sys.exit(0)
     if not visi or visi == nas:
-        uloz_hlidku(stav="ok, visi nas plakat", visi=visi, nas=nas, slideshow=popis)
+        # fotofiltr: hned pro novy plakat a pak jednou za hodinu, kdyby ho nekdo zapnul ovladacem
+        filtr = None
+        if stav.get("filtr_vypnut") != nas or time.localtime().tm_min < 10:
+            try:
+                fid, seznam = zrus_filtr(art, nas)
+                filtr = fid
+                if stav.get("filtr_vypnut") != nas:
+                    log("fotofiltr na %s: %s (TV nabizi %s)" % (nas, fid, [f.get("filter_id") for f in seznam if isinstance(f, dict)]))
+                    stav["filtr_vypnut"] = nas
+                    uloz(stav)
+            except Exception as e:
+                filtr = "chyba %s" % type(e).__name__
+                log("fotofiltr na %s se nepodarilo vypnout:" % nas, type(e).__name__, e)
+        uloz_hlidku(stav="ok, visi nas plakat", visi=visi, nas=nas, slideshow=popis, filtr=filtr)
         sys.exit(0)
     # Vlastni fotky (MY_) necha byt - krome nasich drivejsich plakatu, ktere se nepovedlo smazat.
     nase_stare = set(stav.get("nesmazane", []))
@@ -595,6 +636,11 @@ try:
             log("nove spojeni s TV po nahrani selhalo, pokracuji na starem:", type(e).__name__, e)
         art.select_image(cid, show=True)
         vypni_slideshow(art)
+        try:
+            fid, seznam = zrus_filtr(art, cid)
+            log("fotofiltr na %s: %s (TV nabizi %s)" % (cid, fid, [f.get("filter_id") for f in seznam if isinstance(f, dict)]))
+        except Exception as e:
+            log("fotofiltr na %s se nepodarilo vypnout:" % cid, type(e).__name__, e)
         ok, popis, nahled, art = over_nahrani(art, cid, razitko, cesta_plakatu, sedy_plakat)
         if ok or vzdat_overovani:
             if not ok:
