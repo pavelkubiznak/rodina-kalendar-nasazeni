@@ -21,6 +21,7 @@ const datum = s => `${DNY[parse(s).getDay()]} ${parse(s).getDate()}. ${MES[parse
 const svatek = s => svatky.find(x => x.datum === s && x.volno);
 const pracovni = s => { const d = parse(s).getDay(); return d >= 1 && d <= 5 && !svatek(s); };
 const naVylete = s => events.some(e => (e.typ === 'vylet' || e.typ === 'pobyt') && s >= e.od && s <= (e.do || e.od));
+const prazdniny = s => events.some(e => e.typ === 'prazdniny' && s >= e.od && s <= (e.do || e.od));
 
 /* poslední den, kdy má smysl hodit do biblioboxu */
 function boxTermin(deadline) {
@@ -53,7 +54,7 @@ function oknoDne(s, oddeleniPotreba, kdoJde) {
   // odkdy jsou kluci volní
   let volniOd = od;
   const d = parse(s).getDay();
-  if (d >= 1 && d <= 5 && !svatek(s) && s >= SR.od && s <= SR.do) {
+  if (d >= 1 && d <= 5 && !svatek(s) && !prazdniny(s) && s >= SR.od && s <= SR.do) {
     for (const id of kdoJde) {
       const konec = rozvrhy[id]?.konec?.[String(d)];
       if (konec) volniOd = Math.max(volniOd, min(konec) + oteviraci.cestaMinut);

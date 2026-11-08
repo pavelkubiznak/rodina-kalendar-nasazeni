@@ -17,18 +17,20 @@ const s = iso(dnes), dow = dnes.getDay();
 const sv = svatky.find(x => x.datum === s);
 const volno = dow === 0 || dow === 6 || !!(sv && sv.volno);
 const vylet = events.find(e => (e.typ === 'vylet' || e.typ === 'pobyt') && s >= e.od && s <= (e.do || e.od));
+const prazdniny = events.find(e => e.typ === 'prazdniny' && s >= e.od && s <= (e.do || e.od));
 
 const radky = [];
 narozeniny.filter(n => n.datum.slice(5) === s.slice(5))
   .forEach(n => radky.push(`🎂 ${n.jmeno} má dnes narozeniny`));
 if (sv) radky.push(`${sv.volno ? '🇨🇿' : '·'} ${sv.nazev}`);
 if (vylet) radky.push(`${vylet.ikona || '📍'} ${vylet.nazev} — jste na cestách`);
+if (prazdniny) radky.push(`${prazdniny.ikona || '🏖️'} ${prazdniny.nazev} — škola ani kroužky nejsou`);
 
 events.filter(e => e.od === s && e.cas)
   .sort((a, b) => a.cas.localeCompare(b.cas))
   .forEach(e => radky.push(`${e.cas} ${e.ikona || ''} ${e.nazev}${e.misto ? ' · ' + e.misto : ''}`.replace(/\s+/g, ' ')));
 
-if (!volno && !vylet && s >= SR.od && s <= SR.do) {
+if (!volno && !vylet && !prazdniny && s >= SR.od && s <= SR.do) {
   const skola = people.filter(p => p.role === 'dite')
     .map(p => `${p.jmeno} do ${rozvrhy[p.id].konec[String(dow)]}`).filter(Boolean);
   if (skola.length) radky.push(`🎒 Škola: ${skola.join(' · ')}`);

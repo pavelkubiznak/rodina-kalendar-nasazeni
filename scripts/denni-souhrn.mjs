@@ -18,7 +18,7 @@ function proDen(s) {
   narozeniny.filter(n => n.datum.slice(5) === s.slice(5)).forEach(n => r.push(`🎂 ${n.jmeno} má narozeniny`));
   svatky.filter(x => x.datum === s && x.volno).forEach(x => r.push(`🇨🇿 ${x.nazev}`));
   events.filter(e => s >= e.od && s <= (e.do || e.od)).forEach(e => r.push(`${e.ikona || '📍'} ${e.nazev}`));
-  const vylet = events.some(e => (e.typ === 'vylet' || e.typ === 'pobyt') && s >= e.od && s <= (e.do || e.od));
+  const vylet = events.some(e => ['vylet', 'pobyt', 'prazdniny'].includes(e.typ) && s >= e.od && s <= (e.do || e.od));
   if (s >= SR.od && s <= SR.do && !volno(s) && !vylet) {
     for (const p of people.filter(x => x.role === 'dite')) {
       const konec = rozvrhy[p.id]?.konec?.[dow];

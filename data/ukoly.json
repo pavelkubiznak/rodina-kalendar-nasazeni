@@ -38,5 +38,18 @@
     "hotovo": true,
     "ikona": "📝",
     "hotovoDne": "2026-09-22"
+  },
+  {
+    "id": "pasy-kluci-nove",
+    "nazev": "Zažádat o nové pasy klukům — staré končí začátkem března",
+    "doKdy": "2027-02-01",
+    "popis": "Pasy Matěje i Tomáše končí začátkem března 2027 (v datech 1. 3., přesné datum ověřit v pase). Vyřídit oba najednou na úřadě v Hradci Králové — kluci musí jít osobně (fotí se na místě). Obvykle do 30 dnů, expresně za pár dnů a dráž.",
+    "upominky": [
+      14,
+      7,
+      1
+    ],
+    "hotovo": false,
+    "ikona": "🛂"
   }
 ]

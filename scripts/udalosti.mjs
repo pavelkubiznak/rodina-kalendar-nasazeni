@@ -21,6 +21,10 @@ export const isoTyden = s => {
 };
 export const tydenSedi = (k, s) => !k.tydny || (isoTyden(s) % 2 === 0) === (k.tydny === 'sude');
 
+/* Školní prázdniny jsou v events.json jako `typ: "prazdniny"` (od–do). Ten den není škola ani kroužky —
+   stejně jako o státním svátku. Bere si to plakát, ranní souhrn, plánovač knihovny i Google. */
+export const prazdninyDne = (events, s) => events.find(e => e.typ === 'prazdniny' && s >= e.od && s <= (e.do || e.od));
+
 /* Otevřené platby — každý kroužek zvlášť, se svým termínem a částkou.
    Jediné místo, kde se to počítá: bere si to feed, Google, plakát i upomínky,
    aby všude stál stejný řádek. Seřazeno podle termínu.
@@ -110,6 +114,8 @@ export function generovane() {
   // Kroužek s `tydny: "sude"|"liche"` běží 1× za 14 dní podle parity ISO týdne —
   // RRULE INTERVAL=2 by se v roce s 53 týdny (2026) rozešel, proto samostatné události.
   const DNI_ICS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+  // o prázdninách a státních svátcích se kroužky nekonají — v kalendáři se z opakování vyškrtnou
+  const neniSkola = s => svatky.some(x => x.datum === s && x.volno) || !!prazdninyDne(events, s);
   for (const k of krouzky) {
     const dny = [k.den, k.denDalsi].filter(x => x != null);
     if (!dny.length || !k.od) continue;               // bez dne nebo času nemá smysl generovat
@@ -120,7 +126,7 @@ export function generovane() {
       const konec = new Date((k.konecKurzu || SKOLNI_ROK.do) + 'T00:00:00Z');
       for (const d = new Date(start + 'T00:00:00Z'); d <= konec; d.setUTCDate(d.getUTCDate() + 1)) {
         const sIso = d.toISOString().slice(0, 10);
-        if (!dny.includes(d.getUTCDay()) || !tydenSedi(k, sIso)) continue;
+        if (!dny.includes(d.getUTCDay()) || !tydenSedi(k, sIso) || neniSkola(sIso)) continue;
         push(`krouzek-${k.id}-${sIso.replace(/-/g, '')}`, {
           nazev, od: sIso, cas: k.od, casDo: k.do || k.od,
           celodenni: false, misto: k.misto, popis, upominky: [] });
@@ -129,7 +135,13 @@ export function generovane() {
     }
     const d = new Date(start + 'T00:00:00Z');
     while (!dny.includes(d.getUTCDay())) d.setUTCDate(d.getUTCDate() + 1);
+    const vynechat = [];
+    for (const x = new Date(d), konec = new Date((k.konecKurzu || SKOLNI_ROK.do) + 'T00:00:00Z'); x <= konec; x.setUTCDate(x.getUTCDate() + 1)) {
+      const xIso = x.toISOString().slice(0, 10);
+      if (dny.includes(x.getUTCDay()) && neniSkola(xIso)) vynechat.push(xIso);
+    }
     push(`krouzek-${k.id}`, {
+      exdaty: vynechat.length ? vynechat : undefined,
       nazev,
       od: d.toISOString().slice(0, 10), cas: k.od, casDo: k.do || k.od,
       celodenni: false, misto: k.misto, popis,

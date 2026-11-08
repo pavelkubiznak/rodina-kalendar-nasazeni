@@ -3,7 +3,7 @@
    Na stdout jde jen JSON — workflow ho přesměrovává rovnou do souboru. */
 import fs from 'node:fs';
 import { planProWeb } from './plan-knihovna.mjs';
-import { vsechnyEvents, tydenSedi, otevrenePlatby, kcText } from './udalosti.mjs';
+import { vsechnyEvents, tydenSedi, otevrenePlatby, kcText, prazdninyDne } from './udalosti.mjs';
 
 const J = n => JSON.parse(fs.readFileSync(`data/${n}.json`, 'utf8'));
 const people = J('people'), krouzky = J('krouzky'), events = vsechnyEvents(), svatky = J('svatky'),
@@ -55,7 +55,8 @@ const stitek = kdo => {
 const svatek = s => svatky.find(x => x.datum === s && x.volno);
 const naCestach = s => events.find(e => (e.typ === 'vylet' || e.typ === 'pobyt') && s >= e.od && s <= (e.do || e.od));
 const pracovni = s => dow(s) >= 1 && dow(s) <= 5 && !svatek(s);
-const skolniDen = s => s >= SR.od && s <= SR.do && pracovni(s) && !naCestach(s);
+const prazdniny = s => prazdninyDne(events, s);
+const skolniDen = s => s >= SR.od && s <= SR.do && pracovni(s) && !naCestach(s) && !prazdniny(s);
 const pristiPracovni = s => { let d = plus(s, 1); while (!pracovni(d)) d = plus(d, 1); return d; };
 const krouzkyDne = s => !skolniDen(s) ? [] : krouzky
   .filter(k => [k.den, k.denDalsi].includes(dow(s)) && tydenSedi(k, s)
@@ -67,7 +68,7 @@ const dokladyDne = s => doklady.filter(d => d.platnostDo === s);
 const letyDne = s => events.filter(e => e.typ === 'let' && e.od === s && e.cas);
 
 /* Jednorázové akce — z events.json i ručně zapsané v Google Kalendáři. Cesty, lety a ubytování mají vlastní řádky. */
-const jeAkce = e => !['let', 'ubytovani', 'vylet', 'pobyt'].includes(e.typ);
+const jeAkce = e => !['let', 'ubytovani', 'vylet', 'pobyt', 'prazdniny'].includes(e.typ);
 const bezDiakritiky = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 // „Doučování čeština" opakované v Google Kalendáři je tentýž kroužek, který už je v krouzky.json — stačí jednou.
 // Porovnává se s rozvrhem kroužku, ne s tím, jestli se ten den koná: o prázdninách nemá zůstat viset ani kopie z Googlu.
@@ -111,7 +112,9 @@ function dnes(s) {
   const cesta = naCestach(s);
   if (cesta) pridej('', { text: cesta.nazev, pozn: cesta.od === s ? 'dnes odjezd'
     : cesta.do === s ? 'poslední den' : `${dnuMezi(cesta.od, s) + 1}. den z ${dnuMezi(cesta.od, cesta.do || cesta.od) + 1}` });
-  for (const e of events.filter(e => e.od === s && e.typ !== 'vylet' && e.typ !== 'pobyt' && !jeKopieKrouzku(e))) {
+  const pr = prazdniny(s);
+  if (pr) pridej('', { text: pr.nazev, pozn: pr.do && pr.do !== pr.od ? `do ${kratce(pr.do)}` : undefined });
+  for (const e of events.filter(e => e.od === s && !['vylet', 'pobyt', 'prazdniny'].includes(e.typ) && !jeKopieKrouzku(e))) {
     const text = nazevBezData(e);
     if (e.cas) pridej(e.cas, { cas: e.casDo ? `${e.cas}—${e.casDo}` : e.cas, text, pozn: e.misto, hi: true });
     else pridej(e.typ === 'ubytovani' ? '24:00' : '', { text, pozn: e.misto });   // ubytování až za cestou
@@ -161,6 +164,8 @@ function souhrnDne(s) {
   const cesta = naCestach(s);
   if (cesta?.od === s) { casti.push(`Odjezd: ${cesta.nazev}`); warn = true; }
   else if (cesta) { casti.push(cesta.nazev); pozn.push('na cestách'); }
+  const pr = prazdniny(s);
+  if (pr) casti.push(pr.nazev);
   // lety, kroužky a ruční akce z kalendáře dohromady podle času; celodenní akce před nimi
   const body = [];
   for (const e of letyDne(s)) body.push({ klic: e.cas, text: `${e.cas} ${e.nazev}` });
@@ -231,6 +236,8 @@ function blizi(s, po, doDne, mist) {
   ukoly.filter(u => !u.hotovo).forEach(u => v(u.doKdy, u.nazev));
   vypujcky.forEach(({ v: x, celkem }) => v(x.vratitDo, 'Vrátit knihy do knihovny', `${celkem} titulů`));
   events.filter(e => jeAkce(e) && !jeKopieKrouzku(e)).forEach(e => v(e.od, nazevBezData(e), e.misto, e.cas));
+  events.filter(e => e.typ === 'prazdniny')
+    .forEach(e => v(e.od, e.nazev, e.do && e.do !== e.od ? `${kratce(e.od)} – ${kratce(e.do)}` : undefined));
   const rok = Number(po.slice(0, 4));
   narozeniny.forEach(n => [rok, rok + 1].forEach(r => v(`${r}-${n.datum.slice(5)}`, `${n.jmeno} má narozeniny`)));
   // doklady se hlásí s delším předstihem, podle svých upomínek

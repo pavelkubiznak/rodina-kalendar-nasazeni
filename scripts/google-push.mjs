@@ -30,6 +30,9 @@ function naGoogle(o) {
   if (o.misto) ev.location = o.misto;
   if (o.popis) ev.description = o.popis;
   if (o.rrule) ev.recurrence = [`RRULE:${o.rrule}`];
+  // vynechané dny opakování (prázdniny, svátky) — čas musí sedět se začátkem události
+  if (o.rrule && o.exdaty) ev.recurrence.push(`EXDATE;TZID=Europe/Prague:${o.exdaty
+    .map(x => `${x.replace(/-/g, '')}T${o.cas.replace(':', '')}00`).join(',')}`);
   // svátky a narozeniny nemají blokovat čas v „kdy máš volno"
   if (/^(svatek-|nar-)/.test(o.klic)) ev.transparency = 'transparent';
   return ev;

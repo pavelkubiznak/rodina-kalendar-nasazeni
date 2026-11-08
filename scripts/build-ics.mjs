@@ -23,6 +23,7 @@ for (const o of [...generovane(), ...rucniProFeed()]) {
   if (o.misto) L.push(`LOCATION:${esc(o.misto)}`);
   if (o.popis) L.push(`DESCRIPTION:${esc(o.popis)}`);
   if (o.rrule) L.push(`RRULE:${o.rrule}`);
+  if (o.rrule && o.exdaty) L.push(`EXDATE;TZID=Europe/Prague:${o.exdaty.map(x => `${den(x)}T${hhmm(o.cas)}00`).join(',')}`);
   for (const dnu of (o.upominky || [])) {
     L.push('BEGIN:VALARM', 'ACTION:DISPLAY', `TRIGGER:-P${dnu}D`, `DESCRIPTION:${esc(o.nazev)}`, 'END:VALARM');
   }

@@ -36,7 +36,8 @@ const svatekDne = d => state.data.svatky.find(s => s.datum === d) || null;
 function jeVolno(d) {
   const den = parse(d).getDay();
   if (den === 0 || den === 6) return true;
-  const s = svatekDne(d); return !!(s && s.volno);
+  const s = svatekDne(d); if (s && s.volno) return true;
+  return state.data.events.some(e => e.typ === 'prazdniny' && d >= e.od && d <= (e.do || e.od));
 }
 const naVylete = d => state.data.events.some(e =>
   (e.typ === 'vylet' || e.typ === 'pobyt') && d >= e.od && d <= (e.do || e.od));
