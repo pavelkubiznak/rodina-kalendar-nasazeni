@@ -345,6 +345,21 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0c20e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: Den otevřených dveří pro budoucí prvňáčky",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-11",
+    "popis": "Informace 2.B z 10. 11. 2026."
+  },
+  {
     "id": "g-v4go47ja9oenst8opv7eu6h2ck",
     "nazev": "11.11. sbírka pro diagnostický ústav potrvá do 12.12. Petra jelínková",
     "ikona": "📌",
@@ -360,6 +375,22 @@
     "cas": "08:00",
     "casDo": "09:00",
     "popis": "11.11. sbírka pro diagnostický ústav potrvá do 12.12. Petra jelínková"
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0ca0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: Filharmonie – pohádka, 80 Kč s sebou",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-13",
+    "misto": "ZŠ tř. SNP 694 – tělocvična",
+    "popis": "V tělocvičně.\nInformace 2.B z 10. 11. 2026."
   },
   {
     "id": "g-0q1v9ohj6370ald6ht920190gc",
@@ -378,6 +409,24 @@
     "casDo": "09:00",
     "misto": "škole",
     "popis": "16.11. štafeta ve škole běh za svobodu"
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0ci0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: pečení perníků – přinést vykrajovátka",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-16",
+    "cas": "12:45",
+    "casDo": "13:30",
+    "misto": "ZŠ tř. SNP 694",
+    "popis": "Na odpoledním vyučování, kdo má, přinese vykrajovátka.\nInformace 2.B z 10. 11. 2026."
   },
   {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261117T113500Z",
@@ -412,6 +461,53 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0cq0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: zdobení vánočního stromečku – Velké náměstí",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-25",
+    "misto": "Velké náměstí, Hradec Králové",
+    "popis": "Informace 2.B z 10. 11. 2026."
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0d20e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: preventivní program „Respektuj mé tělo, respektuj můj prostor“",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-25",
+    "popis": "Informace 2.B z 10. 11. 2026."
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0da0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: Cimbál, 100 Kč s sebou",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-01",
+    "misto": "ZŠ tř. SNP 694 – tělocvična",
+    "popis": "V tělocvičně.\nInformace 2.B z 10. 11. 2026."
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261201T113500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
@@ -426,6 +522,52 @@
     "od": "2026-12-01",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0di0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: vystoupení DD Sedloňov",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-03",
+    "popis": "Informace 2.B z 10. 11. 2026."
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0dq0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: Mikulášská besídka",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-03",
+    "popis": "V kalendáři je ze září ještě „mikulášská besídka 8. 12.“ – ověřit, která platí.\nInformace 2.B z 10. 11. 2026."
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0e20e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: Mikuláš ve škole (tělocvična) – 5. 12. je sobota, ověřit",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-05",
+    "misto": "ZŠ tř. SNP 694 – tělocvična",
+    "popis": "V lístku stojí 5. 12., což je sobota – asi překlep (pátek 4. 12.?). Ověřit u p. Jelínkové.\nInformace 2.B z 10. 11. 2026."
   },
   {
     "id": "g-jf9ntjiiu25odqus75sc7sknh4",
@@ -461,6 +603,21 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj0ea0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: poslední věci do sbírky pro Diagnostický ústav (končí 12. 12.)",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-11",
+    "popis": "Sbírka končí v sobotu 12. 12., pátek 11. 12. je poslední školní den.\nInformace 2.B z 10. 11. 2026."
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261215T113500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
@@ -475,6 +632,21 @@
     "od": "2026-12-15",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj2c20e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: poslední den ve škole – čtenářský deník, ručník a úbor na Tv, dárek kamarádovi",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-17",
+    "popis": "18. 12. ráno letíte do Benidormu, Tomáš nebude ve škole 18., 21. ani 22. 12. Proto už dnes:\n- odevzdat druhý čtenářský deník (termín školy 21. 12.)\n- přinést domů ručník a oblečení na Tv\n- předat dárek kamarádovi (dárky jsou na Den her 22. 12., děti si kamarády už vybraly)\nNa 22. 12. (Den her) škola chce: penál, ŽK, notýsek, čip na oběd, svačinu, kdo chce cukroví.\nInformace 2.B z 10. 11. 2026."
   },
   {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261222T113500Z",
@@ -507,6 +679,21 @@
     "od": "2026-12-29",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-_69h2qqbecpniqchg68r32c9h60mj2ca0e9nm8qbec4mmmobccln68obi",
+    "nazev": "Tomáš: zkontrolovat penál před školou",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-03",
+    "popis": "Úkol na vánoční prázdniny: pera, tužky, pastelky + nůžky, malé pravítko, lepidlo. Doplnit, co chybí.\nInformace 2.B z 10. 11. 2026."
   },
   {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270105T113500Z",
