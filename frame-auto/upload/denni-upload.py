@@ -469,7 +469,10 @@ if os.path.exists(os.path.join(HERE, "vypnuto")):
 # pristupu k NASu. Mac jede z lokalniho klonu (po git pull).
 # 8. 10. 2026: NAS vracel na TV rozbity (bily) obrazek pres spravny plakat z Macu; nez se
 # zjisti proc, nahrava jen Mac. Az bude NAS opraveny: "nas" a na Macu soubor "vypnuto".
-NAHRAVA = "mac"                       # "mac" nebo "nas"
+# 12. 11. 2026: Mac od nedele 8. 11. nic nenahral (na TV visel cely tyden pondelni plakat,
+# Pages byly v poradku) - prepnuto zpet na NAS, ktery je doma porad. Bily plakat z 8. 10.
+# nezpusobil NAS, ale fotofiltr "Ink" v televizi (ten se ted vypina pri kazdem nahrani).
+NAHRAVA = "nas"                       # "mac" nebo "nas"
 NA_NASU = HERE.startswith("/volume")  # Synology: /volume1/NAS_6TB/frame-upload
 if (NAHRAVA == "nas") != NA_NASU:
     if NA_NASU and time.localtime().tm_min < 10:
