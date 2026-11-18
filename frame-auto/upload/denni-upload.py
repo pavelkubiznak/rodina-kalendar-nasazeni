@@ -53,6 +53,15 @@ import os, sys, json, time, datetime, urllib.request, hashlib, random, socket, s
 from samsungtvws import SamsungTVWS
 from samsungtvws.helper import get_ssl_context
 
+# Pojistka proti zaseknuti (18. 11. 2026). Knihovna ceka na odpoved televize ve smycce nad
+# recv(); kdyz TV na pozadavek neodpovi, ale dal posila ping, recv() nikdy nevyprsi a beh visi
+# navzdy. launchd (Mac) nespusti dalsi beh, dokud predchozi neskonci - od 9. 11. tak visel
+# jeden beh a plakat se devet dni nenahral. Po 7 minutach se proces sam ukonci, takze
+# nejhur vypadne jeden beh. Bezny beh trva pod minutu.
+import signal
+LIMIT_BEHU = 420   # s
+signal.alarm(LIMIT_BEHU)
+
 # IP televize: 1) soubor tv-ip.txt vedle skriptu, 2) FRAME_IP z launchd, 3) vychozi.
 # Soubor ma prednost schvalne - launchd plist drzi FRAME_IP z doby instalace a jeho zmena
 # chce `launchctl bootout/bootstrap`; prepsat jeden radek v souboru je jednodussi.
@@ -87,8 +96,41 @@ ZITREK_OD = 17         # od teto hodiny visi na TV plakat na zitrek
 # neoverene nez falesny poplach - to je cela lekce z 21. 9.
 TOLERANCE_RAZITKA = 6 * 3600   # s
 
+# Kopie logu vedle skriptu (18. 11. 2026): hlavni log je na Macu v ~/Library/Logs, kam se na
+# dalku neda podivat. beh.log drzi posledni behy vcetne padu skriptu a casoveho limitu.
+BEHLOG = os.path.join(HERE, "beh.log")
+def _behlog(text):
+    try:
+        if os.path.exists(BEHLOG) and os.path.getsize(BEHLOG) > 200000:
+            with open(BEHLOG, encoding="utf8", errors="replace") as f:
+                konec = f.read()[-80000:]
+            with open(BEHLOG, "w", encoding="utf8") as f:
+                f.write(konec)
+        with open(BEHLOG, "a", encoding="utf8") as f:
+            f.write(text.rstrip("\n") + "\n")
+    except Exception:
+        pass
+
 def log(*a):
-    print(time.strftime("%F %T"), *a, flush=True)
+    radek = " ".join([time.strftime("%F %T")] + [str(x) for x in a])
+    print(radek, flush=True)
+    _behlog(radek)
+
+def _pad(typ, hodnota, stopa):
+    import traceback
+    _behlog(time.strftime("%F %T") + " PAD SKRIPTU:\n" + "".join(traceback.format_exception(typ, hodnota, stopa)))
+    sys.__excepthook__(typ, hodnota, stopa)
+sys.excepthook = _pad
+
+def _limit(*_):
+    radek = time.strftime("%F %T") + " CASOVY LIMIT %d s - beh se zasekl (TV neodpovida na pozadavek), koncim" % LIMIT_BEHU
+    try:
+        print(radek, flush=True)
+    except Exception:
+        pass
+    _behlog(radek)
+    os._exit(1)
+signal.signal(signal.SIGALRM, _limit)
 
 def stahni(nazev):
     # Pages drzi cache 10 minut, parametr s casem ji obejde
@@ -472,9 +514,12 @@ if os.path.exists(os.path.join(HERE, "vypnuto")):
 # 12. 11. 2026: Mac od nedele 8. 11. nic nenahral (na TV visel cely tyden pondelni plakat,
 # Pages byly v poradku) - prepnuto zpet na NAS, ktery je doma porad. Bily plakat z 8. 10.
 # nezpusobil NAS, ale fotofiltr "Ink" v televizi (ten se ted vypina pri kazdem nahrani).
-NAHRAVA = "nas"                       # "mac" nebo "nas"
+# 18. 11. 2026: ani NAS od 12. 11. nic nenahral (proc, se zatim nevi - do DSM se nejde
+# prihlasit na dalku). Nez se to zjisti, smi nahravat OBA: kdo se k televizi dostane, nahraje.
+# Kazdy maze jen svoje stare plakaty, takze nanejvys visi tentyz plakat dvakrat po sobe.
+NAHRAVA = "oba"                       # "mac", "nas" nebo "oba"
 NA_NASU = HERE.startswith("/volume")  # Synology: /volume1/NAS_6TB/frame-upload
-if (NAHRAVA == "nas") != NA_NASU:
+if NAHRAVA != "oba" and (NAHRAVA == "nas") != NA_NASU:
     if NA_NASU and time.localtime().tm_min < 10:
         log("vypnuto na dalku (NAHRAVA = %s v denni-upload.py) - nic nenahravam" % NAHRAVA)
     sys.exit(0)
@@ -483,6 +528,70 @@ os.makedirs(NAHLEDY, exist_ok=True)
 dnes = datetime.date.today().isoformat()          # Mac jede v prazskem case
 cil = cilove_datum()                              # ktery den ma ted na TV viset
 stav = json.load(open(STATE)) if os.path.exists(STATE) else {}
+
+# ------------------------------------------------------- jednorazova diagnostika TV
+# Soubor "diag.zadej" vedle skriptu: zapise do diag.json, co televize odpovida na REST a na
+# art kanalu vcetne odpovedi na dva pozadavky. Provede se, az bude TV zapnuta (PowerState on),
+# do te doby soubor ceka. Cteni je po ramcich s pevnym limitem, aby ho ping televize nezdrzel.
+DIAG = os.path.join(HERE, "diag.zadej")
+if os.path.exists(DIAG):
+    d = {"kdy": time.strftime("%F %T"), "tv": TV_IP}
+    zapnuta = False
+    try:
+        info = json.loads(urllib.request.urlopen("http://%s:8001/api/v2/" % TV_IP, timeout=8).read())
+        dev = info.get("device", {})
+        d["rest"] = {k: dev.get(k) for k in ("name", "modelName", "PowerState", "FrameTVSupport", "networkType")}
+        zapnuta = dev.get("PowerState") == "on"
+    except Exception as e:
+        d["rest"] = "%s: %s" % (type(e).__name__, e)
+    if zapnuta:
+        try:
+            import websocket, ssl, base64, uuid
+            def _cti(ws, limit):
+                konec, out = time.time() + limit, []
+                while time.time() < konec and len(out) < 6:
+                    ws.settimeout(max(0.5, konec - time.time()))
+                    try:
+                        fr = ws.recv_frame()
+                    except Exception as e:
+                        out.append("recv %s" % type(e).__name__)
+                        break
+                    if fr.opcode == 0x9:
+                        ws.pong(fr.data)
+                        out.append("ping")
+                    elif fr.opcode == 0x1:
+                        out.append(fr.data.decode("utf8", "replace")[:400])
+                    elif fr.opcode == 0x8:
+                        out.append("close")
+                        break
+                return out
+            def _posli(ws, pozadavek):
+                i = str(uuid.uuid4())
+                pozadavek.update({"id": i, "request_id": i})
+                ws.send(json.dumps({"method": "ms.channel.emit", "params": {
+                    "event": "art_app_request", "to": "host", "data": json.dumps(pozadavek)}}))
+            jmeno = base64.b64encode(b"SamsungTvRemote").decode()
+            ws = websocket.create_connection(
+                "wss://%s:8002/api/v2/channels/com.samsung.art-app?name=%s" % (TV_IP, jmeno),
+                timeout=10, sslopt={"cert_reqs": ssl.CERT_NONE})
+            d["spojeni"] = _cti(ws, 4)
+            _posli(ws, {"request": "get_artmode_status"})
+            d["get_artmode_status"] = _cti(ws, 12)
+            _posli(ws, {"request": "get_current_artwork"})
+            d["get_current_artwork"] = _cti(ws, 12)
+            try:
+                ws.close(timeout=2)
+            except Exception:
+                pass
+        except Exception as e:
+            d["ws"] = "%s: %s" % (type(e).__name__, e)
+        with open(os.path.join(HERE, "diag.json"), "w") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1, default=str)
+        try:
+            os.remove(DIAG)
+        except OSError:
+            pass
+        log("diagnostika TV zapsana do diag.json")
 
 # --------------------------------------------------- jednorazova inventura TV
 # Vznikne, kdyz vedle skriptu lezi soubor "inventura.zadej". Vypise, co ma TV
