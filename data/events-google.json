@@ -413,6 +413,24 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-10i3ng9phfg5bbd06bka381muo",
+    "nazev": "Shromáždění SVJ Slezská 869",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-23",
+    "cas": "18:00",
+    "casDo": "20:00",
+    "misto": "HSC, Jižní ul., Hradec Králové",
+    "popis": "Rozhodnout: osobní účast, nebo plná moc.\nNa programu ke schválení: program shromáždění a hospodaření za rok 2025."
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261124T113500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
@@ -458,6 +476,21 @@
     ],
     "od": "2026-11-25",
     "popis": "Informace 2.B z 10. 11. 2026."
+  },
+  {
+    "id": "g-2lap15i364d9g3ni51ot3dlqng",
+    "nazev": "Daň z nemovitých věcí – 2. splátka",
+    "ikona": "💰",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-11-30",
+    "popis": "Termín druhé splátky daně z nemovitých věcí: 30. 11. 2026."
   },
   {
     "id": "g-_69h2qqbecpniqchg68r32c9h60mj0da0e9nm8qbec4mmmobccln68obi",
@@ -602,6 +635,21 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-uq18vj2e1kudaud31fkc215nlg",
+    "nazev": "Katastr V-10086/2026-602 – souhlas ČS se zatížením (nejzazší termín)",
+    "ikona": "⚠️",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-16",
+    "popis": "Do 16. 12. 2026 doložit katastru souhlas České spořitelny se zatížením, jinak vklad zástavního práva pro Raiffeisenbank zamítnou.\nČeká se na odpověď M. Matěnové."
+  },
+  {
     "id": "g-_69h2qqbecpniqchg68r32c9h60mj2c20e9nm8qbec4mmmobccln68obi",
     "nazev": "Tomáš: poslední den ve škole – čtenářský deník, ručník a úbor na Tv, dárek kamarádovi",
     "ikona": "📌",
@@ -631,6 +679,21 @@
     "od": "2026-12-22",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-uahpmvigfsqu80313subi2cnf0",
+    "nazev": "Air Bank – ověřit telefon (nejzazší termín)",
+    "ikona": "📱",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-27",
+    "popis": "Do 27. 12. 2026 ověřit telefon v Air Bank, jinak zruší platby na kontakt.\nPozor: 18. 12. – 1. 1. jste v Benidormu – nejlépe vyřídit ještě před odletem."
   },
   {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261229T113500Z",
