@@ -1,22 +1,5 @@
 [
   {
-    "id": "g-jlegmc9g7f1frtjdvhoi9mkvcc",
-    "nazev": "Zítra ve 14:15 si má máta udělat úkol z přírodovědy voda a vzduch",
-    "ikona": "📌",
-    "kdo": [
-      "rodina"
-    ],
-    "typ": "google",
-    "celodenni": false,
-    "upominky": [
-      1
-    ],
-    "od": "2026-09-22",
-    "cas": "14:15",
-    "casDo": "15:15",
-    "popis": "Zítra ve 14:15 si má máta udělat úkol z přírodovědy voda a vzduch"
-  },
-  {
     "id": "g-v1f68idibc4met9pc1ui5emla0",
     "nazev": "23.9. v 18:00 shromáždění SVJ libuše",
     "ikona": "📌",
