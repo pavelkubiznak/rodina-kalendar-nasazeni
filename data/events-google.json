@@ -552,6 +552,22 @@
     "popis": "Sbírka končí v sobotu 12. 12., pátek 11. 12. je poslední školní den.\nInformace 2.B z 10. 11. 2026."
   },
   {
+    "id": "g-l9n7uuam6cn80r0bathbtcbu7k",
+    "nazev": "Uhelná: rozhodnout o elektřině a poslat výpověď ČEZ",
+    "ikona": "⚡",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-15",
+    "misto": "Uhelná 160/24",
+    "popis": "Refix 2 530 Kč/MWh bez DPH končí 1. 4. 2027. Bez písemné výpovědi doručené ČEZ do 31. 12. se 2. 4. sám změní produkt i cena (asi 3 000–3 300 Kč/MWh).\nMít v ruce: retenční nabídku ČEZ (800 810 820) a nabídky MND, Centropol, E.ON — sazba C25D, podnikatel, ~5 MWh/rok, dodávka od 2. 4. 2027.\nBrát na 2 roky jen pod ~2 800 Kč/MWh a jen se smlouvou, která dovolí změnu sazby (tepelné čerpadlo) a přepis na Pavla bez pokuty. Jinak 1 rok.\nPOZOR: 18. 12. odlétáme do Benidormu — výpověď poslat doporučeně nebo datovkou ještě před odletem."
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20261215T113500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
@@ -645,6 +661,22 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-u6jh6ij6qon5to10og5g8cvofg",
+    "nazev": "Uhelná: POSLEDNÍ DEN — výpověď elektřiny musí být u ČEZ",
+    "ikona": "⚡",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-31",
+    "misto": "Uhelná 160/24",
+    "popis": "Výpověď smlouvy Refix musí být ČEZ doručena nejpozději dnes, jinak se 2. 4. 2027 automaticky změní produkt a cena. Platí jen v případě, že jsme se rozhodli odejít nebo vyjednat lepší cenu."
+  },
+  {
     "id": "g-_69h2qqbecpniqchg68r32c9h60mj2ca0e9nm8qbec4mmmobccln68obi",
     "nazev": "Tomáš: zkontrolovat penál před školou",
     "ikona": "📌",
@@ -676,6 +708,38 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-01oc2t9qhqcqpmkrl2d8c9irjg",
+    "nazev": "Objednat kominíka a kontrolu hasicích přístrojů (3 domy)",
+    "ikona": "🔧",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-11",
+    "misto": "Uhelná · Luční · Orlická",
+    "popis": "Kontrola spalinové cesty i hasicích přístrojů se dělá jednou ročně. Co jsme našli:\nUhelná — komín: poslední doklad 2016, hasicí přístroje 2022, revize elektro nenalezena.\nLuční — hasicí přístroje 18. 1. 2023, komín nenalezen (elektro hotovo 4. 8. 2026).\nOrlická — kotel, komín ani elektro nenalezeny."
+  },
+  {
+    "id": "g-urlbm02blmap6os17997bsjo68",
+    "nazev": "Pojištění Uhelné navýšit + Orlická bez pojistky",
+    "ikona": "🛡️",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-12",
+    "misto": "Uhelná · Orlická",
+    "popis": "Uhelná: pojištění domu běží od února 2017 (dům 8,5 mil. Kč + vedlejší stavby, domácnost 400 tis. Kč). Makléř v září navrhl navýšit nebo nahradit — domluvit ještě před výročím smlouvy v únoru.\nOrlická: pojistku jsme nenašli — ověřit, jestli vůbec existuje."
+  },
+  {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270112T113500Z",
     "nazev": "Doučování čeština",
     "ikona": "📌",
@@ -690,6 +754,22 @@
     "od": "2027-01-12",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-ih0a24rh1fa3b800ctfah1o4qg",
+    "nazev": "Luční: poslední den staré smlouvy na elektřinu",
+    "ikona": "⚡",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": true,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-16",
+    "misto": "Luční 519 – Villa Rudolf",
+    "popis": "Od 17. 1. 2027 nový produkt nebo dodavatel. Po přechodu zkontrolovat nový předpis záloh (dnes 6 420 Kč měsíčně, platí se ručně)."
   },
   {
     "id": "g-v93uml1t5n2agc4q16h8dmpog0_20270119T113500Z",
@@ -1472,6 +1552,22 @@
       1
     ],
     "od": "2027-12-21",
+    "cas": "12:35",
+    "casDo": "13:05"
+  },
+  {
+    "id": "g-v93uml1t5n2agc4q16h8dmpog0_20271228T113500Z",
+    "nazev": "Doučování čeština",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-12-28",
     "cas": "12:35",
     "casDo": "13:05"
   }
