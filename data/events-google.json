@@ -472,6 +472,24 @@
     "popis": "V lístku stojí 5. 12., což je sobota – asi překlep (pátek 4. 12.?). Ověřit u p. Jelínkové.\nInformace 2.B z 10. 11. 2026."
   },
   {
+    "id": "g-mvm6nn19sfidaj6pi1p1qvgm5g",
+    "nazev": "Biskupské gymnázium – den otevřených dveří",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2026-12-05",
+    "cas": "09:00",
+    "casDo": "12:00",
+    "misto": "Biskupské gymnázium, Orlické nábřeží 356/1, 500 03 Hradec Králové",
+    "popis": "Den otevřených dveří Biskupského gymnázia Bohuslava Balbína. www.bisgymbb.cz"
+  },
+  {
     "id": "g-jf9ntjiiu25odqus75sc7sknh4",
     "nazev": "8.12. mikulášská besídka",
     "ikona": "📌",
@@ -676,6 +694,42 @@
     "casDo": "13:05"
   },
   {
+    "id": "g-kqp4rfv49bjugjdfo737q9fn5c",
+    "nazev": "Biskupské gymnázium – den otevřených dveří",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-06",
+    "cas": "08:00",
+    "casDo": "18:00",
+    "misto": "Biskupské gymnázium, Orlické nábřeží 356/1, 500 03 Hradec Králové",
+    "popis": "Den otevřených dveří Biskupského gymnázia Bohuslava Balbína. www.bisgymbb.cz"
+  },
+  {
+    "id": "g-m7i4t0jg3eqjg6gmsaravqvqnc",
+    "nazev": "1. soukromé jazykové gymnázium (6leté) – den otevřených dveří",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-09",
+    "cas": "09:00",
+    "casDo": "12:00",
+    "misto": "První soukromé jazykové gymnázium, Brandlova 875, 500 03 Hradec Králové",
+    "popis": "Den otevřených dveří pro uchazeče o 4leté i 6leté studium. Slovo ředitele o studiu a přijímacím řízení v 9:15 a v 10:30.\nOsobní schůzka s ředitelem PhDr. Ladislavem Bartůškou: bartuska.ladislav@1sjg.cz, +420 604 200 183.\nhttps://1sjg.cz/pro-uchazece/dny-otevrenych-dveri/"
+  },
+  {
     "id": "g-01oc2t9qhqcqpmkrl2d8c9irjg",
     "nazev": "Objednat kominíka a kontrolu hasicích přístrojů (3 domy)",
     "ikona": "🔧",
@@ -722,6 +776,24 @@
     "od": "2027-01-12",
     "cas": "12:35",
     "casDo": "13:05"
+  },
+  {
+    "id": "g-vd33v00l7iiqvgna2niuic84o0",
+    "nazev": "Gymnázium Boženy Němcové (6leté) – den otevřených dveří",
+    "ikona": "📌",
+    "kdo": [
+      "rodina"
+    ],
+    "typ": "google",
+    "celodenni": false,
+    "upominky": [
+      1
+    ],
+    "od": "2027-01-13",
+    "cas": "14:00",
+    "casDo": "18:00",
+    "misto": "Gymnázium Boženy Němcové, Pospíšilova tř. 324, 500 03 Hradec Králové",
+    "popis": "Den otevřených dveří šestiletého gymnázia (GyBoN). Termín z kalendáře akcí školy v Bakalářích. www.gybon.cz"
   },
   {
     "id": "g-ih0a24rh1fa3b800ctfah1o4qg",
